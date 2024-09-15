@@ -10,19 +10,20 @@ const api_add_product = async (req, res) => {
       batchNumber,
       manufactureDate,
       expiryDate,
-      supplierId,
-      retailerId,
+      supplierEmail,
+      supplierName,
+      retailerEmail,
     } = req.body;
 
     // Generate a unique productId
     const productId = `PROD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     // Find the inventory for the retailer
-    let inventory = await Inventory.findOne({ retailerId });
+    let inventory = await Inventory.findOne({ retailerEmail });
 
     if (!inventory) {
       // If no inventory exists for the retailer, create one
-      inventory = new Inventory({ retailerId, products: [] });
+      inventory = new Inventory({ retailerEmail, products: [] });
     }
 
     // Add the new product to the inventory
@@ -35,8 +36,8 @@ const api_add_product = async (req, res) => {
       batchNumber,
       manufactureDate,
       expiryDate,
-      supplierId,
-      retailerId,
+      supplierEmail,
+      supplierName,
     });
 
     // Save the updated inventory
@@ -45,6 +46,9 @@ const api_add_product = async (req, res) => {
     res.json({ msg: "Product added successfully" });
   } catch (err) {
     console.error(err.message);
+    if (err.code === 11000) {
+      return res.status(400).json({ msg: "Duplicate product ID" });
+    }
     res.status(500).send("Server Error");
   }
 };

@@ -21,18 +21,18 @@ const productSchema = new mongoose.Schema({
   batchNumber: String,
   manufactureDate: Date,
   expiryDate: Date,
-  supplierId: {
+  supplierEmail: {
     type: String,
     required: true,
   },
-  retailerId: {
+  supplierName: {
     type: String,
     required: true,
   },
 });
 
 const inventorySchema = new mongoose.Schema({
-  retailerId: {
+  retailerEmail: {
     type: String,
     required: true,
   },
