@@ -19,8 +19,8 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   batchNumber: String,
-  manufactureDate: Date,
-  expiryDate: Date,
+  manufactureDate: String,
+  expiryDate: String,
   supplierEmail: {
     type: String,
     required: true,
