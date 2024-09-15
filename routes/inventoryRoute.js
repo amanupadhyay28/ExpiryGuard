@@ -8,5 +8,10 @@ router.post(
   authRetailer,
   inventoryController.api_add_product
 );
+router.post(
+  "/api_update_quantity",
+  authRetailer,
+  inventoryController.api_update_quantity
+);
 
 module.exports = router;
