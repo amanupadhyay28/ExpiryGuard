@@ -1,4 +1,6 @@
+const Supplier = require("../models/supplier");
 const Inventory = require("../models/inventory");
+const Retailer = require("../models/retailer");
 
 // Helper function to format a date to 'YYYY-MM-DD'
 const formatDateToYYYYMMDD = (date) => {
@@ -145,7 +147,109 @@ const api_update_quantity = async (req, res) => {
   }
 };
 
+const api_getRetailersForSupplier = async (req, res) => {
+  try {
+    const { supplierEmail } = req.body;
+
+    if (!supplierEmail) {
+      return res.status(400).send("Supplier email is required");
+    }
+
+    // Find inventories containing products from the given supplier
+    const inventories = await Inventory.find({
+      "products.supplierEmail": supplierEmail,
+    });
+
+    // Extract unique retailer emails
+    const retailerEmails = [
+      ...new Set(inventories.map((inventory) => inventory.retailerEmail)),
+    ];
+
+    // Fetch detailed retailer information using the extracted emails
+    const retailers = await Retailer.find({ email: { $in: retailerEmails } });
+
+    res.json(retailers);
+    // console.log(retailers);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+const api_getSuppliersForRetailer = async (req, res) => {
+  try {
+    const { retailerEmail } = req.body;
+    // console.log(retailerEmail);
+
+    if (!retailerEmail) {
+      return res.status(400).send("Retailer email is required");
+    }
+    const inventories = await Inventory.find({ retailerEmail });
+    const supplierEmails = [
+      ...new Set(
+        inventories
+          .map((inventory) =>
+            inventory.products.map((product) => product.supplierEmail)
+          )
+          .flat()
+      ),
+    ];
+    const suppliers = await Supplier.find({ email: { $in: supplierEmails } });
+
+    res.json(suppliers);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+const api_getExpiringProducts = async (req, res) => {
+  try {
+    const { retailerEmail, supplierEmail, days } = req.body;
+
+    if (!retailerEmail || !supplierEmail || !days) {
+      return res
+        .status(400)
+        .send(
+          "Retailer email, supplier email, and number of days are required"
+        );
+    }
+
+    const currentDate = new Date();
+    const thresholdDate = new Date();
+    thresholdDate.setDate(currentDate.getDate() + parseInt(days, 10));
+
+    // Format the threshold date to 'YYYY-MM-DD'
+    const formattedThresholdDate = formatDateToYYYYMMDD(thresholdDate);
+
+    const inventory = await Inventory.findOne({ retailerEmail });
+
+    if (!inventory) {
+      return res
+        .status(404)
+        .json({ msg: "Inventory not found for the retailer" });
+    }
+
+    const expiringProducts = inventory.products.filter((product) => {
+      const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
+
+      return (
+        product.supplierEmail === supplierEmail &&
+        formattedExpiryDate <= formattedThresholdDate
+      );
+    });
+
+    res.json(expiringProducts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   api_add_product,
   api_update_quantity,
+  api_getRetailersForSupplier,
+  api_getSuppliersForRetailer,
+  api_getExpiringProducts,
 };

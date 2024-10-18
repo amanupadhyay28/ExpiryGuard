@@ -36,4 +36,7 @@ const retailerSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Retailer", retailerSchema);
+// Check if the model already exists before creating it
+const Retailer = mongoose.models.Retailer || mongoose.model("Retailer", retailerSchema);
+
+module.exports = Retailer;
