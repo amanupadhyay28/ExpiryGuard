@@ -2,7 +2,7 @@ var express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const Supplier = require("../models/Supplier");
+const Supplier = require("../models/supplier");
 const Retailer = require("../models/retailer");
 
 const api_supplier_registration = async (req, res) => {
@@ -82,15 +82,7 @@ const api_supplier_login = async (req, res) => {
   }
 };
 
-const api_get_suppliers = async (req, res) => {
-  try {
-    const suppliers = await Supplier.find({}, "supplierId name");
-    res.json(suppliers);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-};
+
 
 const api_retailer_registration = async (req, res) => {
   try {
@@ -172,7 +164,6 @@ const api_retailer_login = async (req, res) => {
 module.exports = {
   api_supplier_registration,
   api_supplier_login,
-  api_get_suppliers,
   api_retailer_registration,
   api_retailer_login,
 };
