@@ -1,5 +1,25 @@
 const mongoose = require("mongoose");
 
+const driverSchema = new mongoose.Schema({
+  driverId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  vehicleNumber: {
+    type: String,
+    required: true,
+  },
+});
+
 const supplierSchema = new mongoose.Schema({
   supplierId: {
     type: String,
@@ -30,13 +50,13 @@ const supplierSchema = new mongoose.Schema({
     postalCode: { type: String, required: true },
     country: { type: String, required: true },
   },
+  drivers: [driverSchema],
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-// Check if the model already exists before creating it
 const Supplier =
   mongoose.models.Supplier || mongoose.model("Supplier", supplierSchema);
 
