@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <div className="w-64 h-screen bg-primary text-white flex flex-col">
-      <div className="text-2xl font-bold p-4">Seller Dashboard</div>
+      <div className="text-2xl font-bold p-4">Supplier Dashboard</div>
       <nav className="flex-1">
         {menuItems.map((item) => (
           <Link

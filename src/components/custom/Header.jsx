@@ -7,7 +7,7 @@ const Header = () => {
       <h1 className="text-xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-4">
         {/* Add user profile or other header items here */}
-        <span>Welcome, Seller!</span>
+        <span>Welcome, Supplier!</span>
       </div>
     </header>
   );

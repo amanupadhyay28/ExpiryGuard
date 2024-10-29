@@ -58,7 +58,7 @@ const Dashboard = () => {
               <Line
                 type="monotone"
                 dataKey="profit"
-                stroke="#8884d8"
+                stroke="#8884d8" 
                 strokeWidth={2}
               />
             </LineChart>
