@@ -13,11 +13,9 @@ const api_registration = async (req, res) => {
       email,
       password,
       phoneNumber,
-      street,
-      city,
-      state,
-      postalCode,
-      country,
+      address,
+      companyName,
+      commoditySold,
     } = req.body;
 
     let UserModel, userIdPrefix, existingUser;
@@ -42,21 +40,21 @@ const api_registration = async (req, res) => {
     )}`;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new UserModel({
+    const newUserData = {
       [`${userType}Id`]: userId,
       name,
       email,
       password: hashedPassword,
       phoneNumber,
-      address: {
-        street,
-        city,
-        state,
-        postalCode,
-        country,
-      },
-    });
+      address,
+    };
 
+    if (userType === "supplier") {
+      newUserData.companyName = companyName;
+      newUserData.commoditySold = commoditySold;
+    }
+
+    const newUser = new UserModel(newUserData);
     await newUser.save();
     res.json({ msg: `${userType} registered successfully` });
   } catch (err) {
@@ -99,7 +97,7 @@ const api_login = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({authToken: token });
+        res.json({ authToken: token, user });
       }
     );
   } catch (err) {

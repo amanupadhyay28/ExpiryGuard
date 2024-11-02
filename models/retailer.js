@@ -24,11 +24,8 @@ const retailerSchema = new mongoose.Schema({
     required: true,
   },
   address: {
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, required: true },
+    type: String,
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -36,7 +33,7 @@ const retailerSchema = new mongoose.Schema({
   },
 });
 
-// Check if the model already exists before creating it
-const Retailer = mongoose.models.Retailer || mongoose.model("Retailer", retailerSchema);
+const Retailer =
+  mongoose.models.Retailer || mongoose.model("Retailer", retailerSchema);
 
 module.exports = Retailer;
