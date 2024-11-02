@@ -16,16 +16,7 @@ router.use(
 );
 router.use(cookieParser());
 
-
-router.post(
-  "/api_supplier_registration",
-  loginSignupController.api_supplier_registration
-);
-router.post("/api_supplier_login", loginSignupController.api_supplier_login);
-router.post(
-  "/api_retailer_registration",
-  loginSignupController.api_retailer_registration
-);
-router.post("/api_retailer_login", loginSignupController.api_retailer_login);
+router.post("/api_registration", loginSignupController.api_registration);
+router.post("/api_login", loginSignupController.api_login);
 
 module.exports = router;

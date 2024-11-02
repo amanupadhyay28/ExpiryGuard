@@ -5,9 +5,10 @@ const bcrypt = require("bcrypt");
 const Supplier = require("../models/supplier");
 const Retailer = require("../models/retailer");
 
-const api_supplier_registration = async (req, res) => {
+const api_registration = async (req, res) => {
   try {
     const {
+      userType,
       name,
       email,
       password,
@@ -19,16 +20,30 @@ const api_supplier_registration = async (req, res) => {
       country,
     } = req.body;
 
-    const existingSupplier = await Supplier.findOne({ email: email });
-    if (existingSupplier) {
-      return res.status(400).json({ msg: "Supplier already exists" });
+    let UserModel, userIdPrefix, existingUser;
+    if (userType === "supplier") {
+      UserModel = Supplier;
+      userIdPrefix = "SUP";
+      existingUser = await UserModel.findOne({ email: email });
+    } else if (userType === "retailer") {
+      UserModel = Retailer;
+      userIdPrefix = "RET";
+      existingUser = await UserModel.findOne({ email: email });
+    } else {
+      return res.status(400).json({ msg: "Invalid user type" });
     }
 
-    const supplierId = `SUP-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    if (existingUser) {
+      return res.status(400).json({ msg: `${userType} already exists` });
+    }
+
+    const userId = `${userIdPrefix}-${Date.now()}-${Math.floor(
+      Math.random() * 1000
+    )}`;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newSupplier = new Supplier({
-      supplierId,
+    const newUser = new UserModel({
+      [`${userType}Id`]: userId,
       name,
       email,
       password: hashedPassword,
@@ -42,29 +57,40 @@ const api_supplier_registration = async (req, res) => {
       },
     });
 
-    await newSupplier.save();
-    res.json({ msg: "Supplier registered successfully" });
+    await newUser.save();
+    res.json({ msg: `${userType} registered successfully` });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 };
 
-const api_supplier_login = async (req, res) => {
+const api_login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { userType, email, password } = req.body;
 
-    const supplier = await Supplier.findOne({ email });
-    if (!supplier) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
+    let UserModel, userKey;
+    if (userType === "supplier") {
+      UserModel = Supplier;
+      userKey = "supplier";
+    } else if (userType === "retailer") {
+      UserModel = Retailer;
+      userKey = "retailer";
+    } else {
+      return res.status(400).json({ msg: "Invalid user type" });
     }
-    const isMatch = await bcrypt.compare(password, supplier.password);
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid email" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
+      return res.status(400).json({ msg: "Invalid password" });
     }
     const payload = {
-      supplier: {
-        id: supplier.id,
+      [userKey]: {
+        id: user.id,
       },
     };
     jwt.sign(
@@ -73,86 +99,7 @@ const api_supplier_login = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
-      }
-    );
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-};
-
-
-
-const api_retailer_registration = async (req, res) => {
-  try {
-    const {
-      name,
-      email,
-      password,
-      phoneNumber,
-      street,
-      city,
-      state,
-      postalCode,
-      country,
-    } = req.body;
-
-    const existingRetailer = await Retailer.findOne({ email: email });
-    if (existingRetailer) {
-      return res.status(400).json({ msg: "Retailer already exists" });
-    }
-
-    const retailerId = `RET-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newRetailer = new Retailer({
-      retailerId,
-      name,
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      address: {
-        street,
-        city,
-        state,
-        postalCode,
-        country,
-      },
-    });
-
-    await newRetailer.save();
-    res.json({ msg: "Retailer registered successfully" });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-};
-
-const api_retailer_login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const retailer = await Retailer.findOne({ email });
-    if (!retailer) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
-    }
-    const isMatch = await bcrypt.compare(password, retailer.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
-    }
-    const payload = {
-      retailer: {
-        id: retailer.id,
-      },
-    };
-    jwt.sign(
-      payload,
-      process.env.SECRET_KEY,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
+        res.json({authToken: token });
       }
     );
   } catch (err) {
@@ -162,8 +109,6 @@ const api_retailer_login = async (req, res) => {
 };
 
 module.exports = {
-  api_supplier_registration,
-  api_supplier_login,
-  api_retailer_registration,
-  api_retailer_login,
+  api_registration,
+  api_login,
 };
