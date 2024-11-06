@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   isAuthenticated: null,
-  token: null,
+  authToken: null,
   userMetaData: null,
 };
 
@@ -13,7 +13,6 @@ const storeUserData = async (data) => {
     await localStorage.setItem("email", data?.email);
     await localStorage.setItem("phonenumber", data?.phonenumber);
     await localStorage.setItem("userType", data?.userType);
-  
   } catch (e) {
     console.error(e);
   }
@@ -29,9 +28,9 @@ const removeStoreData = () => {
   }
 };
 
-const storeUserMetaData = async(data) => {
+const storeUserMetaData = async (data) => {
   try {
-   await localStorage.setItem("userProfileData", JSON.stringify(data));
+    await localStorage.setItem("userProfileData", JSON.stringify(data));
   } catch (e) {
     console.error(e);
   }
@@ -43,11 +42,12 @@ const authSlice = createSlice({
   reducers: {
     authInit: (state, action) => {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload.token;
+      state.isAuthenticated = !!action.payload.authtoken;
     },
     setUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
-      state.isAuthenticated = !!action.payload?.token;
+      console.log("action.payload", action.payload);
+      state.isAuthenticated = !!action.payload?.authToken;
       storeUserData(action.payload);
     },
     removeUser: (state) => {

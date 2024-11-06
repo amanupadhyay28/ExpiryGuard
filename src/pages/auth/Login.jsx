@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { TailSpin } from "react-loader-spinner";
 import { useLoginUserMutation } from "../../services/common";
 import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../Redux/reducers/auth";
 
 function Login() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    userType: "supplier",
+    userType: "",
     email: "",
     password: "",
   });
@@ -28,7 +29,8 @@ function Login() {
     try {
       const response = await loginUser(formData).unwrap();
 
-      console.log("resons", response);
+      dispatch(setUser(response));
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -87,6 +89,15 @@ function Login() {
             required
             className="mb-6 h-12"
           />
+          <Input
+            name="userType"
+            placeholder="userType"
+            type="select"
+            onChange={handleChange}
+            value={formData.userType}
+            required
+            className="mb-6 h-12"
+          />
           <Button
             type="submit"
             variant="default"
@@ -95,11 +106,12 @@ function Login() {
             Login
           </Button>
           <div className="text-center mt-4">
-            <p>
-              Don’t have an account?{" "}
-              <a href="/register" className="text-orange-500">
-                Sign up
-              </a>
+            <p
+              onClick={() => {
+                navigate("/register");
+              }}
+            >
+              Don’t have an account? Sign up
             </p>
           </div>
         </form>

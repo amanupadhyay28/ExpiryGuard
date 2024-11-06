@@ -31,8 +31,8 @@ function Register() {
     e.preventDefault();
     try {
       const response = await registerUser(formData).unwrap();
-
-      console.log("response on registration is ", response);
+      console.log("response is ", response);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Registration error:", error);
     }
@@ -146,11 +146,12 @@ function Register() {
             Create Account
           </Button>
           <div className="text-center mt-4">
-            <p>
-              Already have an account?{" "}
-              <a href="/login" className="text-orange-500">
-                Log in
-              </a>
+            <p
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Already have an account? Log in
             </p>
           </div>
         </form>
