@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
@@ -8,7 +8,6 @@ import Dashboard from "./components/custom/Dashboard";
 import Inventory from "./components/custom/Inventory";
 import Redistribution from "./components/custom/Redistribution";
 
-
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -16,7 +15,7 @@ function App() {
     <>
       <Router>
         {!authenticated ? (
-          <Login setAuthenticated={setAuthenticated} />
+          <Register />
         ) : (
           <div className="flex">
             <Sidebar />
@@ -33,7 +32,6 @@ function App() {
           </div>
         )}
       </Router>
-    
     </>
   );
 }

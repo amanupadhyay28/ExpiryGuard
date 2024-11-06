@@ -3,36 +3,35 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   isAuthenticated: null,
-  isOnboardingCompleted: false,
-  notificatioType: null,
+  token: null,
   userMetaData: null,
 };
 
 const storeUserData = async (data) => {
   try {
-    localStorage.setItem("accessToken", data?.accessToken);
-    localStorage.setItem("refreshToken", data?.refreshToken);
-    localStorage.setItem("userId", data?.userId.toString());
-    localStorage.setItem("email", data?.email);
+    await localStorage.setItem("token", data?.token);
+    await localStorage.setItem("email", data?.email);
+    await localStorage.setItem("phonenumber", data?.phonenumber);
+    await localStorage.setItem("userType", data?.userType);
+  
   } catch (e) {
     console.error(e);
   }
 };
 const removeStoreData = () => {
   try {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     localStorage.removeItem("email");
-    localStorage.removeItem("userProfileData1");
+    localStorage.removeItem("phonenumber");
+    localStorage.removeItem("userType");
   } catch (e) {
     console.error(e);
   }
 };
 
-const storeUserMetaData = (data) => {
+const storeUserMetaData = async(data) => {
   try {
-    localStorage.setItem("userProfileData", JSON.stringify(data));
+   await localStorage.setItem("userProfileData", JSON.stringify(data));
   } catch (e) {
     console.error(e);
   }
@@ -44,11 +43,11 @@ const authSlice = createSlice({
   reducers: {
     authInit: (state, action) => {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload?.accessToken;
+      state.isAuthenticated = !!action.payload.token;
     },
     setUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
-      state.isAuthenticated = !!action.payload?.accessToken;
+      state.isAuthenticated = !!action.payload?.token;
       storeUserData(action.payload);
     },
     removeUser: (state) => {

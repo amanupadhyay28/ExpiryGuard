@@ -1,8 +1,8 @@
 import authReducer from "./auth";
-import { api } from "../../services/common";
+import { apiSlice } from "../../services/common";
 
 const rootReducer = {
   auth: authReducer,
-  [api.reducerPath]: api.reducer,
+  [apiSlice.reducerPath]: apiSlice.reducer,
 };
 export default rootReducer;

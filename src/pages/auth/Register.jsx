@@ -2,34 +2,44 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDispatch } from "react-redux";
+import { useRegisterUserMutation } from "../../services/common";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 function Register() {
-  const [userType, setUserType] = useState("supplier");
   const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    address: "",
     companyName: "",
     commoditySold: "",
-    address: "",
-    phoneNumber: "",
-    name: "",
-    retailerName: "",
-    shopAddress: "",
+    userType: "supplier",
   });
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleUserTypeChange = (value) => {
+    setFormData({ ...formData, userType: value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    localStorage.setItem(formData.phoneNumber, JSON.stringify(formData));
-    navigate("/login");
+    try {
+      const response = await registerUser(formData).unwrap();
+
+      console.log("response on registration is ", response);
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   return (
     <div className="flex h-screen flex-col md:flex-row">
-      {/* Left Side: Image/Description */}
       <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
         <div className="max-w-md text-center">
           <h1 className="text-4xl font-bold mb-4">Join the Network</h1>
@@ -46,28 +56,66 @@ function Register() {
         </div>
       </div>
 
-      {/* Right Side: Form */}
       <div className="md:w-1/2 w-full flex justify-center items-center bg-white relative px-4 py-12 md:py-0">
-        {/* Glassmorphic Panel (For Mobile View) */}
         <div className="absolute top-4 w-[80%] h-[20%] bg-white/30 backdrop-blur-lg rounded-lg md:hidden"></div>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleRegister}
           className="w-full max-w-lg p-8 shadow-lg rounded-lg z-10 bg-white"
         >
           <h2 className="text-2xl font-semibold mb-6 text-center">Register</h2>
 
           <ToggleGroup
             type="single"
-            value={userType}
-            onValueChange={setUserType}
+            value={formData.userType}
+            onValueChange={handleUserTypeChange}
             className="mb-6"
           >
             <ToggleGroupItem value="supplier">Supplier</ToggleGroupItem>
             <ToggleGroupItem value="retailer">Retailer</ToggleGroupItem>
           </ToggleGroup>
+          <Input
+            name="name"
+            placeholder="Name"
+            onChange={handleChange}
+            value={formData.name}
+            required
+            className="mb-6 h-12"
+          />
+          <Input
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            value={formData.email}
+            required
+            className="mb-6 h-12"
+          />
+          <Input
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            value={formData.password}
+            required
+            className="mb-6 h-12"
+          />
+          <Input
+            name="phoneNumber"
+            placeholder="Phone Number"
+            onChange={handleChange}
+            value={formData.phoneNumber}
+            required
+            className="mb-6 h-12"
+          />
+          <Input
+            name="address"
+            placeholder="Address"
+            onChange={handleChange}
+            value={formData.address}
+            required
+            className="mb-6 h-12"
+          />
 
-          {userType === "supplier" ? (
+          {formData.userType === "supplier" ? (
             <>
               <Input
                 name="companyName"
@@ -85,52 +133,10 @@ function Register() {
                 required
                 className="mb-6 h-12"
               />
-              <Input
-                name="address"
-                placeholder="Address"
-                onChange={handleChange}
-                value={formData.address}
-                required
-                className="mb-6 h-12"
-              />
             </>
           ) : (
-            <>
-              <Input
-                name="retailerName"
-                placeholder="Retailer Name"
-                onChange={handleChange}
-                value={formData.retailerName}
-                required
-                className="mb-6 h-12"
-              />
-              <Input
-                name="shopAddress"
-                placeholder="Shop Address"
-                onChange={handleChange}
-                value={formData.shopAddress}
-                required
-                className="mb-6 h-12"
-              />
-            </>
+            <></>
           )}
-
-          <Input
-            name="phoneNumber"
-            placeholder="Phone Number"
-            onChange={handleChange}
-            value={formData.phoneNumber}
-            required
-            className="mb-6 h-12"
-          />
-          <Input
-            name="name"
-            placeholder="Name"
-            onChange={handleChange}
-            value={formData.name}
-            required
-            className="mb-6 h-12"
-          />
 
           <Button
             type="submit"
