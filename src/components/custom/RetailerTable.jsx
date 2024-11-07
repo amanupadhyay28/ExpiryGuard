@@ -1,4 +1,7 @@
+import { useGetRetailerForSupplierMutation } from "../../services/common/";
+import { useState, useEffect } from "react";
 function RetailerTable({ onSelectRetailer }) {
+ 
   const retailers = [
     {
       name: "Radhey Shyam",

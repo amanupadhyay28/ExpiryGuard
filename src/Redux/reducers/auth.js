@@ -2,16 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  isAuthenticated: null,
-  authToken: null,
+  isAuthenticated: !!localStorage.getItem("authToken"),
+  authToken: localStorage.getItem("authToken") || null,
   userMetaData: null,
 };
 
 const storeUserData = async (data) => {
   try {
-    await localStorage.setItem("token", data?.token);
-    await localStorage.setItem("email", data?.email);
-    await localStorage.setItem("phonenumber", data?.phonenumber);
+    await localStorage.setItem("authToken", data?.authToken);
+
+    await localStorage.setItem("email", data?.user.email);
+    await localStorage.setItem("phonenumber", data?.user.phoneNumber);
     await localStorage.setItem("userType", data?.userType);
   } catch (e) {
     console.error(e);
@@ -19,7 +20,7 @@ const storeUserData = async (data) => {
 };
 const removeStoreData = () => {
   try {
-    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
     localStorage.removeItem("email");
     localStorage.removeItem("phonenumber");
     localStorage.removeItem("userType");
@@ -43,16 +44,19 @@ const authSlice = createSlice({
     authInit: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = !!action.payload.authtoken;
+      state.authToken = action.payload.authToken;
     },
     setUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
-      console.log("action.payload", action.payload);
+
       state.isAuthenticated = !!action.payload?.authToken;
+      state.authToken = action.payload.authToken;
       storeUserData(action.payload);
     },
     removeUser: (state) => {
       state.user = null;
       state.isAuthenticated = false;
+      state.authToken = null;
       state.userMetaData = null;
       removeStoreData();
     },

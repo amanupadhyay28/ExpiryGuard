@@ -30,13 +30,14 @@ function Login() {
       const response = await loginUser(formData).unwrap();
 
       dispatch(setUser(response));
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
         <TailSpin height="80" width="80" color="#f3a247" ariaLabel="loading" />

@@ -15,7 +15,7 @@ import Inventory from "./components/custom/Inventory";
 import Redistribution from "./components/custom/Redistribution";
 
 function App() {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
 
   return (
     <Router>
@@ -24,17 +24,13 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <Login />
           }
         />
         <Route
           path="/register"
           element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <Register />
-            )
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <Register />
           }
         />
 
@@ -42,7 +38,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            isAuthenticated ? (
+            isLoggedIn ? (
               <div className="flex">
                 <Sidebar />
                 <div className="flex-1 flex flex-col">
@@ -59,14 +55,12 @@ function App() {
         />
         <Route
           path="/inventory"
-          element={
-            isAuthenticated ? <Inventory /> : <Navigate to="/" replace />
-          }
+          element={isLoggedIn ? <Inventory /> : <Navigate to="/" replace />}
         />
         <Route
           path="/redistribution"
           element={
-            isAuthenticated ? <Redistribution /> : <Navigate to="/" replace />
+            isLoggedIn ? <Redistribution /> : <Navigate to="/" replace />
           }
         />
       </Routes>

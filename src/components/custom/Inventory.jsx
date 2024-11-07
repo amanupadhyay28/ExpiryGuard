@@ -1,10 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import RetailerDetailsOverlay from "./RetailerDetailsOverlay";
 import RetailerTable from "./RetailerTable";
+import { useGetRetailerForSupplierMutation } from "../../services/common/";
 
 function Inventory() {
   const [selectedRetailer, setSelectedRetailer] = useState(null);
+  const [getRetailerForSupplierMutation, { isLoading }] =
+    useGetRetailerForSupplierMutation();
+
+  useEffect(() => {
+    const supplierEmail = localStorage.getItem("email");
+    console.log("supplierEmail from localStorage:", supplierEmail);
+
+    if (supplierEmail) {
+      getRetailerForSupplierMutation({ supplierEmail })
+        .unwrap()
+        .then((response) => console.log("response", response))
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getRetailerForSupplierMutation]);
 
   const transitionSettings = {
     duration: 0.6,

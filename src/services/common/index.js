@@ -21,8 +21,27 @@ export const apiSlice = createApi({
         body: task,
       }),
     }),
+    getRetailerForSupplier: builder.mutation({
+      query: (task) => {
+        const token = localStorage.getItem("authToken");
+        console.log("token is", token);
+        console.log("task", task);
+        return {
+          url: "/api_getRetailersForSupplier",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Set Bearer token here
+          },
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = apiSlice;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useGetRetailerForSupplierMutation,
+} = apiSlice;
 export default apiSlice;
