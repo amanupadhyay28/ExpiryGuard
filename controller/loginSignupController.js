@@ -97,7 +97,8 @@ const api_login = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({ authToken: token, user });
+
+        res.json({ authToken: token, userType: userType, user });
       }
     );
   } catch (err) {
