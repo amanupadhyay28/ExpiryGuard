@@ -37,12 +37,23 @@ function Login() {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
       });
+      toast.success("Login successful!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
 
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 4000);
       setTimeout(() => {
         navigate("/dashboard");
       }, 4000);
     } catch (error) {
       console.error("Login error:", error);
+      toast.error(`Login failed! ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
       toast.error(`Login failed! ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
@@ -63,6 +74,29 @@ function Login() {
   ];
 
   return (
+    <>
+      <div>
+        <ToastContainer />{" "}
+        {/* ToastContainer must be rendered in your component */}
+      </div>
+      <div className="flex h-screen flex-col md:flex-row">
+        <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
+          <div className="max-w-md text-center">
+            <h1 className="text-4xl font-bold mb-4">
+              Manage Your Products Easily
+            </h1>
+            <p className="mb-6">
+              Stay updated with product analytics and boost your business
+              management.
+            </p>
+            <div className="mt-4">
+              <p className="text-sm">
+                “This platform has changed how I manage my business.”
+              </p>
+              <p className="text-sm font-bold mt-2">- MR. Jain, CEO</p>
+            </div>
+          </div>
+        </div>
     <>
       <div>
         <ToastContainer />{" "}
