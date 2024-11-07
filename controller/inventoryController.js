@@ -246,10 +246,45 @@ const api_getExpiringProducts = async (req, res) => {
   }
 };
 
+const api_getInventory = async (req, res) => {
+  try {
+    const { retailerEmail } = req.body;
+    const inventory = await Inventory.findOne({ retailerEmail });
+    if (!inventory) {
+      return res.status(404).json({ msg: "Inventory not found" });
+    }
+    res.json(inventory);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+const api_getInventoryForRetailerBySupplier = async (req, res) => {
+  try {
+    const { retailerEmail, supplierEmail } = req.body;
+    const inventory = await Inventory.findOne({ retailerEmail });
+
+    if (!inventory) {
+      return res.status(404).json({ msg: "Inventory not found" });
+    }
+    const supplierProducts = inventory.products.filter(
+      (product) => product.supplierEmail === supplierEmail
+    );
+
+    res.json(supplierProducts);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   api_add_product,
   api_update_quantity,
   api_getRetailersForSupplier,
   api_getSuppliersForRetailer,
   api_getExpiringProducts,
+  api_getInventory,
+  api_getInventoryForRetailerBySupplier,
 };
