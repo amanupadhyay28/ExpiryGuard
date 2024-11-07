@@ -23,10 +23,13 @@ const Sidebar = () => {
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },
   ];
-
+  const user = localStorage.getItem("userType")?.toUpperCase();
+  const formattedUser = user
+    ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
+    : "";
   return (
-    <div className="w-64 h-screen bg-primary text-white flex flex-col">
-      <div className="text-2xl font-bold p-4">Supplier Dashboard</div>
+    <div className="w-64 h-screen bg-primary text-white flex flex-col ">
+      <div className="text-2xl font-bold p-4">{formattedUser} Dashboard</div>
       <nav className="flex-1">
         {menuItems.map((item) => (
           <Link

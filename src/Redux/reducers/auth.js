@@ -9,9 +9,11 @@ const initialState = {
 
 const storeUserData = async (data) => {
   try {
+    console.log(data);
     await localStorage.setItem("authToken", data?.authToken);
 
     await localStorage.setItem("email", data?.user.email);
+    await localStorage.setItem("name", data?.user.name);
     await localStorage.setItem("phonenumber", data?.user.phoneNumber);
     await localStorage.setItem("userType", data?.userType);
   } catch (e) {

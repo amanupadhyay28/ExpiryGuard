@@ -16,6 +16,15 @@ import Redistribution from "./components/custom/Redistribution";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const ProtectedRouteLayout = ({ children }) => (
+    <div className="flex  h-screen">
+      <Sidebar />
+      <div className="flex-1 flex flex-col h-full overflow-auto">
+        <Header />
+        <main className="p-4 bg-gray-100 flex-1">{children}</main>
+      </div>
+    </div>
+  );
 
   return (
     <Router>
@@ -37,15 +46,9 @@ function App() {
           path="/dashboard"
           element={
             isLoggedIn ? (
-              <div className="flex">
-                <Sidebar />
-                <div className="flex-1 flex flex-col">
-                  <Header />
-                  <main className="p-4 bg-gray-100 flex-1 overflow-auto">
-                    <Dashboard />
-                  </main>
-                </div>
-              </div>
+              <ProtectedRouteLayout>
+                <Dashboard />
+              </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />
             )
@@ -53,12 +56,26 @@ function App() {
         />
         <Route
           path="/inventory"
-          element={isLoggedIn ? <Inventory /> : <Navigate to="/" replace />}
+          element={
+            isLoggedIn ? (
+              <ProtectedRouteLayout>
+                <Inventory />
+              </ProtectedRouteLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
         />
         <Route
           path="/redistribution"
           element={
-            isLoggedIn ? <Redistribution /> : <Navigate to="/" replace />
+            isLoggedIn ? (
+              <ProtectedRouteLayout>
+                <Redistribution />
+              </ProtectedRouteLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>

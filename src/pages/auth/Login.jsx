@@ -8,16 +8,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Redux/reducers/auth";
 import { toast, ToastContainer } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css";
+import SelectComponent from "@/components/custom/Select";
 
 function Login() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    userType: "",
     email: "",
     password: "",
   });
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  const [loading, setLoading] = useState(false);
+
+  const [userType, setUserType] = useState("");
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
@@ -29,7 +30,7 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginUser(formData).unwrap();
+      const response = await loginUser({ ...formData, userType }).unwrap();
 
       dispatch(setUser(response));
       toast.success("Login successful!", {
@@ -56,6 +57,10 @@ function Login() {
       </div>
     );
   }
+  const userTypeOptions = [
+    { value: "supplier", label: "Supplier" },
+    { value: "retailer", label: "Retailer" },
+  ];
 
   return (
     <>
@@ -106,14 +111,11 @@ function Login() {
               required
               className="mb-6 h-12"
             />
-            <Input
-              name="userType"
-              placeholder="userType"
-              type="select"
-              onChange={handleChange}
-              value={formData.userType}
-              required
-              className="mb-6 h-12"
+            <SelectComponent
+              selectData={userTypeOptions}
+              onSelectChange={setUserType}
+              selectedValue={userType}
+              className="w-full h-12 border border-gray-300 rounded-md p-3 mt-2"
             />
             <Button
               type="submit"

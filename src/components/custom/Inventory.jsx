@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import RetailerDetailsOverlay from "./RetailerDetailsOverlay";
-import RetailerTable from "./RetailerTable";
+import { TailSpin } from "react-loader-spinner";
+import RetailerInfoCard from "./RetailerCard";
 import { useGetRetailerForSupplierMutation } from "../../services/common/";
 
 function Inventory() {
   const [selectedRetailer, setSelectedRetailer] = useState(null);
   const [getRetailerForSupplierMutation, { isLoading }] =
     useGetRetailerForSupplierMutation();
+  const [retailerData, setRetailerData] = useState([]);
 
   useEffect(() => {
     const supplierEmail = localStorage.getItem("email");
-    console.log("supplierEmail from localStorage:", supplierEmail);
 
     if (supplierEmail) {
       getRetailerForSupplierMutation({ supplierEmail })
         .unwrap()
-        .then((response) => console.log("response", response))
+        .then((response) => {
+          console.log(response);
+          const dataArray = Array.isArray(response) ? response : [response];
+          console.log(dataArray);
+          setRetailerData(dataArray);
+        })
         .catch((error) => console.error("Error fetching retailers:", error));
     } else {
       console.error("No supplier email found in localStorage.");
@@ -27,7 +33,13 @@ function Inventory() {
     duration: 0.6,
     ease: [0.42, 0, 0.58, 1], // Smooth ease-in-out curve
   };
-
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <TailSpin height="80" width="80" color="#f3a247" ariaLabel="loading" />
+      </div>
+    );
+  }
   return (
     <div className="relative flex w-full h-full">
       {/* Table section */}
@@ -37,7 +49,7 @@ function Inventory() {
         animate={{ width: selectedRetailer ? "50%" : "100%" }}
         transition={transitionSettings}
       >
-        <RetailerTable onSelectRetailer={setSelectedRetailer} />
+        <RetailerInfoCard data={retailerData} />
       </motion.div>
 
       {/* Overlay section */}

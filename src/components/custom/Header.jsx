@@ -8,8 +8,10 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = localStorage.getItem("userType");
-
+  const user = localStorage.getItem("name");
+  const formattedUser = user
+    ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
+    : "";
   const handleLogout = () => {
     setIsLoading(true);
 
@@ -29,7 +31,7 @@ const Header = () => {
     <header className="bg-white shadow p-4 flex justify-between items-center">
       <h1 className="text-xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <span>Welcome, {user}!</span>
+        <span>Welcome, {formattedUser}!</span>
         <button
           className="bg-slate-300 p-2 hover:bg-slate-500"
           onClick={handleLogout}
