@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { useRegisterUserMutation } from "../../services/common";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { TailSpin } from "react-loader-spinner";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -37,6 +38,13 @@ function Register() {
       console.error("Registration error:", error);
     }
   };
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <TailSpin height="80" width="80" color="#f3a247" ariaLabel="loading" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen flex-col md:flex-row">
@@ -151,7 +159,10 @@ function Register() {
                 navigate("/");
               }}
             >
-              Already have an account? Log in
+              Already have an account?{" "}
+              <span className="underline hover:text-orange-500 cursor-pointer">
+                Login In
+              </span>
             </p>
           </div>
         </form>
