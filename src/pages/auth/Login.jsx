@@ -6,7 +6,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useLoginUserMutation } from "../../services/common";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../Redux/reducers/auth";
-import { toast, ToastContainer } from "react-toastify"; // Import toast
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SelectComponent from "@/components/custom/Select";
 
@@ -34,7 +34,7 @@ function Login() {
 
       dispatch(setUser(response));
       toast.success("Login successful!", {
-        position: toast.POSITION.TOP_RIGHT,
+        position: "top-right",
         autoClose: 3000,
       });
 
@@ -44,7 +44,7 @@ function Login() {
     } catch (error) {
       console.error("Login error:", error);
       toast.error(`Login failed! ${error}`, {
-        position: toast.POSITION.TOP_RIGHT,
+        position: "top-right",
         autoClose: 3000,
       });
     }

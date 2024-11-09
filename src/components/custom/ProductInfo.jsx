@@ -1,78 +1,69 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import {
-  FaDollarSign,
-  FaBoxes,
-  FaCalendarAlt,
-  FaShippingFast,
-  FaRupeeSign,
-} from "react-icons/fa";
+import { FaRupeeSign, FaBoxes, FaCalendarAlt } from "react-icons/fa";
+
 const ProductInfo = () => {
   const location = useLocation();
-  const products = location.state?.inventoryData;
-  console.log(products);
+  const products = location.state?.inventoryData || [];
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-semibold text-gray-800 mb-6">
+    <div className="p-4 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Product Inventory
       </h2>
 
-      <table className="w-full table-auto bg-white shadow-lg rounded-lg border-collapse text-center">
+      <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-orange-600 text-white ">
-            <th className="py-3 px-6 ">Product Name</th>
-            <th className="py-3 px-6 ">Description</th>
-            <th className="py-3 px-6">Quantity</th>
-            <th className="py-3 px-6 ">Price</th>
-            <th className="py-3 px-6 ">Batch</th>
-            <th className="py-3 px-6">Manufacture </th>
-            <th className="py-3 px-6 ">Expiry</th>
+          <tr className="text-gray-600 uppercase text-xs font-semibold border-b">
+            <th className="px-4 py-3">Product Name</th>
+            <th className="px-4 py-3">Description</th>
+            <th className="px-4 py-3">Quantity</th>
+            <th className="px-4 py-3">Price</th>
+            <th className="px-4 py-3">Batch</th>
+            <th className="px-4 py-3">Manufacture Date</th>
+            <th className="px-4 py-3">Expiry Date</th>
           </tr>
         </thead>
-
-        <tbody>
-          {products.map((product, index) => (
-            <tr
-              key={product._id}
-              className={`${
-                index % 2 === 0 ? "bg-orange-100" : "bg-slate-50"
-              } border-t border-gray-200 hover:bg-orange-200 transition-colors duration-200`}
-            >
-              <td className="py-4 px-6 text-gray-800 font-semibold">
-                {product.productName}
-              </td>
-              <td className="py-4 px-6 text-gray-600">{product.description}</td>
-              <td className="py-4 px-6 text-gray-600 font-semibold">
-                {product.quantity}
-              </td>
-              <td className="py-4 px-6 text-gray-600">
-                <FaRupeeSign className="inline  text-gray-400" />
-                <span className="font-semibold text-green-600">
-                  {product.price}
-                </span>
-              </td>
-
-              <td className="py-4 px-6 text-gray-600">
-                <FaBoxes className="inline mr-2 text-gray-400" />
-                <span className="font-semibold text-gray-600">
-                  {product.batchNumber}
-                </span>
-              </td>
-              <td className="py-4 px-6 text-gray-600">
-                <FaCalendarAlt className="inline mr-2 text-gray-400" />
-                <span className="font-semibold text-green-600">
-                  {product.manufactureDate}
-                </span>
-              </td>
-              <td className="py-4 px-6 text-gray-600">
-                <FaCalendarAlt className="inline mr-2 text-gray-400" />
-                <span className="font-semibold text-red-600">
-                  {product.expiryDate}
-                </span>
+        <tbody className="text-gray-800 text-sm bg-slate-100">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <tr key={product._id} className="border-b hover:bg-gray-50">
+                <td className="px-4 py-4 font-semibold">
+                  {product.productName || "N/A"}
+                </td>
+                <td className="px-4 py-4">{product.description || "N/A"}</td>
+                <td className="px-4 py-4 font-semibold">
+                  {product.quantity || "N/A"}
+                </td>
+                <td className="px-4 py-4 text-gray-800 font-semibold">
+                  <FaRupeeSign className="mr-1 text-gray-400" />
+                  {product.price || "N/A"}
+                </td>
+                <td className="px-4 py-4">
+                  <FaBoxes className="mr-2 text-gray-400" />
+                  {product.batchNumber || "N/A"}
+                </td>
+                <td className="px-4 py-4">
+                  <FaCalendarAlt className="mr-2 text-gray-400" />
+                  <span className="text-green-600 font-semibold">
+                    {product.manufactureDate || "N/A"}
+                  </span>
+                </td>
+                <td className="px-4 py-4">
+                  <FaCalendarAlt className="mr-2 text-gray-400" />
+                  <span className="text-red-600 font-semibold">
+                    {product.expiryDate || "N/A"}
+                  </span>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className="px-4 py-4 text-center text-gray-500">
+                No data available
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

@@ -17,6 +17,8 @@ import ProductInfo from "./components/custom/ProductInfo";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const userType = localStorage.getItem("userType");
+
   const ProtectedRouteLayout = ({ children }) => (
     <div className="flex  h-screen">
       <Sidebar />
@@ -80,7 +82,7 @@ function App() {
           }
         />
         <Route
-          path="/redistribution"
+          path={userType === "supplier" ? "/product_request" : "/add_inventory"}
           element={
             isLoggedIn ? (
               <ProtectedRouteLayout>

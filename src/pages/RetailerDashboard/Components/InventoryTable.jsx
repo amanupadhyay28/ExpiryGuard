@@ -8,8 +8,8 @@ import {
 } from "../../../components/ui/breadcrumb";
 import FormDialog from "../Components/FormDialog";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify"; // Import toast from react-toastify
-import "react-toastify/dist/ReactToastify.css"; // Import the toastify CSS
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { usePostProductReqRetailerMutation } from "../../../services/common/index";
 const InventoryTable = ({ items }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(null);

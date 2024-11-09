@@ -73,6 +73,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getProductReqSupplier: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_SeeProductRequests",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -84,5 +93,6 @@ export const {
   useGetDriverDetailsMutation,
   useGetRetailerInventoryMutation,
   usePostProductReqRetailerMutation,
+  useGetProductReqSupplierMutation,
 } = apiSlice;
 export default apiSlice;

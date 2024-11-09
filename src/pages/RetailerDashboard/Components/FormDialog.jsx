@@ -94,6 +94,7 @@ const FormDialog = ({ open, onClose, product, onSubmit, reqType }) => {
               value={formData.supplierEmail}
               onChange={handleChange}
               className="focus:border-orange-600"
+              disabled
             />
           </div>
           <div>
@@ -103,6 +104,7 @@ const FormDialog = ({ open, onClose, product, onSubmit, reqType }) => {
               type="text"
               value={formData.expiryDate}
               onChange={handleChange}
+              disabled
             />
           </div>
           <Button type="submit" className="w-full bg-orange-600">

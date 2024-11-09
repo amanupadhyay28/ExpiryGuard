@@ -8,6 +8,8 @@ import {
 } from "@heroicons/react/outline";
 
 const Sidebar = () => {
+  const userType = localStorage.getItem("userType");
+
   const location = useLocation();
 
   const menuItems = [
@@ -18,8 +20,8 @@ const Sidebar = () => {
       icon: <ArchiveIcon className="h-6 w-6" />,
     },
     {
-      name: "Redistribution",
-      path: "/redistribution",
+      name: userType === "supplier" ? "Product Request" : "Add Inventory",
+      path: userType === "supplier" ? "/product_request" : "/add_inventory",
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },
   ];
