@@ -3,9 +3,17 @@ const TransferTask = require("../models/tranferTask");
 
 const api_add_driver = async (req, res) => {
   try {
-    const { supplierId, name, phoneNumber, vehicleNumber } = req.body;
+    const {
+      supplierEmail,
+      driverName,
+      phoneNumber,
+      vehicleNumber,
+      driverEmail,
+      serviceArea,
+      vehicleType,
+    } = req.body;
 
-    const supplier = await Supplier.findOne({ supplierId });
+    const supplier = await Supplier.findOne({ email: supplierEmail });
     if (!supplier) {
       return res.status(400).json({ msg: "Supplier not found" });
     }
@@ -13,9 +21,12 @@ const api_add_driver = async (req, res) => {
     const driverId = `DRV-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
     const newDriver = {
       driverId,
-      name,
+      driverName,
       phoneNumber,
       vehicleNumber,
+      driverEmail,
+      serviceArea,
+      vehicleType,
     };
 
     supplier.drivers.push(newDriver);
@@ -30,9 +41,9 @@ const api_add_driver = async (req, res) => {
 
 const api_get_drivers = async (req, res) => {
   try {
-    const { supplierId } = req.params;
+    const { supplierEmail } = req.body;
 
-    const supplier = await Supplier.findOne({ supplierId });
+    const supplier = await Supplier.findOne({ email: supplierEmail });
     if (!supplier) {
       return res.status(400).json({ msg: "Supplier not found" });
     }

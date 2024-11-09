@@ -6,7 +6,7 @@ const driverSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  name: {
+  driverName: {
     type: String,
     required: true,
   },
@@ -15,6 +15,18 @@ const driverSchema = new mongoose.Schema({
     required: true,
   },
   vehicleNumber: {
+    type: String,
+    required: true,
+  },
+  driverEmail: {
+    type: String,
+    required: true,
+  },
+  serviceArea: {
+    type: String,
+    required: true,
+  },
+  vehicleType: {
     type: String,
     required: true,
   },
