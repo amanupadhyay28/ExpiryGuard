@@ -1,6 +1,7 @@
 const Supplier = require("../models/supplier");
 const Inventory = require("../models/inventory");
 const Retailer = require("../models/retailer");
+const ProductRequest = require("../models/productRequest");
 
 // Helper function to format a date to 'YYYY-MM-DD'
 const formatDateToYYYYMMDD = (date) => {
@@ -279,6 +280,40 @@ const api_getInventoryForRetailerBySupplier = async (req, res) => {
   }
 };
 
+const api_productRequests = async (req, res) => {
+  try {
+    const {
+      productId,
+      productName,
+      price,
+      quantity,
+      supplierEmail,
+      retailerEmail,
+      expiryDate,
+      reqType,
+    } = req.body;
+
+    const newProductRequest = new ProductRequest({
+      productId,
+      productName,
+      price,
+      quantity,
+      supplierEmail,
+      retailerEmail,
+      expiryDate,
+      reqType,
+    });
+    // Save the product request to the database
+    const savedProductRequest = await newProductRequest.save();
+
+    // Respond with the saved product request
+    res.status(201).json(savedProductRequest);
+  } catch (error) {
+    console.error("Error saving product request:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   api_add_product,
   api_update_quantity,
@@ -287,4 +322,5 @@ module.exports = {
   api_getExpiringProducts,
   api_getInventory,
   api_getInventoryForRetailerBySupplier,
+  api_productRequests,
 };

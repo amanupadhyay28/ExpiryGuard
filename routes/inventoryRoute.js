@@ -35,4 +35,6 @@ router.post(
   inventoryController.api_getInventoryForRetailerBySupplier
 );
 
+router.post("/api_productRequests", inventoryController.api_productRequests);
+
 module.exports = router;
