@@ -295,7 +295,7 @@ const api_productRequests = async (req, res) => {
     const requestId = `REQ-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     const newProductRequest = new ProductRequest({
-      requestId,
+      requestId: requestId,
       productName,
       price,
       quantity,
