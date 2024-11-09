@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const productRequestSchema = new mongoose.Schema({
-  productId: {
+  requestId: {
     type: String,
     required: true,
-    unique: true,
   },
   productName: {
     type: String,
@@ -39,8 +38,6 @@ const productRequestSchema = new mongoose.Schema({
   },
 });
 
-const ProductRequest =
-  mongoose.models.ProductRequest ||
-  mongoose.model("ProductRequest", productRequestSchema);
+const ProductRequest = mongoose.model("ProductRequest", productRequestSchema);
 
 module.exports = ProductRequest;

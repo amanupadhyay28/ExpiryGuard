@@ -283,7 +283,6 @@ const api_getInventoryForRetailerBySupplier = async (req, res) => {
 const api_productRequests = async (req, res) => {
   try {
     const {
-      productId,
       productName,
       price,
       quantity,
@@ -293,8 +292,10 @@ const api_productRequests = async (req, res) => {
       reqType,
     } = req.body;
 
+    const requestId = `REQ-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
     const newProductRequest = new ProductRequest({
-      productId,
+      requestId,
       productName,
       price,
       quantity,
@@ -303,10 +304,7 @@ const api_productRequests = async (req, res) => {
       expiryDate,
       reqType,
     });
-    // Save the product request to the database
     const savedProductRequest = await newProductRequest.save();
-
-    // Respond with the saved product request
     res.status(201).json(savedProductRequest);
   } catch (error) {
     console.error("Error saving product request:", error);
