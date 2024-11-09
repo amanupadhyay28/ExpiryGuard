@@ -314,6 +314,19 @@ const api_productRequests = async (req, res) => {
   }
 };
 
+const api_SeeProductRequests = async (req, res) => {
+  try {
+    const { supplierEmail } = req.body;
+    console.log(supplierEmail);
+    const productRequests = await ProductRequest.find({
+      supplierEmail: supplierEmail,
+    });
+    res.json(productRequests);
+  } catch (error) {
+    console.error("Error Fetching Product Request:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   api_add_product,
   api_update_quantity,
@@ -323,4 +336,5 @@ module.exports = {
   api_getInventory,
   api_getInventoryForRetailerBySupplier,
   api_productRequests,
+  api_SeeProductRequests,
 };

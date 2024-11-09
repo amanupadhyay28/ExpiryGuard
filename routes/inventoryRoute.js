@@ -37,4 +37,8 @@ router.post(
 
 router.post("/api_productRequests", inventoryController.api_productRequests);
 
+router.post(
+  "/api_SeeProductRequests",
+  inventoryController.api_SeeProductRequests
+);
 module.exports = router;
