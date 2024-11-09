@@ -32,7 +32,9 @@ const Header = () => {
     <header className="bg-white shadow p-4 flex justify-between items-center">
       <h1 className="text-xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <span>Welcome, {formattedUser}!</span>
+        <span className="text-xl ">
+          Welcome, <span className="text-orange-500">{formattedUser}!</span>
+        </span>
         <Button onClick={handleLogout} className="hover:bg-slate-700">
           {" "}
           Logout

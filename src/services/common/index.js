@@ -29,7 +29,7 @@ export const apiSlice = createApi({
           url: "/api_getRetailersForSupplier",
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
           body: task,
         };
@@ -64,6 +64,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    postProductReqRetailer: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_productRequests",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -74,5 +83,6 @@ export const {
   useGetInventoryForRetailerBySupplierMutation,
   useGetDriverDetailsMutation,
   useGetRetailerInventoryMutation,
+  usePostProductReqRetailerMutation,
 } = apiSlice;
 export default apiSlice;
