@@ -24,14 +24,42 @@ export const apiSlice = createApi({
     getRetailerForSupplier: builder.mutation({
       query: (task) => {
         const token = localStorage.getItem("authToken");
-        console.log("token is", token);
-        console.log("task", task);
+
         return {
           url: "/api_getRetailersForSupplier",
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`, // Set Bearer token here
+            Authorization: `Bearer ${token}`, 
           },
+          body: task,
+        };
+      },
+    }),
+    getInventoryForRetailerBySupplier: builder.mutation({
+      query: (task) => {
+        const token = localStorage.getItem("authToken");
+
+        return {
+          url: "/api_getInventoryForRetailerBySupplier",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
+    getDriverDetails: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_get_drivers",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
+    getRetailerInventory: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_getInventory",
+          method: "POST",
           body: task,
         };
       },
@@ -43,5 +71,8 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useGetRetailerForSupplierMutation,
+  useGetInventoryForRetailerBySupplierMutation,
+  useGetDriverDetailsMutation,
+  useGetRetailerInventoryMutation,
 } = apiSlice;
 export default apiSlice;

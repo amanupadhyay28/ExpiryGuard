@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../../Redux/reducers/auth";
 import { TailSpin } from "react-loader-spinner";
+import { Button } from "../ui/button";
 const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -32,12 +33,10 @@ const Header = () => {
       <h1 className="text-xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-4">
         <span>Welcome, {formattedUser}!</span>
-        <button
-          className="bg-slate-300 p-2 hover:bg-slate-500"
-          onClick={handleLogout}
-        >
+        <Button onClick={handleLogout} className="hover:bg-slate-700">
+          {" "}
           Logout
-        </button>
+        </Button>
       </div>
     </header>
   );

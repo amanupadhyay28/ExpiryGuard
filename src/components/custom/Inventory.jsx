@@ -4,12 +4,14 @@ import RetailerDetailsOverlay from "./RetailerDetailsOverlay";
 import { TailSpin } from "react-loader-spinner";
 import RetailerInfoCard from "./RetailerCard";
 import { useGetRetailerForSupplierMutation } from "../../services/common/";
+import RetailerInventory from "../../pages/RetailerDashboard/RetailerInventory";
 
 function Inventory() {
   const [selectedRetailer, setSelectedRetailer] = useState(null);
   const [getRetailerForSupplierMutation, { isLoading }] =
     useGetRetailerForSupplierMutation();
   const [retailerData, setRetailerData] = useState([]);
+  const userType = localStorage.getItem("userType");
 
   useEffect(() => {
     const supplierEmail = localStorage.getItem("email");
@@ -18,9 +20,8 @@ function Inventory() {
       getRetailerForSupplierMutation({ supplierEmail })
         .unwrap()
         .then((response) => {
-          console.log(response);
           const dataArray = Array.isArray(response) ? response : [response];
-          console.log(dataArray);
+
           setRetailerData(dataArray);
         })
         .catch((error) => console.error("Error fetching retailers:", error));
@@ -31,7 +32,7 @@ function Inventory() {
 
   const transitionSettings = {
     duration: 0.6,
-    ease: [0.42, 0, 0.58, 1], // Smooth ease-in-out curve
+    ease: [0.42, 0, 0.58, 1],
   };
   if (isLoading) {
     return (
@@ -40,6 +41,10 @@ function Inventory() {
       </div>
     );
   }
+  if (userType === "retailer") {
+    return <RetailerInventory />;
+  }
+
   return (
     <div className="relative flex w-full h-full">
       {/* Table section */}

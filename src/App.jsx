@@ -13,6 +13,7 @@ import Header from "./components/custom/Header";
 import Dashboard from "./components/custom/Dashboard";
 import Inventory from "./components/custom/Inventory";
 import Redistribution from "./components/custom/Redistribution";
+import ProductInfo from "./components/custom/ProductInfo";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -60,6 +61,18 @@ function App() {
             isLoggedIn ? (
               <ProtectedRouteLayout>
                 <Inventory />
+              </ProtectedRouteLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/inventory/productsdata"
+          element={
+            isLoggedIn ? (
+              <ProtectedRouteLayout>
+                <ProductInfo />
               </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />
