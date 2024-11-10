@@ -41,4 +41,6 @@ router.post(
   "/api_SeeProductRequests",
   inventoryController.api_SeeProductRequests
 );
+
+router.post("/api_get_sales_data", inventoryController.api_get_sales_data);
 module.exports = router;
