@@ -320,8 +320,8 @@ const api_getSuppliersForRetailer = async (req, res) => {
     const { retailerEmail } = req.body;
     // console.log(retailerEmail);
 
-    if (!supplierEmail) {
-      return res.status(400).json({ error: "Supplier email is required" });
+    if (!retailerEmail) {
+      return res.status(400).json({ error: "Retailer Email email is required" });
     }
     const inventories = await Inventory.find({ retailerEmail });
     const supplierEmails = [
