@@ -146,7 +146,7 @@ const Cards = ({ salesData }) => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div className="bg-white p-4 rounded shadow">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="font-medium">Total Sales</h3>
+          <h3 className="font-medium">Total Sales in Units</h3>
         </div>
         <div className="text-2xl font-semibold">{cardData.totalSales}</div>
       </div>
@@ -155,12 +155,12 @@ const Cards = ({ salesData }) => {
           <h3 className="font-medium">Total Revenue</h3>
         </div>
         <div className="text-2xl font-semibold">
-          ${cardData.totalRevenue.toLocaleString()}
+        ₹{cardData.totalRevenue.toLocaleString()}
         </div>
       </div>
       <div className="bg-white p-4 rounded shadow">
         <div className="flex justify-between items-center mb-2">
-          <h3 className="font-medium">Monthly Sales</h3>
+          <h3 className="font-medium">Monthly Sales in Units</h3>
         </div>
         <div className="text-2xl font-semibold">{cardData.monthlySales}</div>
       </div>
@@ -169,7 +169,7 @@ const Cards = ({ salesData }) => {
           <h3 className="font-medium">Monthly Revenue</h3>
         </div>
         <div className="text-2xl font-semibold">
-          ${cardData.monthlyRevenue.toLocaleString()}
+        ₹{cardData.monthlyRevenue.toLocaleString()}
         </div>
       </div>
     </div>

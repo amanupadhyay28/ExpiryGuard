@@ -86,11 +86,12 @@ const SaleProduct = () => {
       <ToastContainer />
 
       <div className="flex justify-center mt-2">
-        <h1 className="text-2xl font-bold mb-6">Sale Product</h1>
+        
         <form
           onSubmit={handleFormSubmit}
-          className="space-y-4 p-4 w-[800px] bg-white rounded-2xl"
+          className="space-y-4 p-4 w-[600px] bg-white rounded-2xl"
         >
+          <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400">Product Sale</h1>
           <Select onValueChange={handleProductSelect}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Select product" />

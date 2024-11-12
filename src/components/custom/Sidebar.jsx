@@ -20,7 +20,7 @@ const Sidebar = () => {
       icon: <ArchiveIcon className="h-6 w-6" />,
     },
     {
-      name: userType === "supplier" ? "Product Request" : "Add Inventory",
+      name: userType === "supplier" ? "Product Request" : "Add/Sell Products",
       path: userType === "supplier" ? "/product_request" : "/add_inventory",
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },

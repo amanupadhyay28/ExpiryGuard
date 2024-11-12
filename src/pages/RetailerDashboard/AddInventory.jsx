@@ -78,102 +78,105 @@ export default function ProductForm({}) {
   return (
     <>
       <ToastContainer />
-      <div className="flex justify-center mt-2">
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 p-4 w-[800px] bg-white rounded-2xl"
-        >
-          <Input
-            label="Product Name"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            placeholder="Enter product name"
-            className="w-full "
-            required
-          />
-          <Textarea
-            label="Description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Enter description"
-            className="w-full"
-            required
-          />
-          <Input
-            label="Quantity"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleInputChange}
-            placeholder="Enter quantity"
-            type="number"
-            className="w-full "
-            required
-          />
-          <Input
-            label="Price"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            placeholder="Enter price"
-            type="number"
-            className="w-full "
-            required
-          />
-          <Input
-            label="Batch Number"
-            name="batchNumber"
-            value={formData.batchNumber}
-            onChange={handleInputChange}
-            placeholder="Enter batch number"
-            className="w-full "
-            required
-          />
-          <Input
-            label="Manufacture Date"
-            name="manufactureDate"
-            value={formData.manufactureDate}
-            onChange={handleInputChange}
-            type="date"
-            className="w-full "
-            required
-          />
-          <Input
-            label="Expiry Date"
-            name="expiryDate"
-            value={formData.expiryDate}
-            onChange={handleInputChange}
-            type="date"
-            className="w-full "
-            required
-          />
-
-          <SelectComponent
-            selectData={supplierResponse}
-            onEmailChange={handleSelectEmailChange}
-            onNameChange={handleSelectNameChange}
-          />
-          <Input
-            label="Retailer Email"
-            name="retailerEmail"
-            value={formData.retailerEmail}
-            onChange={handleInputChange}
-            placeholder="Enter retailer email"
-            type="email"
-            className="w-full "
-            required
-            disabled
-          />
-          <Button
-            type="submit"
-            className="w-full bg-orange-500 text-white mt-4 hover:bg-black p-2"
+      <div className="flex justify-center mt-2 space-x-8 items-center">
+        <div className="flex justify-center mt-2">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-2 p-4 w-[600px] bg-white rounded-2xl"
           >
-            Submit
-          </Button>
-        </form>
+            <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400 ">Add Product </h1>
+            <Input
+              label="Product Name"
+              name="productName"
+              value={formData.productName}
+              onChange={handleInputChange}
+              placeholder="Enter product name"
+              className="w-full "
+              required
+            />
+            <Textarea
+              label="Description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Enter description"
+              className="w-full"
+              required
+            />
+            <Input
+              label="Quantity"
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleInputChange}
+              placeholder="Enter quantity"
+              type="number"
+              className="w-full "
+              required
+            />
+            <Input
+              label="Price"
+              name="price"
+              value={formData.price}
+              onChange={handleInputChange}
+              placeholder="Enter price"
+              type="number"
+              className="w-full "
+              required
+            />
+            <Input
+              label="Batch Number"
+              name="batchNumber"
+              value={formData.batchNumber}
+              onChange={handleInputChange}
+              placeholder="Enter batch number"
+              className="w-full "
+              required
+            />
+            <Input
+              label="Manufacture Date"
+              name="manufactureDate"
+              value={formData.manufactureDate}
+              onChange={handleInputChange}
+              type="date"
+              className="w-full "
+              required
+            />
+            <Input
+              label="Expiry Date"
+              name="expiryDate"
+              value={formData.expiryDate}
+              onChange={handleInputChange}
+              type="date"
+              className="w-full "
+              required
+            />
+
+            <SelectComponent
+              selectData={supplierResponse}
+              onEmailChange={handleSelectEmailChange}
+              onNameChange={handleSelectNameChange}
+            />
+            <Input
+              label="Retailer Email"
+              name="retailerEmail"
+              value={formData.retailerEmail}
+              onChange={handleInputChange}
+              placeholder="Enter retailer email"
+              type="email"
+              className="w-full "
+              required
+              disabled
+            />
+            <Button
+              type="submit"
+              className="w-full bg-orange-500 text-white mt-4 hover:bg-black p-2"
+            >
+              Submit
+            </Button>
+          </form>
+        </div>
+        <SaleProduct />
       </div>
-      <SaleProduct />
     </>
   );
 }
