@@ -140,6 +140,7 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
+  // console.log(retaileSalesData);
   const { monthlySales, monthlyRevenue, topSellingProducts, salesByProduct } =
     retaileSalesData;
 
@@ -156,21 +157,25 @@ const Dashboard = () => {
     })
   );
 
-  const topSellingProductsData = topSellingProducts.map(
-    ([product, quantity]) => ({
+  const topSellingProductsData = topSellingProducts
+    .map(([product, quantity]) => ({
       product,
       quantity,
-    })
-  );
+    }))
+    .slice(0, 5);
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   // Calculate totals for cards
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const currentMonth = date.getMonth() + 1;
+  const monthYearDate = `${currentMonth}-${currentYear}`;
+
   const totalSales = salesData.reduce((acc, curr) => acc + curr.sales, 0);
   const totalRevenue = salesData.reduce((acc, curr) => acc + curr.revenue, 0);
-  const currentMonth = new Date().toLocaleString("default", { month: "long" });
-  const monthlySalesValue = monthlySales[currentMonth] || 0;
-  const monthlyRevenueValue = monthlyRevenue[currentMonth] || 0;
+  const monthlySalesValue = monthlySales[monthYearDate] || 0;
+  const monthlyRevenueValue = monthlyRevenue[monthYearDate] || 0;
 
   return (
     <div>
@@ -215,35 +220,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top Selling Products with Pie Chart */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Top Selling Products</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={topSellingProductsData}
-                dataKey="quantity"
-                nameKey="product"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                label
-              >
-                {topSellingProductsData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
+      <div className="mt-6 grid grid-cols-1 lg:grid-cols-1 gap-6">
         {/* Sales by Product with Line Chart */}
         <div className="bg-white p-4 rounded shadow">
           <h2 className="text-lg font-semibold mb-4">Sales by Product</h2>
@@ -261,12 +238,31 @@ const Dashboard = () => {
             </LineChart>
           </ResponsiveContainer>
         </div>
+        {/* Top Selling Products with Horizontal Bar Chart */}
+        <div className="bg-white p-4 rounded shadow">
+          <h2 className="text-lg font-semibold mb-4">Top 5 Selling Products</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart
+              data={topSellingProductsData}
+              layout="vertical"
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <XAxis type="number" />
+              <YAxis type="category" dataKey="product" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="quantity" fill="#8884d8">
+                {topSellingProductsData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
-
-      {/* Table placed under the charts */}
-      {/* <div className="mt-6">
-        <Table />
-      </div> */}
     </div>
   );
 };
