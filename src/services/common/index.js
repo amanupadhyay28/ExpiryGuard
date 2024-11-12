@@ -104,6 +104,18 @@ export const apiSlice = createApi({
         };
       },
     }),
+    postSaleProduct: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_update_quantity",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -118,5 +130,6 @@ export const {
   useGetProductReqSupplierMutation,
   useGetSupplierForRetailerMutation,
   usePostAddProductMutation,
+  usePostSaleProductMutation,
 } = apiSlice;
 export default apiSlice;

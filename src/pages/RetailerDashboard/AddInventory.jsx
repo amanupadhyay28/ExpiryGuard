@@ -7,6 +7,7 @@ import SelectComponent from "./Components/SupplierSelect";
 import { usePostAddProductMutation } from "../../services/common/index.js";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SaleProduct from "./SaleProduct";
 export default function ProductForm({}) {
   const [supplierData, { isLoading }] = useGetSupplierForRetailerMutation();
   const [postAddProduct, { isLoadingPostProduct }] =
@@ -172,6 +173,7 @@ export default function ProductForm({}) {
           </Button>
         </form>
       </div>
+      <SaleProduct />
     </>
   );
 }
