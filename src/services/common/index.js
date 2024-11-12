@@ -116,6 +116,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getSalesDta: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_get_sales_data",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -131,5 +140,6 @@ export const {
   useGetSupplierForRetailerMutation,
   usePostAddProductMutation,
   usePostSaleProductMutation,
+  useGetSalesDtaMutation,
 } = apiSlice;
 export default apiSlice;
