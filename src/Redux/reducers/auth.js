@@ -9,7 +9,6 @@ const initialState = {
 
 const storeUserData = async (data) => {
   try {
-    console.log(data);
     await localStorage.setItem("authToken", data?.authToken);
 
     await localStorage.setItem("email", data?.user.email);

@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+const token = localStorage.getItem("authToken");
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -23,8 +23,6 @@ export const apiSlice = createApi({
     }),
     getRetailerForSupplier: builder.mutation({
       query: (task) => {
-        const token = localStorage.getItem("authToken");
-
         return {
           url: "/api_getRetailersForSupplier",
           method: "POST",
@@ -82,6 +80,30 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getSupplierForRetailer: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_getSuppliersForRetailer",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: task,
+        };
+      },
+    }),
+    postAddProduct: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_add_product",
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -94,5 +116,7 @@ export const {
   useGetRetailerInventoryMutation,
   usePostProductReqRetailerMutation,
   useGetProductReqSupplierMutation,
+  useGetSupplierForRetailerMutation,
+  usePostAddProductMutation,
 } = apiSlice;
 export default apiSlice;

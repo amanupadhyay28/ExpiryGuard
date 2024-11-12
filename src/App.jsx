@@ -14,6 +14,8 @@ import Dashboard from "./components/custom/Dashboard";
 import Inventory from "./components/custom/Inventory";
 import Redistribution from "./components/custom/Redistribution";
 import ProductInfo from "./components/custom/ProductInfo";
+import Orders from "./pages/Supplier/Orders/Orders";
+import ProductForm from "./pages/RetailerDashboard/AddInventory";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -86,7 +88,19 @@ function App() {
           element={
             isLoggedIn ? (
               <ProtectedRouteLayout>
-                <Redistribution />
+                {userType !== "supplier" ? <ProductForm /> : <Redistribution />}
+              </ProtectedRouteLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            isLoggedIn ? (
+              <ProtectedRouteLayout>
+                <Orders />
               </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />

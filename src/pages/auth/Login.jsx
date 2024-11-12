@@ -35,21 +35,18 @@ function Login() {
       dispatch(setUser(response));
       toast.success("Login successful!", {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 1000,
       });
 
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 4000);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
-      toast.error(`Login failed! ${error}`, {
+      toast.error(`Login failed! ${error.data.msg}`, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
       });
     }
   };
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">

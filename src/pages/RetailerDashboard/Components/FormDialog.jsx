@@ -104,7 +104,7 @@ const FormDialog = ({ open, onClose, product, onSubmit, reqType }) => {
               type="text"
               value={formData.expiryDate}
               onChange={handleChange}
-              disabled
+              disable
             />
           </div>
           <Button type="submit" className="w-full bg-orange-600">

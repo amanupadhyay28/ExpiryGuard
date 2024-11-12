@@ -13,8 +13,8 @@ function Inventory() {
   const [retailerData, setRetailerData] = useState([]);
   const userType = localStorage.getItem("userType");
 
+  const supplierEmail = localStorage.getItem("email");
   useEffect(() => {
-    const supplierEmail = localStorage.getItem("email");
 
     if (supplierEmail) {
       getRetailerForSupplierMutation({ supplierEmail })
