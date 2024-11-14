@@ -102,7 +102,7 @@ const InventoryTable = ({ items }) => {
                   <td className="px-4 py-4 font-semibold">
                     {product.manufactureDate}
                   </td>
-                  <td className="px-4 py-4 text-red-600 font-semibold">
+                  <td className="px-4 py-4 text-white bg-red-500 hover:bg-red-700 font-semibold">
                     {product.expiryDate}
                   </td>
                   <td className="px-4 py-4 flex items-center relative">
