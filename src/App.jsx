@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,8 +19,10 @@ import ProductForm from "./pages/RetailerDashboard/AddInventory";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
-  const userType = localStorage.getItem("userType");
+  const userType = useSelector((state) => state.auth.userType);
+  console.log("isLooged in", isLoggedIn);
 
+  console.log("userType", userType);
   const ProtectedRouteLayout = ({ children }) => (
     <div className="flex  h-screen">
       <Sidebar />
@@ -88,7 +90,7 @@ function App() {
           element={
             isLoggedIn ? (
               <ProtectedRouteLayout>
-                {userType !== "supplier" ? <ProductForm /> : <Redistribution />}
+                {userType === "supplier" ? <Redistribution /> : <ProductForm />}
               </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />

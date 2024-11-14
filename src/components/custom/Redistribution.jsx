@@ -6,13 +6,14 @@ import { useGetProductReqSupplierMutation } from "../../services/common";
 import RetailerProductData from "../../pages/Supplier/ProductRequest/RetailerProduct";
 const Redistribution = () => {
   const supplierEmail = localStorage.getItem("email");
+
   const [getProductReq, { isLoading }] = useGetProductReqSupplierMutation();
   const [retailerProductData, setretailerProductData] = useState([]);
 
   useEffect(() => {
     const getProductData = async () => {
       const response = await getProductReq({ supplierEmail });
-      
+
       setretailerProductData(response.data);
     };
     getProductData();

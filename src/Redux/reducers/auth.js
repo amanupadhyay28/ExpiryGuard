@@ -5,6 +5,7 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("authToken"),
   authToken: localStorage.getItem("authToken") || null,
   userMetaData: null,
+  userType: localStorage.getItem("userType") || null,
 };
 
 const storeUserData = async (data) => {

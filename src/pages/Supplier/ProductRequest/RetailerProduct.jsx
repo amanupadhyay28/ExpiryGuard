@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Badge } from "../../../components/ui/badge";
 
 const RetailerProductData = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -17,17 +18,45 @@ const RetailerProductData = ({ data }) => {
   });
 
   const toggleSort = (column) => {
+    const columnKeyMap = {
+      "Request Date": "createdAt",
+      "Update Status": "reqStatus",
+      requestId: "requestId",
+      productName: "productName",
+      price: "price",
+      quantity: "quantity",
+      supplierEmail: "supplierEmail",
+      retailerEmail: "retailerEmail",
+      expiryDate: "expiryDate",
+      reqType: "reqType",
+    };
+    const key = columnKeyMap[column] || column;
+
     setSortConfig((prevConfig) => ({
-      key: column,
+      key,
       direction:
-        prevConfig.key === column && prevConfig.direction === "asc"
+        prevConfig.key === key && prevConfig.direction === "asc"
           ? "desc"
           : "asc",
     }));
   };
 
   const getSortIcon = (column) => {
-    if (sortConfig.key === column) {
+    const columnKeyMap = {
+      "Request Date": "createdAt",
+      "Update Status": "reqStatus",
+      requestId: "requestId",
+      productName: "productName",
+      price: "price",
+      quantity: "quantity",
+      supplierEmail: "supplierEmail",
+      retailerEmail: "retailerEmail",
+      expiryDate: "expiryDate",
+      reqType: "reqType",
+    };
+    const key = columnKeyMap[column] || column;
+
+    if (sortConfig.key === key) {
       return sortConfig.direction === "asc" ? (
         <FaSortUp title="Sort Descending" />
       ) : (
@@ -51,6 +80,8 @@ const RetailerProductData = ({ data }) => {
   return (
     <>
       <ToastContainer />
+
+      <h2 className="p-4 text-black ">Product Requests </h2>
       <div className="p-4 bg-white shadow-md rounded-lg">
         <table className="w-full text-left border-collapse">
           <thead className="flex-row">
@@ -65,6 +96,7 @@ const RetailerProductData = ({ data }) => {
                 "expiryDate",
                 "reqType",
                 "Request Date",
+                "Update Status",
               ].map((column) => (
                 <th
                   key={column}
@@ -101,7 +133,7 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-white font-extrabold text-md bg-red-400 hover:bg-red-600">
+                  <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-400 hover:bg-red-600">
                     {product.expiryDate}
                   </td>
                   <td className="px-4 py-4 text-black font-semibold text-md">
@@ -109,6 +141,9 @@ const RetailerProductData = ({ data }) => {
                   </td>
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
+                  </td>
+                  <td className="px-4 py-4 text-green-600 font-semibold">
+                    {product.reqStatus}
                   </td>
                 </tr>
               ))
@@ -141,7 +176,7 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-white  text-md  font-extrabold bg-red-400 hover:bg-red-600">
+                  <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-400 hover:bg-red-600">
                     {product.expiryDate}
                   </td>
                   <td className="px-4 py-4 text-black font-semibold text-md mx-6">
@@ -149,6 +184,11 @@ const RetailerProductData = ({ data }) => {
                   </td>
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
+                  </td>
+                  <td className="px-4 py-4 font-semibold">
+                    <Badge variant="default" className="p-1">
+                      {product.reqStatus}
+                    </Badge>
                   </td>
                 </tr>
               ))
