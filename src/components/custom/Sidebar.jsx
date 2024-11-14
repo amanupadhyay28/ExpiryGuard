@@ -24,11 +24,7 @@ const Sidebar = () => {
       path: userType === "supplier" ? "/product_request" : "/add_inventory",
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },
-    {
-      name: "Orders",
-      path: "/orders",
-      icon: <ClipboardListIcon className="h-6 w-6" />,
-    },
+
     {
       name: userType === "supplier" ? "" : "My Request",
       path: "/my_request",
@@ -36,6 +32,14 @@ const Sidebar = () => {
         userType === "supplier" ? null : (
           <ClipboardListIcon className="h-6 w-6" />
         ),
+    },
+    {
+      name: userType === "supplier" ? "Orders" : "",
+      path: userType === "supplier" ? "/orders" : "",
+      icon:
+        userType === "supplier" ? (
+          <ClipboardListIcon className="h-6 w-6" />
+        ) : null,
     },
   ];
   const user = localStorage.getItem("userType")?.toUpperCase();
@@ -46,18 +50,20 @@ const Sidebar = () => {
     <div className="w-64 h-screen bg-primary text-white flex flex-col ">
       <div className="text-2xl font-bold p-4">{formattedUser} Dashboard</div>
       <nav className="flex-1">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.path}
-            className={`flex items-center p-4 hover:bg-orange-600 ${
-              location.pathname === item.path ? "bg-orange-600" : ""
-            }`}
-          >
-            {item.icon}
-            <span className="ml-3">{item.name}</span>
-          </Link>
-        ))}
+        {menuItems.map((item) =>
+          item.name ? (
+            <Link
+              key={item.name}
+              to={item.path}
+              className={`flex items-center p-4 hover:bg-orange-600 ${
+                location.pathname === item.path ? "bg-orange-600" : ""
+              }`}
+            >
+              {item.icon}
+              <span className="ml-3">{item.name}</span>
+            </Link>
+          ) : null
+        )}
       </nav>
     </div>
   );

@@ -102,7 +102,7 @@ function App() {
           element={
             isLoggedIn ? (
               <ProtectedRouteLayout>
-                <Orders />
+                {userType === "supplier" ? <Orders /> : null}
               </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />
