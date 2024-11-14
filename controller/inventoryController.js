@@ -321,7 +321,9 @@ const api_getSuppliersForRetailer = async (req, res) => {
     // console.log(retailerEmail);
 
     if (!retailerEmail) {
-      return res.status(400).json({ error: "Retailer Email email is required" });
+      return res
+        .status(400)
+        .json({ error: "Retailer Email email is required" });
     }
     const inventories = await Inventory.find({ retailerEmail });
     const supplierEmails = [
@@ -463,6 +465,25 @@ const api_SeeProductRequests = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const api_updateProductRequestStatus = async (req, res) => {
+  try {
+    const { requestId, reqStatus } = req.body;
+    const productRequest = await ProductRequest.findOneAndUpdate(
+      { requestId },
+      { reqStatus },
+      { new: true }
+    );
+    if (!productRequest) {
+      return res.status(404).json({ msg: "Product request not found" });
+    }
+
+    res.json({ msg: "Product request status updated", productRequest });
+  } catch (error) {
+    console.error("Error updating product request status:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   api_add_product,
   api_update_quantity,
@@ -474,4 +495,5 @@ module.exports = {
   api_productRequests,
   api_SeeProductRequests,
   api_get_sales_data,
+  api_updateProductRequestStatus,
 };

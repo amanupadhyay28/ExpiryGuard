@@ -43,4 +43,9 @@ router.post(
 );
 
 router.post("/api_get_sales_data", inventoryController.api_get_sales_data);
+
+router.post(
+  "/api_updateProductRequestStatus",
+  inventoryController.api_updateProductRequestStatus
+);
 module.exports = router;

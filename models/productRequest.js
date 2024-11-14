@@ -32,6 +32,11 @@ const productRequestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  reqStatus: {
+    type: String,
+    enum: ["pending", "processing", "processed"],
+    default: "pending",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
