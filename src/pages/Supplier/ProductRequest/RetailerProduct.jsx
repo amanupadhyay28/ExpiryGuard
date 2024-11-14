@@ -142,8 +142,21 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
                   </td>
-                  <td className="px-4 py-4 text-green-600 font-semibold">
-                    {product.reqStatus}
+                  <td className="px-4 py-4 font-semibold text-white">
+                    <Badge
+                      variant="defaul"
+                      className={`py-1 font-bold cursor-pointer  ${
+                        product.reqStatus === "pending"
+                          ? "bg-red-500"
+                          : product.reqStatus === "processing"
+                          ? "bg-orange-500"
+                          : product.reqStatus === "processed"
+                          ? "bg-green-500"
+                          : ""
+                      }`}
+                    >
+                      {product.reqStatus}
+                    </Badge>
                   </td>
                 </tr>
               ))
@@ -185,8 +198,19 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
                   </td>
-                  <td className="px-4 py-4 font-semibold">
-                    <Badge variant="default" className="p-1">
+                  <td className="px-4 py-4 font-semibold text-white">
+                    <Badge
+                      variant="defaul"
+                      className={`py-1 font-bold cursor-pointer   ${
+                        product.reqStatus === "pending"
+                          ? "bg-red-500"
+                          : product.reqStatus === "processing"
+                          ? "bg-orange-500"
+                          : product.reqStatus === "completed"
+                          ? "bg-green-500"
+                          : ""
+                      }`}
+                    >
                       {product.reqStatus}
                     </Badge>
                   </td>
