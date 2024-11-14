@@ -1,106 +1,5 @@
-// // src/components/Dashboard.js
-// import React, { useEffect, useState } from "react";
-// import Cards from "./Cards";
-// import Table from "./Table";
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-//   LineChart,
-//   Line,
-// } from "recharts";
-
-// import { useGetSalesDtaMutation } from "../../services/common/index";
-
-// const Dashboard = () => {
-//   const [getSalesData, { isLoading }] = useGetSalesDtaMutation();
-//   const [retaileSalesData, setretaileSalesData] = useState([]);
-//   const retailerEmail = localStorage.getItem("email");
-
-//   useEffect(() => {
-//     try {
-//       const response = getSalesData({ retailerEmail })
-//         .unwrap()
-//         .then((response) => {
-//           const dataArray = Array.isArray(response) ? response : [response];
-
-//           setretaileSalesData(dataArray);
-//         })
-//         .catch((error) => console.error("Error fetching retailers:", error));
-//     } catch (error) {
-//       console.error(`No supplier data found ${error}`);
-//     }
-//   }, [getSalesData]);
-
-//   console.log("retaileSalesData", retaileSalesData);
-
-//   const salesData = [
-//     { month: "Jan", sales: 4000, profit: 2400 },
-//     { month: "Feb", sales: 3000, profit: 1398 },
-//     { month: "Mar", sales: 5000, profit: 9800 },
-//     { month: "Apr", sales: 4000, profit: 3908 },
-//     { month: "May", sales: 6000, profit: 4800 },
-//     { month: "Jun", sales: 7000, profit: 3800 },
-//     { month: "Jul", sales: 8000, profit: 4300 },
-//     { month: "Aug", sales: 5000, profit: 5400 },
-//     { month: "Sep", sales: 4000, profit: 3200 },
-//     { month: "Oct", sales: 6000, profit: 5300 },
-//     { month: "Nov", sales: 7000, profit: 5700 },
-//     { month: "Dec", sales: 8000, profit: 6900 },
-//   ];
-
-//   return (
-//     <div>
-//       <Cards />
-//       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-//         {/* Sales Overview with Bar Chart */}
-//         <div className="bg-white p-4 rounded shadow">
-//           <h2 className="text-lg font-semibold mb-4">Sales Overview</h2>
-//           <ResponsiveContainer width="100%" height={300}>
-//             <BarChart data={salesData}>
-//               <XAxis dataKey="month" />
-//               <YAxis />
-//               <Tooltip />
-//               <Bar dataKey="sales" fill="#FF7F50" />
-//             </BarChart>
-//           </ResponsiveContainer>
-//         </div>
-
-//         {/* Profit Overview with Line Chart */}
-//         <div className="bg-white p-4 rounded shadow">
-//           <h2 className="text-lg font-semibold mb-4">Profit Overview</h2>
-//           <ResponsiveContainer width="100%" height={300}>
-//             <LineChart data={salesData}>
-//               <XAxis dataKey="month" />
-//               <YAxis />
-//               <Tooltip />
-//               <Line
-//                 type="monotone"
-//                 dataKey="profit"
-//                 stroke="#8884d8"
-//                 strokeWidth={2}
-//               />
-//             </LineChart>
-//           </ResponsiveContainer>
-//         </div>
-//       </div>
-
-//       {/* Table placed under the charts */}
-//       <div className="mt-6">
-//         <Table />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cards from "./Cards";
-import Table from "./Table";
 import {
   BarChart,
   Bar,
@@ -110,11 +9,20 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  PieChart,
-  Pie,
   Cell,
   Legend,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogClose,
+} from "../../components/ui/dialog";
+
+import { useGetExpiringProductsMutation } from "../../services/common/index";
 
 import { useGetSalesDtaMutation } from "../../services/common/index";
 
@@ -123,6 +31,13 @@ const Dashboard = () => {
   const [retaileSalesData, setretaileSalesData] = useState(null);
   const retailerEmail = localStorage.getItem("email");
 
+  const navigate=useNavigate();
+
+  const [modalOpen, setModalOpen] = useState(true);
+  const [getExpiringProducts, { isLoading: isExpiringLoading }] =
+    useGetExpiringProductsMutation();
+  const [expiringProducts, setExpiringProducts] = useState(0);
+  const userType = useSelector((state) => state.auth.userType);
   useEffect(() => {
     try {
       getSalesData({ retailerEmail })
@@ -135,6 +50,23 @@ const Dashboard = () => {
       console.error(`No supplier data found ${error}`);
     }
   }, [getSalesData]);
+
+  useEffect(() => {
+    try {
+      getExpiringProducts({ retailerEmail })
+        .unwrap()
+        .then((response) => {
+          setExpiringProducts(response.expiringProductCount);
+        })
+        .catch((error) =>
+          console.error("Error fetching expiring products:", error)
+        );
+    } catch (error) {
+      console.error(`No expiring products found ${error}`);
+    }
+  }, [getExpiringProducts]);
+
+  console.log(expiringProducts);
 
   if (isLoading || !retaileSalesData) {
     return <div>Loading...</div>;
@@ -179,6 +111,36 @@ const Dashboard = () => {
 
   return (
     <div>
+
+      {/* Dialog modal */}
+    {userType === "retailer" && (  <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="bg-primary w-[900px] h-[300px]">
+          <div className="bg-white m-[-18px] rounded-md flex justify-center items-center ">
+            <h1 className="text-6xl   text-red-600 font-bold text-center py-2 ">
+              !! ALERT !!
+            </h1>
+          </div>
+          <h1 className="text-3xl  mb-4 text-white font-extrabold text-center mt-6 ">
+            Expiring Products
+          </h1>
+          <div className="text-center text-white text-2xl">
+            {expiringProducts > 0 ? (
+              <p>
+                You have{" "}
+                <span className="text-orange-400 font-semibold hover:underline cursor-pointer" onClick={()=>navigate('/inventory')}>
+                  {expiringProducts === 1
+                    ? `${expiringProducts} product `
+                    : `${expiringProducts} products `}
+                </span>
+                expiring within a week.
+              </p>
+            ) : (
+              <p>No products are expiring within a week.</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>) }
+    
       <Cards
         salesData={{
           totalSales,

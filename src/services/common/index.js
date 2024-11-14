@@ -143,6 +143,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getExpiringProducts: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_getExpiringProducts",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -161,5 +170,6 @@ export const {
   useGetSalesDtaMutation,
   usePostUpdateStatusMutation,
   usePostMyRequestMutation,
+  useGetExpiringProductsMutation,
 } = apiSlice;
 export default apiSlice;
