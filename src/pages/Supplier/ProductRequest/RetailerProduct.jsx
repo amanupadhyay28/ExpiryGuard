@@ -3,9 +3,11 @@ import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Badge } from "../../../components/ui/badge";
+import { usePostUpdateStatusMutation } from "../../../services/common/index";
 
 const RetailerProductData = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [postUpdateStatus, { isLoading }] = usePostUpdateStatusMutation();
 
   const sortedData = [...data].sort((a, b) => {
     if (sortConfig.key) {
@@ -16,6 +18,26 @@ const RetailerProductData = ({ data }) => {
     }
     return 0;
   });
+
+  const updateProductStatus = async (requestId, status) => {
+    const newStatus =
+      status === "pending"
+        ? "processing"
+        : status === "processing"
+        ? "processed"
+        : status === "processed"
+        ? "pending"
+        : "pending";
+    try {
+      const response = await postUpdateStatus({
+        requestId,
+        reqStatus: newStatus,
+      }).unwrap();
+      toast.success(response.msg);
+    } catch (error) {
+      toast.error("Something went wrong", error.data.msg);
+    }
+  };
 
   const toggleSort = (column) => {
     const columnKeyMap = {
@@ -133,7 +155,7 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-400 hover:bg-red-600">
+                  <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-500 hover:bg-red-700">
                     {product.expiryDate}
                   </td>
                   <td className="px-4 py-4 text-black font-semibold text-md">
@@ -154,6 +176,12 @@ const RetailerProductData = ({ data }) => {
                           ? "bg-green-500"
                           : ""
                       }`}
+                      onClick={() =>
+                        updateProductStatus(
+                          product.requestId,
+                          product.reqStatus
+                        )
+                      }
                     >
                       {product.reqStatus}
                     </Badge>
@@ -189,7 +217,7 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-400 hover:bg-red-600">
+                  <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-500 hover:bg-red-700">
                     {product.expiryDate}
                   </td>
                   <td className="px-4 py-4 text-black font-semibold text-md mx-6">
@@ -210,6 +238,12 @@ const RetailerProductData = ({ data }) => {
                           ? "bg-green-500"
                           : ""
                       }`}
+                      onClick={() =>
+                        updateProductStatus(
+                          product.requestId,
+                          product.reqStatus
+                        )
+                      }
                     >
                       {product.reqStatus}
                     </Badge>

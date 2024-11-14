@@ -125,6 +125,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    postUpdateStatus: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_updateProductRequestStatus ",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -141,5 +150,6 @@ export const {
   usePostAddProductMutation,
   usePostSaleProductMutation,
   useGetSalesDtaMutation,
+  usePostUpdateStatusMutation,
 } = apiSlice;
 export default apiSlice;
