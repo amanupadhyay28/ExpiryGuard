@@ -4,9 +4,12 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Badge } from "../../../components/ui/badge";
 import { usePostUpdateStatusMutation } from "../../../services/common/index";
+import Loader from "../../../components/custom/Loader";
 
 const RetailerProductData = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const [statusDropdown, setStatusDropdown] = useState(null);
+  const [sortedStatusData, setsortedStatusData] = useState([...data]);
   const [postUpdateStatus, { isLoading }] = usePostUpdateStatusMutation();
 
   const sortedData = [...data].sort((a, b) => {
@@ -19,23 +22,30 @@ const RetailerProductData = ({ data }) => {
     return 0;
   });
 
-  const updateProductStatus = async (requestId, status) => {
-    const newStatus =
-      status === "pending"
-        ? "processing"
-        : status === "processing"
-        ? "processed"
-        : status === "processed"
-        ? "pending"
-        : "pending";
+  const updateProductStatus = async (requestId, newStatus) => {
     try {
       const response = await postUpdateStatus({
         requestId,
         reqStatus: newStatus,
       }).unwrap();
-      toast.success(response.msg);
+
+      setsortedStatusData((prevData) =>
+        prevData.map((item) =>
+          item.requestId === requestId
+            ? { ...item, reqStatus: newStatus }
+            : item
+        )
+      );
+
+      toast.success(response.msg, {
+        autoClose: 400,
+        className: "text-sm",
+      });
     } catch (error) {
-      toast.error("Something went wrong", error.data.msg);
+      toast.error("Something went wrong", error.data?.msg, {
+        autoClose: 400,
+        className: "text-sm",
+      });
     }
   };
 
@@ -103,7 +113,6 @@ const RetailerProductData = ({ data }) => {
     <>
       <ToastContainer />
 
-      <h2 className="p-4 text-black ">Product Requests </h2>
       <div className="p-4 bg-white shadow-md rounded-lg">
         <table className="w-full text-left border-collapse">
           <thead className="flex-row">
@@ -164,27 +173,53 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
                   </td>
-                  <td className="px-4 py-4 font-semibold text-white">
-                    <Badge
-                      variant="defaul"
-                      className={`py-1 font-bold cursor-pointer  ${
-                        product.reqStatus === "pending"
-                          ? "bg-red-500"
-                          : product.reqStatus === "processing"
-                          ? "bg-orange-500"
-                          : product.reqStatus === "processed"
-                          ? "bg-green-500"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        updateProductStatus(
-                          product.requestId,
-                          product.reqStatus
-                        )
-                      }
-                    >
-                      {product.reqStatus}
-                    </Badge>
+                  <td className="px-4 py-4 font-semibold text-white relative">
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      <Badge
+                        variant="default"
+                        className={`py-1 font-bold cursor-pointer ${
+                          product.reqStatus === "pending"
+                            ? "bg-red-500"
+                            : product.reqStatus === "processing"
+                            ? "bg-orange-500"
+                            : "bg-green-500"
+                        }`}
+                        onClick={() =>
+                          setStatusDropdown(
+                            product._id === statusDropdown ? null : product._id
+                          )
+                        }
+                      >
+                        {product.reqStatus}
+                      </Badge>
+                    )}
+
+                    {statusDropdown === product._id && (
+                      <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
+                        {["pending", "processing", "processed"].map(
+                          (status) => (
+                            <button
+                              key={status}
+                              onClick={() => {
+                                updateProductStatus(product.requestId, status);
+                                setStatusDropdown(null);
+                              }}
+                              className={`block w-full text-left px-2 py-1 font-semibold ${
+                                status === "pending"
+                                  ? "text-red-500"
+                                  : status === "processing"
+                                  ? "text-orange-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
@@ -226,27 +261,53 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4 text-green-600 font-semibold">
                     {formatDate(product.createdAt)}
                   </td>
-                  <td className="px-4 py-4 font-semibold text-white">
-                    <Badge
-                      variant="defaul"
-                      className={`py-1 font-bold cursor-pointer   ${
-                        product.reqStatus === "pending"
-                          ? "bg-red-500"
-                          : product.reqStatus === "processing"
-                          ? "bg-orange-500"
-                          : product.reqStatus === "completed"
-                          ? "bg-green-500"
-                          : ""
-                      }`}
-                      onClick={() =>
-                        updateProductStatus(
-                          product.requestId,
-                          product.reqStatus
-                        )
-                      }
-                    >
-                      {product.reqStatus}
-                    </Badge>
+                  <td className="px-4 py-4 font-semibold text-white relative">
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      <Badge
+                        variant="default"
+                        className={`py-1 font-bold cursor-pointer ${
+                          product.reqStatus === "pending"
+                            ? "bg-red-500"
+                            : product.reqStatus === "processing"
+                            ? "bg-orange-500"
+                            : "bg-green-500"
+                        }`}
+                        onClick={() =>
+                          setStatusDropdown(
+                            product._id === statusDropdown ? null : product._id
+                          )
+                        }
+                      >
+                        {product.reqStatus}
+                      </Badge>
+                    )}
+
+                    {statusDropdown === product._id && (
+                      <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
+                        {["pending", "processing", "processed"].map(
+                          (status) => (
+                            <button
+                              key={status}
+                              onClick={() => {
+                                updateProductStatus(product.requestId, status);
+                                setStatusDropdown(null);
+                              }}
+                              className={`block w-full text-left px-2 py-1 font-semibold ${
+                                status === "pending"
+                                  ? "text-red-500"
+                                  : status === "processing"
+                                  ? "text-orange-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))

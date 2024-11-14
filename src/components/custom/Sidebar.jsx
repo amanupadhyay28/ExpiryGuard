@@ -29,6 +29,14 @@ const Sidebar = () => {
       path: "/orders",
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },
+    {
+      name: userType === "supplier" ? "" : "My Request",
+      path: "/my_request",
+      icon:
+        userType === "supplier" ? null : (
+          <ClipboardListIcon className="h-6 w-6" />
+        ),
+    },
   ];
   const user = localStorage.getItem("userType")?.toUpperCase();
   const formattedUser = user
