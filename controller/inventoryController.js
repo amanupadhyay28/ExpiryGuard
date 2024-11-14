@@ -85,70 +85,6 @@ const api_add_product = async (req, res) => {
   }
 };
 
-// const api_update_quantity = async (req, res) => {
-//   try {
-//     const {
-//       productName,
-//       quantitySold,
-//       price,
-//       manufactureDate,
-//       expiryDate,
-//       retailerEmail,
-//     } = req.body;
-
-//     // Format dates to 'YYYY-MM-DD'
-//     const formattedManufactureDate = formatDateToYYYYMMDD(manufactureDate);
-//     const formattedExpiryDate = formatDateToYYYYMMDD(expiryDate);
-
-//     // Find the inventory for the retailer
-//     let inventory = await Inventory.findOne({ retailerEmail });
-
-//     if (!inventory) {
-//       return res
-//         .status(404)
-//         .json({ msg: "Inventory not found for the retailer" });
-//     }
-
-//     // Find products matching the criteria
-//     const productsToUpdate = inventory.products.filter(
-//       (product) =>
-//         product.productName === productName &&
-//         product.price === price &&
-//         product.manufactureDate === formattedManufactureDate &&
-//         product.expiryDate === formattedExpiryDate
-//     );
-
-//     if (productsToUpdate.length === 0) {
-//       return res
-//         .status(404)
-//         .json({ msg: "No matching product found in inventory" });
-//     }
-
-//     // Check if there's enough quantity in the first matching product
-//     let productUpdated = false;
-//     for (let product of productsToUpdate) {
-//       if (product.quantity >= quantitySold) {
-//         // Update the quantity
-//         product.quantity -= quantitySold;
-//         productUpdated = true;
-//         break;
-//       }
-//     }
-
-//     if (!productUpdated) {
-//       return res.status(400).json({ msg: "Not enough quantity available" });
-//     }
-
-//     // Save the updated inventory
-//     await inventory.save();
-
-//     res.json({ msg: "Product quantity updated successfully" });
-//   } catch (err) {
-//     console.error(err.message);
-//     res.status(500).send("Server Error");
-//   }
-// };
-
 const api_update_quantity = async (req, res) => {
   try {
     const {
@@ -346,44 +282,33 @@ const api_getSuppliersForRetailer = async (req, res) => {
 
 const api_getExpiringProducts = async (req, res) => {
   try {
-    const { retailerEmail, supplierEmail, days } = req.body;
-
-    if (!retailerEmail || !supplierEmail || !days) {
-      return res
-        .status(400)
-        .send(
-          "Retailer email, supplier email, and number of days are required"
-        );
+    const { retailerEmail } = req.body;
+    if (!retailerEmail) {
+      return res.status(400).json({ message: "retailerEmail is required" });
     }
-
-    const currentDate = new Date();
-    const thresholdDate = new Date();
-    thresholdDate.setDate(currentDate.getDate() + parseInt(days, 10));
-
-    // Format the threshold date to 'YYYY-MM-DD'
-    const formattedThresholdDate = formatDateToYYYYMMDD(thresholdDate);
-
     const inventory = await Inventory.findOne({ retailerEmail });
-
     if (!inventory) {
-      return res
-        .status(404)
-        .json({ msg: "Inventory not found for the retailer" });
+      return res.status(404).json({ message: "Inventory not found" });
     }
+    const currentDate = new Date();
+    const oneWeekLater = new Date();
+    oneWeekLater.setDate(currentDate.getDate() + 7);
+
+    const formattedCurrentDate = formatDateToYYYYMMDD(currentDate);
+    const formattedOneWeekLaterDate = formatDateToYYYYMMDD(oneWeekLater);
 
     const expiringProducts = inventory.products.filter((product) => {
       const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
-
       return (
-        product.supplierEmail === supplierEmail &&
-        formattedExpiryDate <= formattedThresholdDate
+        formattedExpiryDate >= formattedCurrentDate &&
+        formattedExpiryDate <= formattedOneWeekLaterDate
       );
     });
 
-    res.json(expiringProducts);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(200).json({ expiringProductCount: expiringProducts.length });
+  } catch (error) {
+    console.error("Error Fetching Expiring Products:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
