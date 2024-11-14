@@ -1,42 +1,92 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FaRupeeSign } from "react-icons/fa";
-
+import React, { useState } from "react";
+import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const RetailerProductData = ({ data }) => {
-  const sendRequests = data.filter((item) => item.reqType === "send");
-  const otherRequests = data.filter((item) => item.reqType !== "send");
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
-  console.log("Send Requests:", sendRequests);
-  console.log("Other Requests:", otherRequests);
+  const sortedData = [...data].sort((a, b) => {
+    if (sortConfig.key) {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const toggleSort = (column) => {
+    setSortConfig((prevConfig) => ({
+      key: column,
+      direction:
+        prevConfig.key === column && prevConfig.direction === "asc"
+          ? "desc"
+          : "asc",
+    }));
+  };
+
+  const getSortIcon = (column) => {
+    if (sortConfig.key === column) {
+      return sortConfig.direction === "asc" ? (
+        <FaSortUp title="Sort Descending" />
+      ) : (
+        <FaSortDown title="Sort Ascending" />
+      );
+    }
+    return <FaSortUp title="Sort Descending" />;
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const sendRequests = sortedData.filter((item) => item.reqType === "send");
+  const otherRequests = sortedData.filter((item) => item.reqType !== "send");
+
   return (
     <>
       <ToastContainer />
-
       <div className="p-4 bg-white shadow-md rounded-lg">
         <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-gray-600 uppercase text-xs font-semibold border-b">
-              <th className="px-4 py-3">Request ID</th>
-              <th className="px-4 py-3">Product Name</th>
-              <th className="px-4 py-3">Price</th>
-              <th className="px-4 py-3">Quantity</th>
-              <th className="px-4 py-3">Supplier Email</th>
-              <th className="px-4 py-3">Retailer Email</th>
-              <th className="px-4 py-3">Expiry Date</th>
-              <th className="px-4 py-3">Request Type</th>
-            </tr>
-            <thead>
-              <tr className="text-gray-600 uppercase text-xs font-semibold border-b ">
+          <thead className="flex-row">
+            <tr className="text-gray-600 uppercase text-xs font-semibold border-b flex-row justify-center space-x-6">
+              {[
+                "requestId",
+                "productName",
+                "price",
+                "quantity",
+                "supplierEmail",
+                "retailerEmail",
+                "expiryDate",
+                "reqType",
+                "Request Date",
+              ].map((column) => (
                 <th
-                  colSpan="8"
-                  className="px-4 py-3 text-gray-800 uppercase text-xs "
+                  key={column}
+                  className="flex-row justify-center space-x-10 cursor-pointer"
+                  onClick={() => toggleSort(column)}
                 >
-                  Products Send
+                  <span>{column.replace(/([A-Z])/g, " $1")}</span>
+                  <span>{getSortIcon(column)}</span>
                 </th>
-              </tr>
-            </thead>
+              ))}
+            </tr>
+          </thead>
+
+          <thead>
+            <tr className="text-gray-600 uppercase text-xs font-semibold border-b text-center ">
+              <th
+                colSpan="9"
+                className="px-4 py-5 text-gray-800 uppercase text-md font-extrabold "
+              >
+                Products Send
+              </th>
+            </tr>
           </thead>
           <tbody className="text-gray-800 text-sm bg-slate-100">
             {sendRequests.length > 0 ? (
@@ -51,11 +101,15 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-red-600 font-semibold">
+                  <td className="px-4 py-4 text-white font-extrabold text-md bg-red-400 hover:bg-red-600">
                     {product.expiryDate}
                   </td>
-                  <td className="px-4 py-4">{product.reqType}</td>
-                  <td className="px-4 py-4 flex items-center relative"></td>
+                  <td className="px-4 py-4 text-black font-semibold text-md">
+                    {product.reqType.toUpperCase()}
+                  </td>
+                  <td className="px-4 py-4 text-green-600 font-semibold">
+                    {formatDate(product.createdAt)}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -66,12 +120,13 @@ const RetailerProductData = ({ data }) => {
               </tr>
             )}
           </tbody>
+
           <thead>
-            <thead>
-              <tr className="text-gray-800 uppercase text-xs font-semibold border-b text-center">
-                <th className="px-4 py-3"> Products Requested</th>
-              </tr>
-            </thead>
+            <tr className="text-gray-800 uppercase text-xs font-semibold border-b text-center ">
+              <th colSpan="9" className="px-4 py-5 text-md font-extrabold ">
+                Products Requested
+              </th>
+            </tr>
           </thead>
           <tbody className="text-gray-800 text-sm bg-violet-100">
             {otherRequests.length > 0 ? (
@@ -86,11 +141,15 @@ const RetailerProductData = ({ data }) => {
                   <td className="px-4 py-4">{product.quantity}</td>
                   <td className="px-4 py-4">{product.supplierEmail}</td>
                   <td className="px-4 py-4">{product.retailerEmail}</td>
-                  <td className="px-4 py-4 text-red-600 font-semibold">
+                  <td className="px-4 py-4 text-white  text-md  font-extrabold bg-red-400 hover:bg-red-600">
                     {product.expiryDate}
                   </td>
-                  <td className="px-4 py-4 text-blue-800">{product.reqType}</td>
-                  <td className="px-4 py-4 flex items-center relative"></td>
+                  <td className="px-4 py-4 text-black font-semibold text-md mx-6">
+                    {product.reqType.toUpperCase()}
+                  </td>
+                  <td className="px-4 py-4 text-green-600 font-semibold">
+                    {formatDate(product.createdAt)}
+                  </td>
                 </tr>
               ))
             ) : (
@@ -106,4 +165,5 @@ const RetailerProductData = ({ data }) => {
     </>
   );
 };
+
 export default RetailerProductData;

@@ -12,7 +12,7 @@ const Redistribution = () => {
   useEffect(() => {
     const getProductData = async () => {
       const response = await getProductReq({ supplierEmail });
-
+      
       setretailerProductData(response.data);
     };
     getProductData();
