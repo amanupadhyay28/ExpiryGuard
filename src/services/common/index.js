@@ -134,6 +134,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    postMyRequest: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_getRetailerProductRequests",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -151,5 +160,6 @@ export const {
   usePostSaleProductMutation,
   useGetSalesDtaMutation,
   usePostUpdateStatusMutation,
+  usePostMyRequestMutation,
 } = apiSlice;
 export default apiSlice;

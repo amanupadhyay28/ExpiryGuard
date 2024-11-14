@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -122,7 +122,7 @@ const RetailerProductData = ({ data }) => {
                 "productName",
                 "price",
                 "quantity",
-                "supplierEmail",
+                // "supplierEmail",
                 "retailerEmail",
                 "expiryDate",
                 "reqType",
@@ -162,7 +162,7 @@ const RetailerProductData = ({ data }) => {
                     {product.price}
                   </td>
                   <td className="px-4 py-4">{product.quantity}</td>
-                  <td className="px-4 py-4">{product.supplierEmail}</td>
+                  {/* <td className="px-4 py-4">{product.supplierEmail}</td> */}
                   <td className="px-4 py-4">{product.retailerEmail}</td>
                   <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-500 hover:bg-red-700">
                     {product.expiryDate}
@@ -250,7 +250,7 @@ const RetailerProductData = ({ data }) => {
                     {product.price}
                   </td>
                   <td className="px-4 py-4">{product.quantity}</td>
-                  <td className="px-4 py-4">{product.supplierEmail}</td>
+                  {/* <td className="px-4 py-4">{product.supplierEmail}</td> */}
                   <td className="px-4 py-4">{product.retailerEmail}</td>
                   <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-500 hover:bg-red-700">
                     {product.expiryDate}
