@@ -1,5 +1,5 @@
-import{ useState, useRef, useEffect } from "react";
-import { FaRupeeSign } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { LuMoreHorizontal } from "react-icons/lu";
 import {
   Breadcrumb,
@@ -7,28 +7,82 @@ import {
   BreadcrumbLink,
 } from "../../../components/ui/breadcrumb";
 import FormDialog from "../Components/FormDialog";
-import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePostProductReqRetailerMutation } from "../../../services/common/index";
+
 const InventoryTable = ({ items }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(null);
   const [dialogData, setDialogData] = useState(null);
-
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [reqType, setreqType] = useState("");
   const breadcrumbRef = useRef(null);
-  const navigate = useNavigate();
-  const [postProductReq, { isLoading }] = usePostProductReqRetailerMutation();
+  const [postProductReq] = usePostProductReqRetailerMutation();
 
   const toggleBreadcrumb = (productId) => {
     setIsBreadcrumbOpen((prev) => (prev === productId ? null : productId));
   };
 
+  const sortedData = [...items].sort((a, b) => {
+    if (sortConfig.key) {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const toggleSort = (column) => {
+    const columnKeyMap = {
+      "Product ID": "productId",
+      "Product Name": "productName",
+      Price: "price",
+      Quantity: "quantity",
+      "Supplier Name": "supplierName",
+      "Supplier Email": "supplierEmail",
+      "Manufacture Date": "manufactureDate",
+      "Expiry Date": "expiryDate",
+    };
+    const key = columnKeyMap[column] || column;
+
+    setSortConfig((prevConfig) => ({
+      key,
+      direction:
+        prevConfig.key === key && prevConfig.direction === "asc"
+          ? "desc"
+          : "asc",
+    }));
+  };
+
+  const getSortIcon = (column) => {
+    const columnKeyMap = {
+      "Product ID": "productId",
+      "Product Name": "productName",
+      Price: "price",
+      Quantity: "quantity",
+      "Supplier Name": "supplierName",
+      "Supplier Email": "supplierEmail",
+      "Manufacture Date": "manufactureDate",
+      "Expiry Date": "expiryDate",
+    };
+    const key = columnKeyMap[column] || column;
+
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "asc" ? (
+        <FaSortUp title="Sort Descending" />
+      ) : (
+        <FaSortDown title="Sort Ascending" />
+      );
+    }
+    return null;
+  };
+
   const handleDialogOpen = (product, reqType) => {
-    console.log("in modal req type is ", reqType);
     setreqType(reqType);
     setDialogData(product);
   };
+
   const handleDialogClose = () => {
     setDialogData(null);
   };
@@ -52,40 +106,51 @@ const InventoryTable = ({ items }) => {
 
   const handleFormSubmit = async (data) => {
     try {
-      const response = await postProductReq(data).unwrap();
-
+      await postProductReq(data).unwrap();
       toast.success("Product request sent successfully!", {
         position: "top-right",
         autoClose: 800,
-        onClose: () => {
-          handleDialogClose();
-        },
+        onClose: handleDialogClose,
       });
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+
   return (
     <>
       <ToastContainer />
       <div className="p-4 bg-white shadow-md rounded-lg">
         <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="text-gray-600 uppercase text-xs font-semibold border-b">
-              <th className="px-4 py-3">Product ID</th>
-              <th className="px-4 py-3">Product Name</th>
-              <th className="px-4 py-3">Price</th>
-              <th className="px-4 py-3">Quantity</th>
-              <th className="px-4 py-3">Supplier Name</th>
-              <th className="px-4 py-3">Supplier Email</th>
-              <th className="px-4 py-3">Manufacture Date</th>
-              <th className="px-4 py-3">Expiry Date</th>
-              <th className="px-4 py-3">Action</th>
+          <thead className="text-gray-600 uppercase text-xs font-semibold border-b">
+            <tr>
+              {[
+                "Product ID",
+                "Product Name",
+                "Price",
+                "Quantity",
+                "Supplier Name",
+                "Supplier Email",
+                "Manufacture Date",
+                "Expiry Date",
+                "Action",
+              ].map((column) => (
+                <th
+                  key={column}
+                  className="px-4 py-3 cursor-pointer"
+                  onClick={() => toggleSort(column)}
+                >
+                  <div className="flex items-center">
+                    <span>{column.replace(/([A-Z])/g, " $1")}</span>
+                    <span>{getSortIcon(column)}</span>
+                  </div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className="text-gray-800 text-sm">
-            {items.length > 0 ? (
-              items.map((product) => (
+            {sortedData.length > 0 ? (
+              sortedData.map((product) => (
                 <tr
                   key={product.productId}
                   className="border-b hover:bg-gray-50"
@@ -120,16 +185,14 @@ const InventoryTable = ({ items }) => {
                               onClick={() =>
                                 handleDialogOpen(product, "request")
                               }
-                              className="text-[14px] font-semibold hover:text-blue-500  cursor-pointer hover:underline"
+                              className="text-[14px] font-semibold hover:text-blue-500 cursor-pointer hover:underline"
                             >
-                              {" "}
                               Request Product
                             </BreadcrumbLink>
                           </BreadcrumbItem>
-
                           <BreadcrumbItem>
                             <BreadcrumbLink
-                              className="text-[14px] font-semibold hover:text-blue-500  cursor-pointer hover:underline"
+                              className="text-[14px] font-semibold hover:text-blue-500 cursor-pointer hover:underline"
                               onClick={() => handleDialogOpen(product, "send")}
                             >
                               Send Extras
