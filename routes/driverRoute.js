@@ -10,5 +10,9 @@ router.get(
   "/api_update_task_status/:taskId",
   driverController.api_update_task_status
 );
+router.post(
+  "/api_get_tranferTask_data",
+  driverController.api_get_tranferTask_data
+);
 
 module.exports = router;

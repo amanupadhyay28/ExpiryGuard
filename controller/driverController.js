@@ -113,6 +113,7 @@ const assign_transfer_task = async (req, res) => {
       targetRetailerAddress,
       products,
       driverEmail,
+      supplierEmail,
     });
 
     await newTask.save();
@@ -215,10 +216,28 @@ const api_update_task_status = async (req, res) => {
   }
 };
 
+const api_get_tranferTask_data = async (req, res) => {
+  try {
+    const { supplierEmail } = req.body;
+    const supplier = await Supplier.findOne({ email: supplierEmail });
+    if (!supplier) {
+      return res.status(400).json({ msg: "Supplier not found" });
+    }
+    const tasks = await TransferTask.find({
+      supplierEmail: supplierEmail,
+    }).sort({ date: -1 });
+    res.json(tasks);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   api_add_driver,
   api_get_drivers,
   api_remove_driver,
   assign_transfer_task,
   api_update_task_status,
+  api_get_tranferTask_data,
 };

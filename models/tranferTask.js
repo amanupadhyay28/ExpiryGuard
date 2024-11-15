@@ -36,9 +36,13 @@ const transferTaskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  supplierEmail: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
-    enum: ["assigned","completed"],
+    enum: ["assigned", "completed"],
     default: "assigned",
   },
   createdAt: {
