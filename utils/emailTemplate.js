@@ -7,6 +7,7 @@ const emailTemplate = ({
   products,
   supplierEmail,
   driverEmail,
+  taskId,
 }) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -109,6 +110,9 @@ const emailTemplate = ({
     </div>
     <div class="footer">
       <p>Best regards,<br>ExpiryGuard</p>
+    </div>
+    <div class="footer">
+      <a href="http://localhost:5001/api_update_task_status/${taskId}" class="button">Confirm Task Completion</a>
     </div>
   </div>
 </body>

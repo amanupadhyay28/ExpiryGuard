@@ -113,7 +113,6 @@ const assign_transfer_task = async (req, res) => {
       targetRetailerAddress,
       products,
       driverEmail,
-      status: "pending",
     });
 
     await newTask.save();
@@ -129,6 +128,7 @@ const assign_transfer_task = async (req, res) => {
       products,
       supplierEmail,
       driverEmail,
+      taskId,
     });
 
     await sendEmail(driverEmail, "New Transfer Task Assigned", emailContent);
@@ -140,9 +140,85 @@ const assign_transfer_task = async (req, res) => {
   }
 };
 
+const api_update_task_status = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    console.log(taskId);
+    const task = await TransferTask.findOne({ taskId });
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+
+    task.status = "completed";
+    await task.save();
+
+    res.status(200).send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Task Confirmation</title>
+        <style>
+          body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+          }
+          .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            margin: auto;
+          }
+          h1 {
+            color: #28a745;
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+          .task-id {
+            color: #FF0000;
+            font-weight: bold;
+          }
+          p {
+            font-size: 18px;
+            color: #333;
+          }
+          @media (max-width: 600px) {
+            h1 {
+              font-size: 20px;
+            }
+            p {
+              font-size: 16px;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Task Confirmed for TaskId: <span class="task-id">${taskId}</span></h1>
+          <p>Thank you for confirming the task completion.</p>
+        </div>
+      </body>
+      </html>
+    `);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   api_add_driver,
   api_get_drivers,
   api_remove_driver,
   assign_transfer_task,
+  api_update_task_status,
 };
