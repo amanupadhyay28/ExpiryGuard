@@ -15,12 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogClose,
-} from "../../components/ui/dialog";
+import { Dialog, DialogContent } from "../../components/ui/dialog";
 
 import { useGetExpiringProductsMutation } from "../../services/common/index";
 
@@ -57,7 +52,7 @@ const Dashboard = () => {
       getExpiringProducts({ retailerEmail })
         .unwrap()
         .then((response) => {
-          setExpiringProducts(response.expiringProductCount);
+          setExpiringProducts(response.expiringProductsCount);
         })
         .catch((error) =>
           console.error("Error fetching expiring products:", error)
@@ -66,6 +61,8 @@ const Dashboard = () => {
       console.error(`No expiring products found ${error}`);
     }
   }, [getExpiringProducts]);
+
+  console.log(expiringProducts);
 
   if (isLoading || !retaileSalesData) {
     return <Loader />;
