@@ -84,7 +84,9 @@ export default function ProductForm({}) {
             onSubmit={handleSubmit}
             className="space-y-2 p-4 w-[600px] bg-white rounded-2xl"
           >
-            <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400 ">Add Product </h1>
+            <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400 ">
+              Add Product{" "}
+            </h1>
             <Input
               label="Product Name"
               name="productName"
@@ -118,7 +120,7 @@ export default function ProductForm({}) {
               name="price"
               value={formData.price}
               onChange={handleInputChange}
-              placeholder="Enter price"
+              placeholder="Enter price per item"
               type="number"
               className="w-full "
               required

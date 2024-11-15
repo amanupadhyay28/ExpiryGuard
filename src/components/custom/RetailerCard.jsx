@@ -7,7 +7,7 @@ const RetailerInfoCard = ({ data }) => {
   const [getInventory, { isLoading }] =
     useGetInventoryForRetailerBySupplierMutation();
 
-  const handleClick = (retailerEmail) => {
+  const handleClick = (retailerEmail, retailerData) => {
     const supplierEmail = localStorage.getItem("email");
 
     if (supplierEmail) {
@@ -18,7 +18,8 @@ const RetailerInfoCard = ({ data }) => {
               inventoryData: response.data,
               isOpenAlertModal: true,
               retailerEmail: retailerEmail,
-              supplierEmail:supplierEmail,
+              supplierEmail: supplierEmail,
+              retailerData: retailerData,
             },
           });
         })
@@ -40,7 +41,7 @@ const RetailerInfoCard = ({ data }) => {
           <div
             key={retailer._id}
             className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 border-t-4 border-orange-500 hover:bg-slate-100 cursor-pointer"
-            onClick={() => handleClick(retailer.email)}
+            onClick={() => handleClick(retailer.email, retailer)}
           >
             <div className="flex items-center mb-4">
               <div className="w-16 h-16 rounded-full bg-gray-300 flex-shrink-0 mr-4 overflow-hidden shadow-sm">

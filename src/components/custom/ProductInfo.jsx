@@ -17,12 +17,16 @@ const ProductInfo = () => {
   const isModalOpen = location.state?.isOpenAlertModal || false;
   const retailerEmail = location.state?.retailerEmail || "";
   const supplierEmail = location.state?.supplierEmail || "";
+  const retailerData = location.state?.retailerData || "";
 
   const [modalOpen, setModalOpen] = useState(isModalOpen);
   const [sortedProducts, setSortedProducts] = useState(products);
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const [highlightedProductIds, setHighlightedProductIds] = useState([]);
+  const [selectedDays, setSelectedDays] = useState(7);
   const [getExpiringProducts, { isLoading: isExpiringLoading }] =
     useGetExpiringProductsForSupplierMutation();
+  const [expiringProducts, setExpiringProducts] = useState(null);
 
   const handleSort = (columnKey) => {
     let direction = "ascending";
@@ -47,7 +51,6 @@ const ProductInfo = () => {
       sortConfig.key === columnKey && sortConfig.direction === arrowDirection;
     return isActive ? "text-gray-800" : "text-gray-400";
   };
-  const [expiringProducts, setExpiringProducts] = useState(null);
 
   useEffect(() => {
     try {
@@ -66,7 +69,29 @@ const ProductInfo = () => {
     }
   }, [getExpiringProducts]);
 
-  console.log(expiringProducts);
+  const handleDaysChange = async (days) => {
+  
+    setSelectedDays(days);
+    try {
+      const response = await getExpiringProducts({
+        retailerEmail,
+        supplierEmail,
+        days,
+      }).unwrap();
+      const expiringIds = response.expiringProducts.map(
+        (product) => product.productId
+      );
+  
+      setHighlightedProductIds(expiringIds);
+    } catch (error) {
+      console.error("Error fetching highlighted products:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleDaysChange(selectedDays);
+  }, []);
+
   if (isExpiringLoading) {
     return <Loader />;
   }
@@ -86,7 +111,7 @@ const ProductInfo = () => {
           <div className="text-center text-white text-2xl">
             {expiringProducts > 0 ? (
               <p>
-                You have{" "}
+                {retailerData.name} has{" "}
                 <span className="text-orange-400 font-semibold hover:underline cursor-pointer">
                   {expiringProducts === 1
                     ? `${expiringProducts} product `
@@ -102,11 +127,27 @@ const ProductInfo = () => {
       </Dialog>
 
       <div className="p-4 bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          Product Inventory
-        </h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            Product Inventory
+          </h2>
+          <div>
+            <label className="mr-2 text-gray-700 font-medium">
+              Highlight Rows By Days:
+            </label>
+            <select
+              value={selectedDays}
+              onChange={(e) => handleDaysChange(parseInt(e.target.value, 10))}
+              className="border border-gray-300 rounded p-2"
+            >
+              <option value={7}>7 Days</option>
+              <option value={15}>15 Days</option>
+              <option value={30}>30 Days</option>
+            </select>
+          </div>
+        </div>
 
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse ">
           <thead>
             <tr className="text-gray-600 uppercase text-xs font-semibold border-b">
               <th
@@ -240,7 +281,14 @@ const ProductInfo = () => {
           <tbody className="text-gray-800 text-sm bg-slate-100">
             {sortedProducts.length > 0 ? (
               sortedProducts.map((product) => (
-                <tr key={product._id} className="border-b hover:bg-gray-50">
+                <tr
+                key={product.productId}
+                className={`border-b hover:bg-gray-50 ${
+                  highlightedProductIds.includes(product.productId)
+                    ? "bg-yellow-200"
+                    : ""
+                }`}
+              >
                   <td className="px-4 py-4 font-semibold">
                     {product.productName || "N/A"}
                   </td>

@@ -34,7 +34,7 @@ const SelectComponent = ({
       <Select value={selectedEmail} onValueChange={handleChange}>
         <SelectTrigger className="w-full h-12 border border-gray-300 rounded-md p-3 mt-2 mb-5">
           <SelectValue
-            placeholder="Select Your Email"
+            placeholder="Select Email"
             className="text-blue-500"
           />
         </SelectTrigger>
