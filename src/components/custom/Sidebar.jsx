@@ -1,5 +1,3 @@
-// src/components/Sidebar.js
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
@@ -34,7 +32,7 @@ const Sidebar = () => {
         ),
     },
     {
-      name: userType === "supplier" ? "Orders" : "",
+      name: userType === "supplier" ? "Redistribution" : "",
       path: userType === "supplier" ? "/orders" : "",
       icon:
         userType === "supplier" ? (

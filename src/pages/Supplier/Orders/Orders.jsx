@@ -167,7 +167,9 @@ import Loader from "../../../components/custom/Loader";
 import SelectComponent from "../../RetailerDashboard/Components/SupplierSelect";
 import { useGetDriverDetailsMutation } from "../../../services/common/index.js";
 import { usePostTransferTaskMutation } from "../../../services/common/index.js";
+import { useGetTransferTaskDataMutation } from "../../../services/common/index.js";
 import { toast, ToastContainer } from "react-toastify";
+import { Badge } from "../../../components/ui/badge";
 import "react-toastify/dist/ReactToastify.css";
 const Orders = () => {
   const [getRetailerForSupplierMutation, { isLoading }] =
@@ -175,8 +177,12 @@ const Orders = () => {
   const [getdriverData, { isdriverLoading }] = useGetDriverDetailsMutation();
   const [PostTransferTask, { isPostTransferTaskLoading }] =
     usePostTransferTaskMutation();
+  const [getTransferTaskData, { isGetTransferTaskDataLoading }] =
+    useGetTransferTaskDataMutation();
+
   const [retailerData, setRetailerData] = useState([]);
   const [driverData, setDriverData] = useState([]);
+  const [transferTaskData, setTransferTaskData] = useState([]);
 
   const supplierEmail = localStorage.getItem("email");
   useEffect(() => {
@@ -209,6 +215,22 @@ const Orders = () => {
     }
   }, [getdriverData]);
 
+  useEffect(() => {
+    if (supplierEmail) {
+      getTransferTaskData({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+          setTransferTaskData(dataArray);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getTransferTaskData]);
+
+  console.log("transferTaskData", transferTaskData);
+
   const [formData, setFormData] = useState({
     sourceRetailerEmail: "",
     sourceRetailerName: "",
@@ -216,7 +238,7 @@ const Orders = () => {
     targetRetailerEmail: "",
     targetRetailerName: "",
     targetRetailerAddress: "",
-    products: [{ productName: "", quantity: null, price: null }],
+    products: [{ productName: "", quantity: "", price: "" }],
     supplierEmail: supplierEmail,
     driverEmail: "",
   });
@@ -289,7 +311,7 @@ const Orders = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex justify-center mt-2 space-x-8 items-center">
+      <div className=" justify-center mt-2 space-x-8 items-center">
         <div className="flex justify-center mt-2">
           <form
             className="space-y-2 p-4 w-[600px] bg-white rounded-2xl"
@@ -298,16 +320,6 @@ const Orders = () => {
             <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400">
               Assign Transfer Task
             </h1>
-            {/* <Input
-            label="Source Retailer Email"
-            name="sourceRetailerEmail"
-            placeholder="Enter source retailer email"
-            type="email"
-            className="w-full"
-            value={formData.sourceRetailerEmail}
-            onChange={handleChange}
-            required
-          /> */}
             <SelectComponent
               selectData={retailerData}
               onEmailChange={handleSourceEmailChange}
@@ -410,6 +422,73 @@ const Orders = () => {
               Submit
             </Button>
           </form>
+        </div>
+        <div className="p-4">
+          <h2 className="text-lg font-bold mb-4">Transfer Task Details</h2>
+          <table className="table-auto w-full border-collapse shadow-lg">
+            <thead>
+              <tr className="bg-green-600 text-white">
+                <th className="border border-green-600 p-2">Task ID</th>
+                <th className="border border-green-600 p-2">Source Retailer</th>
+                <th className="border border-green-600 p-2">Source Address</th>
+                <th className="border border-green-600 p-2">Target Retailer</th>
+                <th className="border border-green-600 p-2">Target Address</th>
+                <th className="border border-green-600 p-2">Products</th>
+                <th className="border border-green-600 p-2">Driver</th>
+                <th className="border border-green-600 p-2">Status</th>
+                <th className="border border-green-600 p-2">Created At</th>
+                <th className="border border-green-600 p-2">Supplier Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {transferTaskData.map((task) => (
+                <tr key={task._id} className="hover:bg-green-100">
+                  <td className="border border-green-600 p-2">{task.taskId}</td>
+                  <td className="border border-green-600 p-2">
+                    {task.sourceRetailerName}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.sourceRetailerAddress}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.targetRetailerName}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.targetRetailerAddress}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.products.map((product) => (
+                      <div key={product._id} className="mb-2">
+                        <p className="font-semibold">{product.productName}</p>
+                        <p>Quantity: {product.quantity}</p>
+                        <p>Price: {product.price}</p>
+                      </div>
+                    ))}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.driverEmail}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    <Badge
+                      className={`py-1 font-bold cursor-pointer ${
+                        task.status === "assigned"
+                          ? "bg-orange-500"
+                          : "bg-green-500"
+                      }`}
+                    >
+                      {task.status}
+                    </Badge>
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {new Date(task.createdAt).toLocaleString()}
+                  </td>
+                  <td className="border border-green-600 p-2">
+                    {task.supplierEmail}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>
