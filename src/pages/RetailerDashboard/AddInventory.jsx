@@ -155,6 +155,7 @@ export default function ProductForm({}) {
               selectData={supplierResponse}
               onEmailChange={handleSelectEmailChange}
               onNameChange={handleSelectNameChange}
+              isOrderComponent={false}
             />
             <Input
               label="Retailer Email"

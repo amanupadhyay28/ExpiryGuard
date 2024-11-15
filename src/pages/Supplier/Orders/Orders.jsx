@@ -161,9 +161,54 @@
 import { Input } from "../../../components/ui/input";
 import { Textarea } from "../../../components/ui/textarea";
 import { Button } from "../../../components/ui/button";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useGetRetailerForSupplierMutation } from "../../../services/common/index.js";
+import Loader from "../../../components/custom/Loader";
+import SelectComponent from "../../RetailerDashboard/Components/SupplierSelect";
+import { useGetDriverDetailsMutation } from "../../../services/common/index.js";
+import { usePostTransferTaskMutation } from "../../../services/common/index.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Orders = () => {
+  const [getRetailerForSupplierMutation, { isLoading }] =
+    useGetRetailerForSupplierMutation();
+  const [getdriverData, { isdriverLoading }] = useGetDriverDetailsMutation();
+  const [PostTransferTask, { isPostTransferTaskLoading }] =
+    usePostTransferTaskMutation();
+  const [retailerData, setRetailerData] = useState([]);
+  const [driverData, setDriverData] = useState([]);
+
+  const supplierEmail = localStorage.getItem("email");
+  useEffect(() => {
+    if (supplierEmail) {
+      getRetailerForSupplierMutation({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setRetailerData(dataArray);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getRetailerForSupplierMutation]);
+
+  useEffect(() => {
+    if (supplierEmail) {
+      getdriverData({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setDriverData(dataArray);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getdriverData]);
+
   const [formData, setFormData] = useState({
     sourceRetailerEmail: "",
     sourceRetailerName: "",
@@ -171,8 +216,8 @@ const Orders = () => {
     targetRetailerEmail: "",
     targetRetailerName: "",
     targetRetailerAddress: "",
-    products: [{ productName: "", quantity: 0, price: 0 }],
-    supplierEmail: "",
+    products: [{ productName: "", quantity: null, price: null }],
+    supplierEmail: supplierEmail,
     driverEmail: "",
   });
 
@@ -183,7 +228,32 @@ const Orders = () => {
       [name]: value,
     }));
   };
+  const handleSourceEmailChange = (email) => {
+    const retailer = retailerData.find((item) => item.email === email);
 
+    setFormData((prevData) => ({
+      ...prevData,
+      sourceRetailerEmail: email,
+      sourceRetailerName: retailer?.name || "",
+      sourceRetailerAddress: retailer?.address || "",
+    }));
+  };
+
+  const handleTargetEmailChange = (email) => {
+    const retailer = retailerData.find((item) => item.email === email);
+    setFormData((prevData) => ({
+      ...prevData,
+      targetRetailerEmail: email,
+      targetRetailerName: retailer?.name || "",
+      targetRetailerAddress: retailer?.address || "",
+    }));
+  };
+  const handleDriverEmailChange = (email) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      driverEmail: email,
+    }));
+  };
   const handleProductChange = (e, index) => {
     const { name, value } = e.target;
     const products = [...formData.products];
@@ -197,23 +267,38 @@ const Orders = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Submit the form data
-  };
+    try {
+      const response = await PostTransferTask(formData).unwrap();
 
+      toast.success("Transfer Request Send!!", {
+        position: "top-right",
+        autoClose: 1000,
+      });
+    } catch (error) {
+      toast.error(`Transfer Product Error! ${error.data.msg}`, {
+        position: "top-right",
+        autoClose: 2000,
+      });
+    }
+  };
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
-    <div className="flex justify-center mt-2 space-x-8 items-center">
-      <div className="flex justify-center mt-2">
-        <form
-          className="space-y-2 p-4 w-[600px] bg-white rounded-2xl"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400">
-            Assign Transfer Task
-          </h1>
-          <Input
+    <>
+      <ToastContainer />
+      <div className="flex justify-center mt-2 space-x-8 items-center">
+        <div className="flex justify-center mt-2">
+          <form
+            className="space-y-2 p-4 w-[600px] bg-white rounded-2xl"
+            onSubmit={handleSubmit}
+          >
+            <h1 className="text-2xl font-extrabold mb-6 text-center text-gray-400">
+              Assign Transfer Task
+            </h1>
+            {/* <Input
             label="Source Retailer Email"
             name="sourceRetailerEmail"
             placeholder="Enter source retailer email"
@@ -222,115 +307,112 @@ const Orders = () => {
             value={formData.sourceRetailerEmail}
             onChange={handleChange}
             required
-          />
-          <Input
-            label="Source Retailer Name"
-            name="sourceRetailerName"
-            placeholder="Enter source retailer name"
-            className="w-full"
-            value={formData.sourceRetailerName}
-            onChange={handleChange}
-            required
-          />
-          <Textarea
-            label="Source Retailer Address"
-            name="sourceRetailerAddress"
-            placeholder="Enter source retailer address"
-            className="w-full"
-            value={formData.sourceRetailerAddress}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            label="Target Retailer Email"
-            name="targetRetailerEmail"
-            placeholder="Enter target retailer email"
-            type="email"
-            className="w-full"
-            value={formData.targetRetailerEmail}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            label="Target Retailer Name"
-            name="targetRetailerName"
-            placeholder="Enter target retailer name"
-            className="w-full"
-            value={formData.targetRetailerName}
-            onChange={handleChange}
-            required
-          />
-          <Textarea
-            label="Target Retailer Address"
-            name="targetRetailerAddress"
-            placeholder="Enter target retailer address"
-            className="w-full"
-            value={formData.targetRetailerAddress}
-            onChange={handleChange}
-            required
-          />
-          {formData.products.map((product, index) => (
-            <div key={index} className="space-y-2">
-              <Input
-                label="Product Name"
-                name="productName"
-                placeholder="Enter product name"
-                className="w-full"
-                value={product.productName}
-                onChange={(e) => handleProductChange(e, index)}
-                required
-              />
-              <Input
-                label="Quantity"
-                name="quantity"
-                placeholder="Enter quantity"
-                type="number"
-                className="w-full"
-                value={product.quantity}
-                onChange={(e) => handleProductChange(e, index)}
-                required
-              />
-              <Input
-                label="Price"
-                name="price"
-                placeholder="Enter price"
-                type="number"
-                className="w-full"
-                value={product.price}
-                onChange={(e) => handleProductChange(e, index)}
-                required
-              />
-            </div>
-          ))}
-          <Input
-            label="Supplier Email"
-            name="supplierEmail"
-            placeholder="Enter supplier email"
-            type="email"
-            className="w-full"
-            value={formData.supplierEmail}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            label="Driver Email"
-            name="driverEmail"
-            placeholder="Enter driver email"
-            type="email"
-            className="w-full"
-            value={formData.driverEmail}
-            onChange={handleChange}
-            required
-          />
-          <Button
-            type="submit"
-            className="w-full bg-orange-500 text-white mt-4 hover:bg-black p-2"
-          >
-            Submit
-          </Button>
-        </form>
+          /> */}
+            <SelectComponent
+              selectData={retailerData}
+              onEmailChange={handleSourceEmailChange}
+              onNameChange={() => {}}
+              isOrderComponent={true}
+            />
+            <Input
+              label="Source Retailer Name"
+              name="sourceRetailerName"
+              placeholder="Enter source retailer name"
+              className="w-full"
+              value={formData.sourceRetailerName}
+              readOnly
+            />
+
+            <Textarea
+              label="Source Retailer Address"
+              name="sourceRetailerAddress"
+              placeholder="Enter source retailer address"
+              className="w-full"
+              value={formData.sourceRetailerAddress}
+              onChange={handleChange}
+              required
+            />
+            <SelectComponent
+              selectData={retailerData}
+              onEmailChange={handleTargetEmailChange}
+              onNameChange={() => {}}
+              isOrderComponent={true}
+            />
+            <Input
+              label="Target Retailer Name"
+              name="TargetRetailerName"
+              placeholder="Enter Target retailer name"
+              className="w-full"
+              value={formData.targetRetailerName}
+              readOnly
+            />
+            <Textarea
+              label="Target Retailer Address"
+              name="targetRetailerAddress"
+              placeholder="Enter target retailer address"
+              className="w-full"
+              value={formData.targetRetailerAddress}
+              readOnly
+            />
+            {formData.products.map((product, index) => (
+              <div key={index} className="space-y-2">
+                <Input
+                  label="Product Name"
+                  name="productName"
+                  placeholder="Enter product name"
+                  className="w-full"
+                  value={product.productName}
+                  onChange={(e) => handleProductChange(e, index)}
+                  required
+                />
+                <Input
+                  label="Quantity"
+                  name="quantity"
+                  placeholder="Enter quantity"
+                  type="number"
+                  className="w-full"
+                  value={product.quantity}
+                  onChange={(e) => handleProductChange(e, index)}
+                  required
+                />
+                <Input
+                  label="Price"
+                  name="price"
+                  placeholder="Enter price"
+                  type="number"
+                  className="w-full"
+                  value={product.price}
+                  onChange={(e) => handleProductChange(e, index)}
+                  required
+                />
+              </div>
+            ))}
+            <Input
+              label="Supplier Email"
+              name="supplierEmail"
+              placeholder="Enter supplier email"
+              type="email"
+              className="w-full"
+              value={formData.supplierEmail}
+              onChange={handleChange}
+              readOnly
+            />
+            <SelectComponent
+              selectData={driverData}
+              onEmailChange={handleDriverEmailChange}
+              onNameChange={() => {}}
+              isOrderComponent={true}
+            />
+            <Button
+              type="submit"
+              className="w-full bg-orange-500 text-white mt-4 hover:bg-black p-2"
+            >
+              Submit
+            </Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -15,7 +15,6 @@ function Inventory() {
 
   const supplierEmail = localStorage.getItem("email");
   useEffect(() => {
-
     if (supplierEmail) {
       getRetailerForSupplierMutation({ supplierEmail })
         .unwrap()
@@ -50,7 +49,7 @@ function Inventory() {
       {/* Table section */}
       <motion.div
         className="relative"
-        style={{ width: selectedRetailer ? "50%" : "100%" }} // Set table width to 50% when overlay is open
+        style={{ width: selectedRetailer ? "50%" : "100%" }}
         animate={{ width: selectedRetailer ? "50%" : "100%" }}
         transition={transitionSettings}
       >

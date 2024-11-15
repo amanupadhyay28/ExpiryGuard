@@ -7,7 +7,12 @@ import {
   SelectValue,
 } from "../../../components/ui/select";
 import { Input } from "../../../components/ui/input";
-const SelectComponent = ({ selectData, onEmailChange, onNameChange }) => {
+const SelectComponent = ({
+  selectData,
+  onEmailChange,
+  onNameChange,
+  isOrderComponent,
+}) => {
   const [selectedEmail, setSelectedEmail] = useState("");
   const [selectedName, setSelectedName] = useState("");
 
@@ -16,12 +21,9 @@ const SelectComponent = ({ selectData, onEmailChange, onNameChange }) => {
 
     const selectedSupplier = selectData.find((item) => item.email === email);
 
-    
     onEmailChange(email);
-  
 
     onNameChange(selectedSupplier ? selectedSupplier.name : "");
-  
 
     setSelectedName(selectedSupplier ? selectedSupplier.name : "");
   };
@@ -37,22 +39,27 @@ const SelectComponent = ({ selectData, onEmailChange, onNameChange }) => {
           />
         </SelectTrigger>
         <SelectContent>
-          {selectData.map((item, index) => (
-            <SelectItem key={index} value={item.email}>
-              {item.email}
-            </SelectItem>
-          ))}
+          {selectData.map((item, index) => {
+            const emailValue = item.email || item.driverEmail; // Use driverEmail if email is undefined
+            return (
+              <SelectItem key={index} value={emailValue}>
+                {emailValue}
+              </SelectItem>
+            );
+          })}
         </SelectContent>
       </Select>
 
       {/* Autofilled Name Input */}
-      <Input
-        type="text"
-        value={selectedName}
-        placeholder="Supplier Name"
-        className="w-full h-12 border border-gray-300 rounded-md p-3 mt-2 mb-5"
-        readOnly
-      />
+      {!isOrderComponent && (
+        <Input
+          type="text"
+          value={selectedName}
+          placeholder="Supplier Name"
+          className="w-full h-12 border border-gray-300 rounded-md p-3 mt-2 mb-5"
+          readOnly
+        />
+      )}
     </div>
   );
 };
