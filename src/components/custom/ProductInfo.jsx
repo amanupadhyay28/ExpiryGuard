@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FaRupeeSign, FaBoxes, FaCalendarAlt } from "react-icons/fa";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const ProductInfo = () => {
   const location = useLocation();
   const products = location.state?.inventoryData || [];
+
+  const [sortedProducts, setSortedProducts] = useState(products);
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+
+  const handleSort = (columnKey) => {
+    let direction = "ascending";
+    if (sortConfig.key === columnKey && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+
+    const sortedData = [...sortedProducts].sort((a, b) => {
+      if (a[columnKey] < b[columnKey])
+        return direction === "ascending" ? -1 : 1;
+      if (a[columnKey] > b[columnKey])
+        return direction === "ascending" ? 1 : -1;
+      return 0;
+    });
+
+    setSortedProducts(sortedData);
+    setSortConfig({ key: columnKey, direction });
+  };
+
+  const getArrowClasses = (columnKey, arrowDirection) => {
+    const isActive =
+      sortConfig.key === columnKey && sortConfig.direction === arrowDirection;
+    return isActive ? "text-gray-800" : "text-gray-400";
+  };
 
   return (
     <div className="p-4 bg-white shadow-md rounded-lg">
@@ -15,18 +43,137 @@ const ProductInfo = () => {
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="text-gray-600 uppercase text-xs font-semibold border-b">
-            <th className="px-4 py-3">Product Name</th>
-            <th className="px-4 py-3">Description</th>
-            <th className="px-4 py-3">Quantity</th>
-            <th className="px-4 py-3">Price</th>
-            <th className="px-4 py-3">Batch</th>
-            <th className="px-4 py-3">Manufacture Date</th>
-            <th className="px-4 py-3">Expiry Date</th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("productName")}
+            >
+              Product Name
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "productName",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "productName",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("description")}
+            >
+              Description
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "description",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "description",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("quantity")}
+            >
+              Quantity
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "quantity",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "quantity",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("price")}
+            >
+              Price
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "price",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "price",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("batchNumber")}
+            >
+              Batch
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "batchNumber",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "batchNumber",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("manufactureDate")}
+            >
+              Manufacture Date
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "manufactureDate",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "manufactureDate",
+                  "descending"
+                )}`}
+              />
+            </th>
+            <th
+              className="px-4 py-3 cursor-pointer"
+              onClick={() => handleSort("expiryDate")}
+            >
+              Expiry Date
+              <FaArrowUp
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "expiryDate",
+                  "ascending"
+                )}`}
+              />
+              <FaArrowDown
+                className={`inline-block ml-1 ${getArrowClasses(
+                  "expiryDate",
+                  "descending"
+                )}`}
+              />
+            </th>
           </tr>
         </thead>
         <tbody className="text-gray-800 text-sm bg-slate-100">
-          {products.length > 0 ? (
-            products.map((product) => (
+          {sortedProducts.length > 0 ? (
+            sortedProducts.map((product) => (
               <tr key={product._id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-4 font-semibold">
                   {product.productName || "N/A"}
