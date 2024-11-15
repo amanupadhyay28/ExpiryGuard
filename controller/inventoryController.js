@@ -312,6 +312,60 @@ const api_getExpiringProducts = async (req, res) => {
   }
 };
 
+const api_getExpiringProductsForSupplier = async (req, res) => {
+  try {
+    const { retailerEmail, days } = req.body;
+    if (!retailerEmail) {
+      return res.status(400).json({ message: "retailerEmail is required" });
+    }
+    const inventory = await Inventory.findOne({ retailerEmail });
+    if (!inventory) {
+      return res.status(404).json({ message: "Inventory not found" });
+    }
+    const currentDate = new Date();
+
+    const getFormattedDates = (days) => {
+      const targetDate = new Date();
+      targetDate.setDate(currentDate.getDate() + days);
+      const formattedCurrentDate = formatDateToYYYYMMDD(currentDate);
+      const formattedTargetDate = formatDateToYYYYMMDD(targetDate);
+      return { formattedCurrentDate, formattedTargetDate };
+    };
+
+    const filterExpiringProducts = (startDate, endDate) => {
+      return inventory.products.filter((product) => {
+        const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
+        return (
+          formattedExpiryDate >= startDate && formattedExpiryDate <= endDate
+        );
+      });
+    };
+
+    if (!days) {
+      const { formattedCurrentDate, formattedTargetDate } =
+        getFormattedDates(7);
+      const expiringProducts = filterExpiringProducts(
+        formattedCurrentDate,
+        formattedTargetDate
+      );
+      return res.json({ expiringProductsCount: expiringProducts.length });
+    } else {
+      const { formattedCurrentDate, formattedTargetDate } =
+        getFormattedDates(days);
+      const expiringProducts = filterExpiringProducts(
+        formattedCurrentDate,
+        formattedTargetDate
+      );
+      const expiringProductIds = expiringProducts.map(
+        (product) => product.productId
+      );
+      return res.json({ expiringProductIds });
+    }
+  } catch (error) {
+    console.error("Error Fetching Expiring Products:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 const api_getInventory = async (req, res) => {
   try {
     const { retailerEmail } = req.body;
@@ -435,4 +489,5 @@ module.exports = {
   api_get_sales_data,
   api_updateProductRequestStatus,
   api_getRetailerProductRequests,
+  api_getExpiringProductsForSupplier,
 };
