@@ -2,22 +2,50 @@ const mongoose = require("mongoose");
 
 const transferTaskSchema = new mongoose.Schema({
   taskId: String,
-  sourceRetailerEmail: String,
-  targetRetailerEmail: String,
+  sourceRetailerEmail: {
+    type: String,
+    required: true,
+  },
+  sourceRetailerName: {
+    type: String,
+    required: true,
+  },
+  sourceRetailerAddress: {
+    type: String,
+  },
+
+  targetRetailerEmail: {
+    type: String,
+    required: true,
+  },
+  targetRetailerName: {
+    type: String,
+    required: true,
+  },
+  targetRetailerAddress: {
+    type: String,
+  },
   products: [
     {
       productName: String,
       quantity: Number,
     },
   ],
-  driverId: String,
+  driverEmail: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     enum: ["pending", "in-progress", "completed"],
     default: "pending",
   },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
-
-module.exports = mongoose.model("TransferTask", transferTaskSchema);
+TransferTask =
+  mongoose.models.TransferTask ||
+  mongoose.model("TransferTask", transferTaskSchema);
+module.exports = TransferTask;

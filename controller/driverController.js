@@ -1,5 +1,5 @@
-const Supplier = require("../models/supplier");
 const TransferTask = require("../models/tranferTask");
+const Supplier = require("../models/supplier");
 
 const api_add_driver = async (req, res) => {
   try {
@@ -80,19 +80,35 @@ const assign_transfer_task = async (req, res) => {
   try {
     const {
       sourceRetailerEmail,
+      sourceRetailerName,
+      sourceRetailerAddress,
       targetRetailerEmail,
+      targetRetailerName,
+      targetRetailerAddress,
       products,
-      supplierId,
-      driverId,
+      supplierEmail,
+      driverEmail,
     } = req.body;
 
-    const supplier = await Supplier.findOne({ supplierId });
+    console.log({
+      sourceRetailerEmail,
+      sourceRetailerName,
+      sourceRetailerAddress,
+      targetRetailerEmail,
+      targetRetailerName,
+      targetRetailerAddress,
+      products,
+      supplierEmail,
+      driverEmail,
+    });
+
+    const supplier = await Supplier.findOne({ email: supplierEmail });
     if (!supplier) {
       return res.status(400).json({ msg: "Supplier not found" });
     }
 
     const driver = supplier.drivers.find(
-      (driver) => driver.driverId === driverId
+      (driver) => driver.driverEmail === driverEmail
     );
     if (!driver) {
       return res.status(400).json({ msg: "Driver not found" });
@@ -102,9 +118,13 @@ const assign_transfer_task = async (req, res) => {
     const newTask = new TransferTask({
       taskId,
       sourceRetailerEmail,
+      sourceRetailerName,
+      sourceRetailerAddress,
       targetRetailerEmail,
+      targetRetailerName,
+      targetRetailerAddress,
       products,
-      driverId,
+      driverEmail,
       status: "pending",
     });
 
