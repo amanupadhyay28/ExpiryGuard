@@ -262,9 +262,9 @@ const ProductInfo = () => {
                       {product.manufactureDate || "N/A"}
                     </span>
                   </td>
-                  <td className="px-4 py-4">
+                  <td className="px-4 py-4 bg-red-600 hover:bg-red-400">
                     <FaCalendarAlt className="mr-2 text-gray-400" />
-                    <span className="text-red-600 font-semibold">
+                    <span className="text-white font-bold text-md">
                       {product.expiryDate || "N/A"}
                     </span>
                   </td>
