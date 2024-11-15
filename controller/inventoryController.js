@@ -282,30 +282,54 @@ const api_getSuppliersForRetailer = async (req, res) => {
 
 const api_getExpiringProducts = async (req, res) => {
   try {
-    const { retailerEmail } = req.body;
+    const { retailerEmail, days } = req.body;
     if (!retailerEmail) {
       return res.status(400).json({ message: "retailerEmail is required" });
     }
+
     const inventory = await Inventory.findOne({ retailerEmail });
     if (!inventory) {
       return res.status(404).json({ message: "Inventory not found" });
     }
+
     const currentDate = new Date();
-    const oneWeekLater = new Date();
-    oneWeekLater.setDate(currentDate.getDate() + 7);
 
-    const formattedCurrentDate = formatDateToYYYYMMDD(currentDate);
-    const formattedOneWeekLaterDate = formatDateToYYYYMMDD(oneWeekLater);
+    const getFormattedDates = (days) => {
+      const targetDate = new Date();
+      targetDate.setDate(currentDate.getDate() + days);
+      const formattedCurrentDate = formatDateToYYYYMMDD(currentDate);
+      const formattedTargetDate = formatDateToYYYYMMDD(targetDate);
+      return { formattedCurrentDate, formattedTargetDate };
+    };
 
-    const expiringProducts = inventory.products.filter((product) => {
-      const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
-      return (
-        formattedExpiryDate >= formattedCurrentDate &&
-        formattedExpiryDate <= formattedOneWeekLaterDate
+    const filterExpiringProducts = (startDate, endDate) => {
+      return inventory.products.filter((product) => {
+        const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
+        return (
+          formattedExpiryDate >= startDate && formattedExpiryDate <= endDate
+        );
+      });
+    };
+
+    if (days == null) {
+      const { formattedCurrentDate, formattedTargetDate } =
+        getFormattedDates(7);
+      const expiringProducts = filterExpiringProducts(
+        formattedCurrentDate,
+        formattedTargetDate
       );
-    });
-
-    res.status(200).json({ expiringProductCount: expiringProducts.length });
+      return res
+        .status(200)
+        .json({ expiringProductsCount: expiringProducts.length });
+    } else {
+      const { formattedCurrentDate, formattedTargetDate } =
+        getFormattedDates(days);
+      const expiringProducts = filterExpiringProducts(
+        formattedCurrentDate,
+        formattedTargetDate
+      );
+      return res.status(200).json({ expiringProducts });
+    }
   } catch (error) {
     console.error("Error Fetching Expiring Products:", error);
     res.status(500).json({ message: "Internal Server Error" });
