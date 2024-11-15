@@ -90,18 +90,6 @@ const assign_transfer_task = async (req, res) => {
       driverEmail,
     } = req.body;
 
-    console.log({
-      sourceRetailerEmail,
-      sourceRetailerName,
-      sourceRetailerAddress,
-      targetRetailerEmail,
-      targetRetailerName,
-      targetRetailerAddress,
-      products,
-      supplierEmail,
-      driverEmail,
-    });
-
     const supplier = await Supplier.findOne({ email: supplierEmail });
     if (!supplier) {
       return res.status(400).json({ msg: "Supplier not found" });
@@ -129,6 +117,21 @@ const assign_transfer_task = async (req, res) => {
     });
 
     await newTask.save();
+
+    const sendEmail = require("../config/emailConfig");
+    const emailTemplate = require("../utils/emailTemplate");
+
+    const emailContent = emailTemplate({
+      sourceRetailerName,
+      sourceRetailerAddress,
+      targetRetailerName,
+      targetRetailerAddress,
+      products,
+      supplierEmail,
+      driverEmail,
+    });
+
+    await sendEmail(driverEmail, "New Transfer Task Assigned", emailContent);
 
     res.json({ msg: "Transfer task assigned successfully", task: newTask });
   } catch (err) {
