@@ -314,10 +314,14 @@ const api_getExpiringProducts = async (req, res) => {
 
 const api_getExpiringProductsForSupplier = async (req, res) => {
   try {
-    const { retailerEmail, days } = req.body;
+    const { retailerEmail, days, supplierEmail } = req.body;
     if (!retailerEmail) {
       return res.status(400).json({ message: "retailerEmail is required" });
     }
+    if (!supplierEmail) {
+      return res.status(400).json({ message: "supplierEmail is required" });
+    }
+
     const inventory = await Inventory.findOne({ retailerEmail });
     if (!inventory) {
       return res.status(404).json({ message: "Inventory not found" });
@@ -336,7 +340,9 @@ const api_getExpiringProductsForSupplier = async (req, res) => {
       return inventory.products.filter((product) => {
         const formattedExpiryDate = formatDateToYYYYMMDD(product.expiryDate);
         return (
-          formattedExpiryDate >= startDate && formattedExpiryDate <= endDate
+          product.supplierEmail === supplierEmail &&
+          formattedExpiryDate >= startDate &&
+          formattedExpiryDate <= endDate
         );
       });
     };
@@ -356,9 +362,6 @@ const api_getExpiringProductsForSupplier = async (req, res) => {
         formattedCurrentDate,
         formattedTargetDate
       );
-      // const expiringProductIds = expiringProducts.map(
-      //   (product) => product.productId
-      // );
       return res.json({ expiringProducts });
     }
   } catch (error) {
