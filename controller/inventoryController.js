@@ -356,10 +356,10 @@ const api_getExpiringProductsForSupplier = async (req, res) => {
         formattedCurrentDate,
         formattedTargetDate
       );
-      const expiringProductIds = expiringProducts.map(
-        (product) => product.productId
-      );
-      return res.json({ expiringProductIds });
+      // const expiringProductIds = expiringProducts.map(
+      //   (product) => product.productId
+      // );
+      return res.json({ expiringProducts });
     }
   } catch (error) {
     console.error("Error Fetching Expiring Products:", error);
