@@ -152,10 +152,19 @@ export const apiSlice = createApi({
         };
       },
     }),
-   postTransferTask: builder.mutation({
+    postTransferTask: builder.mutation({
       query: (task) => {
         return {
           url: "/assign_transfer_task",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
+    getExpiringProductsForSupplier: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_getExpiringProductsForSupplier",
           method: "POST",
           body: task,
         };
@@ -181,5 +190,6 @@ export const {
   usePostMyRequestMutation,
   useGetExpiringProductsMutation,
   usePostTransferTaskMutation,
+  useGetExpiringProductsForSupplierMutation,
 } = apiSlice;
 export default apiSlice;

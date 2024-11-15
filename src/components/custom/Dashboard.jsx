@@ -25,13 +25,14 @@ import {
 import { useGetExpiringProductsMutation } from "../../services/common/index";
 
 import { useGetSalesDtaMutation } from "../../services/common/index";
+import Loader from "./Loader";
 
 const Dashboard = () => {
   const [getSalesData, { isLoading }] = useGetSalesDtaMutation();
   const [retaileSalesData, setretaileSalesData] = useState(null);
   const retailerEmail = localStorage.getItem("email");
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const [modalOpen, setModalOpen] = useState(true);
   const [getExpiringProducts, { isLoading: isExpiringLoading }] =
@@ -66,13 +67,10 @@ const Dashboard = () => {
     }
   }, [getExpiringProducts]);
 
-  console.log(expiringProducts);
-
   if (isLoading || !retaileSalesData) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
-  // console.log(retaileSalesData);
   const { monthlySales, monthlyRevenue, topSellingProducts, salesByProduct } =
     retaileSalesData;
 
@@ -98,7 +96,6 @@ const Dashboard = () => {
 
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-  // Calculate totals for cards
   const date = new Date();
   const currentYear = date.getFullYear();
   const currentMonth = date.getMonth() + 1;
@@ -111,36 +108,40 @@ const Dashboard = () => {
 
   return (
     <div>
-
       {/* Dialog modal */}
-    {userType === "retailer" && (  <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="bg-primary w-[900px] h-[300px]">
-          <div className="bg-white m-[-18px] rounded-md flex justify-center items-center ">
-            <h1 className="text-6xl   text-red-600 font-bold text-center py-2 ">
-              !! ALERT !!
+      {userType === "retailer" && (
+        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+          <DialogContent className="bg-primary w-[900px] h-[300px]">
+            <div className="bg-white m-[-18px] rounded-md flex justify-center items-center ">
+              <h1 className="text-6xl   text-red-600 font-bold text-center py-2 ">
+                !! ALERT !!
+              </h1>
+            </div>
+            <h1 className="text-3xl  mb-4 text-white font-extrabold text-center mt-6 ">
+              Expiring Products
             </h1>
-          </div>
-          <h1 className="text-3xl  mb-4 text-white font-extrabold text-center mt-6 ">
-            Expiring Products
-          </h1>
-          <div className="text-center text-white text-2xl">
-            {expiringProducts > 0 ? (
-              <p>
-                You have{" "}
-                <span className="text-orange-400 font-semibold hover:underline cursor-pointer" onClick={()=>navigate('/inventory')}>
-                  {expiringProducts === 1
-                    ? `${expiringProducts} product `
-                    : `${expiringProducts} products `}
-                </span>
-                expiring within a week.
-              </p>
-            ) : (
-              <p>No products are expiring within a week.</p>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>) }
-    
+            <div className="text-center text-white text-2xl">
+              {expiringProducts > 0 ? (
+                <p>
+                  You have{" "}
+                  <span
+                    className="text-orange-400 font-semibold hover:underline cursor-pointer"
+                    onClick={() => navigate("/inventory")}
+                  >
+                    {expiringProducts === 1
+                      ? `${expiringProducts} product `
+                      : `${expiringProducts} products `}
+                  </span>
+                  expiring within a week.
+                </p>
+              ) : (
+                <p>No products are expiring within a week.</p>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
       <Cards
         salesData={{
           totalSales,

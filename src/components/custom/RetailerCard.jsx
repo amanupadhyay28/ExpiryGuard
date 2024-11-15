@@ -13,9 +13,13 @@ const RetailerInfoCard = ({ data }) => {
     if (supplierEmail) {
       getInventory({ supplierEmail, retailerEmail })
         .then((response) => {
-          console.log("inventory data", response.data);
           navigate("/inventory/productsdata", {
-            state: { inventoryData: response.data },
+            state: {
+              inventoryData: response.data,
+              isOpenAlertModal: true,
+              retailerEmail: retailerEmail,
+              supplierEmail:supplierEmail,
+            },
           });
         })
         .catch((error) => {
