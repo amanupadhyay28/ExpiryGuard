@@ -28,8 +28,8 @@ const transferTaskSchema = new mongoose.Schema({
   products: [
     {
       productName: String,
-      quantity: Number,
-      price: Number,
+      quantity: String,
+      price: String,
     },
   ],
   driverEmail: {
