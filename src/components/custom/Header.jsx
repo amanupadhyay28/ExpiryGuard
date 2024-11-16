@@ -5,6 +5,12 @@ import { useDispatch } from "react-redux";
 import { removeUser } from "../../Redux/reducers/auth";
 import { TailSpin } from "react-loader-spinner";
 import { Button } from "../ui/button";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar";
+
 const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -13,14 +19,7 @@ const Header = () => {
   const formattedUser = user
     ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
     : "";
-  const handleLogout = () => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      dispatch(removeUser());
-      navigate("/");
-    }, 800);
-  };
+  
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -35,10 +34,11 @@ const Header = () => {
         <span className="text-xl ">
           Welcome, <span className="text-orange-500">{formattedUser}!</span>
         </span>
-        <Button onClick={handleLogout} className="hover:bg-slate-700">
-          {" "}
-          Logout
-        </Button>
+       
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       </div>
     </header>
   );

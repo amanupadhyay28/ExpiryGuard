@@ -4,9 +4,30 @@ import {
   ClipboardListIcon,
   ArchiveIcon,
 } from "@heroicons/react/outline";
+import { Button } from "../../components/ui/button";
+import Loader from "./Loader";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../../Redux/reducers/auth";
+import { TbLogout } from "react-icons/tb";
 
 const Sidebar = () => {
   const userType = localStorage.getItem("userType");
+  const [isLoading, setIsLoading] = useState(false);
+  const handleLogout = () => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      dispatch(removeUser());
+      navigate("/");
+    }, 800);
+  };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const location = useLocation();
 
@@ -63,6 +84,13 @@ const Sidebar = () => {
           ) : null
         )}
       </nav>
+      <div
+        onClick={handleLogout}
+        className="flex text-white justify-center item-center gap-2 mb-10 bg-orange-500 cursor-pointer mx-10 rounded-md p-1 hover:bg-orange-600"
+      >
+        Logout
+        <TbLogout size={30} />
+      </div>
     </div>
   );
 };

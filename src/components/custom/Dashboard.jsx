@@ -14,17 +14,23 @@ import {
 } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { IoNavigate } from "react-icons/io5";
 
-import { Dialog, DialogContent } from "../../components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../../components/ui/dialog";
 
 import { useGetExpiringProductsMutation } from "../../services/common/index";
-
+import { useGetRetailerInventoryMutation } from "../../services/common/index";
+import { usePostMyRequestMutation } from "../../services/common/index";
 import { useGetSalesDtaMutation } from "../../services/common/index";
+import { useGetSavedProductsDataRetailerMutation } from "../../services/common/index";
 import Loader from "./Loader";
+import DashboardData from "../../pages/RetailerDashboard/Components/DashboardData";
 
 const Dashboard = () => {
   const [getSalesData, { isLoading }] = useGetSalesDtaMutation();
   const [retaileSalesData, setretaileSalesData] = useState(null);
+  const [data, setdata] = useState([]);
+
   const retailerEmail = localStorage.getItem("email");
 
   const navigate = useNavigate();
@@ -34,6 +40,55 @@ const Dashboard = () => {
     useGetExpiringProductsMutation();
   const [expiringProducts, setExpiringProducts] = useState(0);
   const userType = useSelector((state) => state.auth.userType);
+
+  const [getproductsSavedDataRetailer, { isSavedProductsDataLoading }] =
+    useGetSavedProductsDataRetailerMutation();
+  const [savedproductsDataRetailer, setsavedproductsDataRetailer] = useState(
+    []
+  );
+
+  useEffect(() => {
+    try {
+      getproductsSavedDataRetailer({ retailerEmail })
+        .unwrap()
+        .then((response) => {
+          setsavedproductsDataRetailer(response);
+        })
+        .catch((error) =>
+          console.error("Error fetching saved product details:", error)
+        );
+    } catch (error) {
+      console.error(`No data found ${error}`);
+    }
+  }, [getproductsSavedDataRetailer]);
+
+  const productsSavedFromExpiring =
+    savedproductsDataRetailer.totalProductsCountSaved;
+  const moneySavedByProducts = savedproductsDataRetailer.totalRevenueGenerated;
+
+  console.log("products saved : ", productsSavedFromExpiring);
+  console.log("Money Saved", moneySavedByProducts);
+
+  const [postMyRequest, { isLoadingPostMyRequest }] =
+    usePostMyRequestMutation();
+  const getRequestData = async () => {
+    try {
+      const response = await postMyRequest({ retailerEmail }).unwrap();
+
+      setdata(response);
+    } catch (error) {
+      console.error(`No request data found ${error}`);
+    }
+  };
+  const sortedData = [...data].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  const latestProductRequests = sortedData.slice(0, 3);
+
+  useEffect(() => {
+    getRequestData();
+  }, [postMyRequest]);
+
   useEffect(() => {
     try {
       getSalesData({ retailerEmail })
@@ -62,11 +117,35 @@ const Dashboard = () => {
     }
   }, [getExpiringProducts]);
 
+  const [getRetailerInventory, { isRetailerLoading }] =
+    useGetRetailerInventoryMutation();
 
+  const [inventoryData, setInventoryData] = useState([]);
+  useEffect(() => {
+    const getInventory = async () => {
+      const response = await getRetailerInventory({ retailerEmail }).unwrap();
+
+      setInventoryData(response.products);
+    };
+    getInventory();
+  }, [getRetailerInventory, retailerEmail]);
 
   if (isLoading || !retaileSalesData) {
     return <Loader />;
   }
+  const parseDate = (date) => new Date(date);
+
+  const lowStockProducts = inventoryData
+    .filter((product) => product.quantity < 10)
+    .sort((a, b) => a.quantity - b.quantity)
+    .slice(0, 5);
+
+  const nearestExpiryProducts = inventoryData
+    .filter((product) => parseDate(product.expiryDate) >= new Date())
+    .sort((a, b) => parseDate(a.expiryDate) - parseDate(b.expiryDate))
+    .slice(0, 5);
+  console.log("low stock products", lowStockProducts);
+  console.log("nereast expiry  products", nearestExpiryProducts);
 
   const { monthlySales, monthlyRevenue, topSellingProducts, salesByProduct } =
     retaileSalesData;
@@ -91,7 +170,7 @@ const Dashboard = () => {
     }))
     .slice(0, 5);
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = ["#9d5bbd", "#9d5bbd", "#9d5bbd", "#9d5bbd"];
 
   const date = new Date();
   const currentYear = date.getFullYear();
@@ -104,25 +183,29 @@ const Dashboard = () => {
   const monthlyRevenueValue = monthlyRevenue[monthYearDate] || 0;
 
   return (
-    <div>
-      {/* Dialog modal */}
+    <div className="p-6 bg-white min-h-screen rounded-xl ">
+      {/* Dialog Modal */}
       {userType === "retailer" && (
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-          <DialogContent className="bg-primary w-[900px] h-[300px]">
-            <div className="bg-white m-[-18px] rounded-md flex justify-center items-center ">
-              <h1 className="text-6xl   text-red-600 font-bold text-center py-2 ">
+          <DialogContent
+            className="bg-primary w-[900px] h-[300px] rounded-md"
+            description=""
+            aria-describedby={undefined}
+          >
+            <div className="bg-white -m-5 rounded-md flex justify-center items-center">
+              <DialogTitle className="text-5xl text-red-600 font-bold text-center py-3">
                 !! ALERT !!
-              </h1>
+              </DialogTitle>
             </div>
-            <h1 className="text-3xl  mb-4 text-white font-extrabold text-center mt-6 ">
+            <h1 className="text-2xl text-white font-extrabold text-center mt-6">
               Expiring Products
             </h1>
-            <div className="text-center text-white text-2xl">
+            <div className="text-center text-white text-lg mt-4">
               {expiringProducts > 0 ? (
                 <p>
                   You have{" "}
                   <span
-                    className="text-orange-400 font-semibold hover:underline cursor-pointer"
+                    className="text-orange-400 font-semibold  hover:underline cursor-pointer "
                     onClick={() => navigate("/inventory")}
                   >
                     {expiringProducts === 1
@@ -145,12 +228,25 @@ const Dashboard = () => {
           totalRevenue,
           monthlySales: monthlySalesValue,
           monthlyRevenue: monthlyRevenueValue,
+          moneySavedByProducts,
+          productsSavedFromExpiring,
         }}
       />
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sales Overview with Bar Chart */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Sales Overview</h2>
+      {/* Right Panel */}
+
+      <DashboardData
+        data={{
+          lowStockProducts,
+          nearestExpiryProducts,
+          latestProductRequests,
+        }}
+      />
+
+      {/* Overview Section */}
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Sales Overview */}
+        <div className="bg-slate-100 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold mb-4">Sales Overview</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={salesData}>
               <XAxis dataKey="month" />
@@ -161,9 +257,9 @@ const Dashboard = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Revenue Overview with Line Chart */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Revenue Overview</h2>
+        {/* Revenue Overview */}
+        <div className="bg-slate-100 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold mb-4">Revenue Overview</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={salesData}>
               <XAxis dataKey="month" />
@@ -173,17 +269,18 @@ const Dashboard = () => {
                 type="monotone"
                 dataKey="revenue"
                 stroke="#8884d8"
-                strokeWidth={2}
+                strokeWidth={3}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-1 gap-6">
-        {/* Sales by Product with Line Chart */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Sales by Product</h2>
+      {/* Product Insights Section */}
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Sales by Product */}
+        <div className="bg-slate-100 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold mb-4">Sales by Product</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={salesByProductData}>
               <XAxis dataKey="product" />
@@ -193,14 +290,15 @@ const Dashboard = () => {
                 type="monotone"
                 dataKey="sales"
                 stroke="#82ca9d"
-                strokeWidth={2}
+                strokeWidth={3}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
-        {/* Top Selling Products with Horizontal Bar Chart */}
-        <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-4">Top 5 Selling Products</h2>
+
+        {/* Top Selling Products */}
+        <div className="bg-slate-100 p-6 rounded-xl shadow">
+          <h2 className="text-xl font-semibold mb-4">Top 5 Selling Products</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               data={topSellingProductsData}

@@ -19,7 +19,7 @@ const MyRequest = () => {
   const getRequestData = async () => {
     try {
       const response = await postMyRequest({ retailerEmail }).unwrap();
-      console.log(response);
+
       setdata(response);
     } catch (error) {
       console.error(`No request data found ${error}`);

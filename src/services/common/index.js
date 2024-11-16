@@ -179,6 +179,15 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getSavedProductsDataRetailer: builder.mutation({
+      query: (task) => {
+        return {
+          url: "/api_get_savedProductsDataRetailer",
+          method: "POST",
+          body: task,
+        };
+      },
+    }),
   }),
 });
 
@@ -201,5 +210,6 @@ export const {
   usePostTransferTaskMutation,
   useGetExpiringProductsForSupplierMutation,
   useGetTransferTaskDataMutation,
+  useGetSavedProductsDataRetailerMutation,
 } = apiSlice;
 export default apiSlice;
