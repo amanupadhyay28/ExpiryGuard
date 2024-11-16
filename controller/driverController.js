@@ -232,6 +232,26 @@ const api_get_tranferTask_data = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+const api_get_completed_TransferTask_count = async (req, res) => {
+  try {
+    const { supplierEmail } = req.body;
+
+    const supplier = await Supplier.findOne({ email: supplierEmail });
+    if (!supplier) {
+      return res.status(400).json({ msg: "Supplier not found" });
+    }
+
+    const completedTaskCount = await TransferTask.countDocuments({
+      supplierEmail: supplierEmail,
+      status: "completed",
+    });
+
+    res.json({ completedTaskCount: completedTaskCount });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 const api_get_savedProductsDataRetailer = async (req, res) => {
   try {
@@ -321,4 +341,5 @@ module.exports = {
   api_get_tranferTask_data,
   api_get_savedProductsDataRetailer,
   api_get_savedProductsDataSupplier,
+  api_get_completed_TransferTask_count,
 };

@@ -24,4 +24,9 @@ router.post(
   driverController.api_get_savedProductsDataSupplier
 );
 
+router.post(
+  "/api_get_completed_TransferTask_count",
+  driverController.api_get_completed_TransferTask_count
+);
+
 module.exports = router;
