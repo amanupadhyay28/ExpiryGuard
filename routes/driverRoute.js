@@ -14,5 +14,9 @@ router.post(
   "/api_get_tranferTask_data",
   driverController.api_get_tranferTask_data
 );
+router.post(
+  "/api_get_savedProductsData",
+  driverController.api_get_savedProductsData
+);
 
 module.exports = router;

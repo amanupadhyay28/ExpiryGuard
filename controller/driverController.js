@@ -233,6 +233,46 @@ const api_get_tranferTask_data = async (req, res) => {
   }
 };
 
+const api_get_savedProductsData = async (req, res) => {
+  try {
+    const { retailerEmail } = req.body;
+
+    // Find all transfer tasks for the given retailer email with status 'completed'
+    const completedTransferTasksForRetailer = await TransferTask.find({
+      sourceRetailerEmail: retailerEmail,
+      status: "completed",
+    });
+
+    if (completedTransferTasksForRetailer.length === 0) {
+      return res.status(400).json({ msg: "No Products Found" });
+    }
+
+    // Initialize counters for total products and total revenue
+    let totalProductsCountSaved = 0;
+    let totalRevenueGenerated = 0;
+
+    // Iterate through each completed transfer task
+    completedTransferTasksForRetailer.forEach((task) => {
+      task.products.forEach((product) => {
+        const quantity = parseInt(product.quantity, 10);
+        const price = parseFloat(product.price);
+
+        totalProductsCountSaved += quantity;
+        totalRevenueGenerated += quantity * price;
+      });
+    });
+
+    // Return the total count of products and total revenue
+    return res.status(200).json({
+      totalProductsCountSaved,
+      totalRevenueGenerated,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   api_add_driver,
   api_get_drivers,
@@ -240,4 +280,5 @@ module.exports = {
   assign_transfer_task,
   api_update_task_status,
   api_get_tranferTask_data,
+  api_get_savedProductsData,
 };
