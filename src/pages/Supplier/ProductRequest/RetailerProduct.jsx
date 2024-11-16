@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaRupeeSign, FaSortUp, FaSortDown } from "react-icons/fa";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,8 +11,14 @@ const RetailerProductData = ({ data }) => {
   const [statusDropdown, setStatusDropdown] = useState(null);
   const [sortedStatusData, setsortedStatusData] = useState([...data]);
   const [postUpdateStatus, { isLoading }] = usePostUpdateStatusMutation();
+  
+  useEffect(() => {
+    if (data) {
+      setsortedStatusData([...data]);
+    }
+  }, [data]);
 
-  const sortedData = [...data].sort((a, b) => {
+  const sortedData = [...sortedStatusData].sort((a, b) => {
     if (sortConfig.key) {
       const aValue = a[sortConfig.key];
       const bValue = b[sortConfig.key];
