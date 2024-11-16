@@ -67,6 +67,7 @@ function Login() {
       {/* ToastContainer must be rendered in your component */}
       <div className="flex h-screen flex-col md:flex-row">
         {/* Left Side: Content */}
+        
         <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
           {/* <div className="max-w-md text-center">
             <h1 className="text-4xl font-bold mb-4">
@@ -83,7 +84,8 @@ function Login() {
               <p className="text-sm font-bold mt-2">- MR. Jain, CEO</p>
             </div>
           </div> */}
-          <OnboardingCarousel />
+           <OnboardingCarousel />
+         
         </div>
 
         {/* Right Side: Form */}

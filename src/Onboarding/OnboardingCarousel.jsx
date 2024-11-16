@@ -18,7 +18,7 @@ const OnboardingCarousel = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
-    arrows: true,
+    arrows: false,
   };
 
   const carouselData = [
@@ -37,7 +37,7 @@ const OnboardingCarousel = () => {
       image: Van,
     },
     {
-      title: "Boost Retailer Collaboration",
+      title: "Boost Retailer-Supplier Collaboration",
       description:
         "Foster communication between suppliers and retailers. Request or offer products seamlessly through connected dashboards.",
       icon: "🤝",
@@ -57,15 +57,15 @@ const OnboardingCarousel = () => {
       <Slider {...settings}>
         {carouselData.map((item, index) => (
           <div key={index} className="p-4">
-            <div className="flex flex-col items-center bg-primary shadow-lg rounded-lg overflow-hidden">
+            <div className="flex flex-col items-centerbg-gradient-to-r from-black via-gray-900 to-gray-800  rounded-lg overflow-hidden">
               <img
                 src={item.image}
                 alt={item.title}
-                className="w-[90%] h-[250px] object-fit"
+                className="w-full h-[250px] object-fit"
               />
               <div className="p-6 text-center">
-                <h2 className="text-xl font-bold text-white flex items-center justify-center">
-                  <span className="text-2xl mr-2">{item.icon}</span>
+                <h2 className="text-2xl font-bold text-white flex items-center justify-center">
+                  <span className="text-3xl mr-2">{item.icon}</span>
                   {item.title}
                 </h2>
                 <p className="text-white mt-4 text-md font-semibold text-center p-2">
