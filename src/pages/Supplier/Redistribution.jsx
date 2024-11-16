@@ -1,9 +1,9 @@
 // src/components/Redistribution.js
 import React, { useEffect, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
 import { useGetProductReqSupplierMutation } from "../../services/common";
-import RetailerProductData from "../../pages/Supplier/ProductRequest/RetailerProduct";
+import RetailerProductData from "./ProductRequest/RetailerProduct";
 const Redistribution = () => {
   const supplierEmail = localStorage.getItem("email");
 

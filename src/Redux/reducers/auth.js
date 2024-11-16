@@ -8,14 +8,13 @@ const initialState = {
   userType: localStorage.getItem("userType") || null,
 };
 
-const storeUserData = async (data) => {
+const storeUserData = (data) => {
   try {
-    await localStorage.setItem("authToken", data?.authToken);
+    localStorage.setItem("authToken", data?.authToken);
 
-    await localStorage.setItem("email", data?.user.email);
-    await localStorage.setItem("name", data?.user.name);
-    await localStorage.setItem("phonenumber", data?.user.phoneNumber);
-    await localStorage.setItem("userType", data?.userType);
+    localStorage.setItem("email", data?.user.email);
+    localStorage.setItem("name", data?.user.name);
+    localStorage.setItem("userType", data?.userType);
   } catch (e) {
     console.error(e);
   }
@@ -31,9 +30,9 @@ const removeStoreData = () => {
   }
 };
 
-const storeUserMetaData = async (data) => {
+const storeUserMetaData = (data) => {
   try {
-    await localStorage.setItem("userProfileData", JSON.stringify(data));
+    localStorage.setItem("userProfileData", JSON.stringify(data));
   } catch (e) {
     console.error(e);
   }

@@ -12,14 +12,15 @@ import Sidebar from "./components/custom/Sidebar";
 import Header from "./components/custom/Header";
 import Dashboard from "./components/custom/Dashboard";
 import Inventory from "./components/custom/Inventory";
-import Redistribution from "./components/custom/Redistribution";
+import Redistribution from "./pages/Supplier/Redistribution";
 import ProductInfo from "./components/custom/ProductInfo";
 import Orders from "./pages/Supplier/Orders/Orders";
 import ProductForm from "./pages/RetailerDashboard/AddInventory";
 import MyRequest from "./pages/RetailerDashboard/MyRequest";
+import SupplierDashboard from "./pages/Supplier/SupplierDashboard";
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
-  const userType = useSelector((state) => state.auth.userType);
+  const userType = localStorage.getItem("userType");
   console.log("isLooged in", isLoggedIn);
 
   console.log("userType", userType);
@@ -54,7 +55,11 @@ function App() {
           element={
             isLoggedIn ? (
               <ProtectedRouteLayout>
-                <Dashboard />
+                {userType !== "supplier" ? (
+                  <Dashboard />
+                ) : (
+                  <SupplierDashboard />
+                )}
               </ProtectedRouteLayout>
             ) : (
               <Navigate to="/" replace />

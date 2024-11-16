@@ -14,7 +14,6 @@ import {
 } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { IoNavigate } from "react-icons/io5";
 
 import { Dialog, DialogContent, DialogTitle } from "../../components/ui/dialog";
 
