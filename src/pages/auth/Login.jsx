@@ -9,6 +9,7 @@ import { setUser } from "../../Redux/reducers/auth";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SelectComponent from "@/components/custom/Select";
+import OnboardingCarousel from "../../Onboarding/OnboardingCarousel";
 
 function Login() {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ function Login() {
       <div className="flex h-screen flex-col md:flex-row">
         {/* Left Side: Content */}
         <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
-          <div className="max-w-md text-center">
+          {/* <div className="max-w-md text-center">
             <h1 className="text-4xl font-bold mb-4">
               Manage Your Products Easily
             </h1>
@@ -81,7 +82,8 @@ function Login() {
               </p>
               <p className="text-sm font-bold mt-2">- MR. Jain, CEO</p>
             </div>
-          </div>
+          </div> */}
+          <OnboardingCarousel />
         </div>
 
         {/* Right Side: Form */}
