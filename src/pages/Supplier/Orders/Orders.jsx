@@ -427,7 +427,7 @@ const Orders = () => {
           <h2 className="text-lg font-bold mb-4">Transfer Task Details</h2>
           <table className="table-auto w-full border-collapse shadow-lg">
             <thead>
-              <tr className="bg-green-600 text-white">
+              <tr className="bg-orange-500 text-white">
                 <th className="border border-green-600 p-2">Task ID</th>
                 <th className="border border-green-600 p-2">Source Retailer</th>
                 <th className="border border-green-600 p-2">Source Address</th>
