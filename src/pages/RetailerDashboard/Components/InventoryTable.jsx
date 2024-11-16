@@ -10,18 +10,47 @@ import FormDialog from "../Components/FormDialog";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePostProductReqRetailerMutation } from "../../../services/common/index";
+import { useGetExpiringProductsMutation } from "../../../services/common/index";
+import { ArchiveIcon } from "lucide-react";
 
 const InventoryTable = ({ items }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(null);
   const [dialogData, setDialogData] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [reqType, setreqType] = useState("");
+  const [highlightedProductIds, setHighlightedProductIds] = useState([]);
+  const [selectedDays, setSelectedDays] = useState(7);
   const breadcrumbRef = useRef(null);
   const [postProductReq] = usePostProductReqRetailerMutation();
-
+  const [getExpiringProducts, { isLoading: isExpiringLoading }] =
+    useGetExpiringProductsMutation();
+  const [expiringProducts, setExpiringProducts] = useState(null);
   const toggleBreadcrumb = (productId) => {
     setIsBreadcrumbOpen((prev) => (prev === productId ? null : productId));
   };
+  const retailerEmail = localStorage.getItem("email");
+
+  const handleDaysChange = async (days) => {
+    setSelectedDays(days);
+    try {
+      const response = await getExpiringProducts({
+        retailerEmail,
+
+        days,
+      }).unwrap();
+      const expiringIds = response.expiringProducts.map(
+        (product) => product.productId
+      );
+
+      setHighlightedProductIds(expiringIds);
+    } catch (error) {
+      console.error("Error fetching highlighted products:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleDaysChange(selectedDays);
+  }, [getExpiringProducts]);
 
   const sortedData = [...items].sort((a, b) => {
     if (sortConfig.key) {
@@ -121,6 +150,28 @@ const InventoryTable = ({ items }) => {
     <>
       <ToastContainer />
       <div className="p-4 bg-white shadow-md rounded-lg">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center justify-center gap-4">
+            <ArchiveIcon size={20} />
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Inventory Data
+            </h2>
+          </div>
+          <div>
+            <label className="mr-2 text-gray-700 font-medium">
+              Highlight Rows By Days:
+            </label>
+            <select
+              value={selectedDays}
+              onChange={(e) => handleDaysChange(parseInt(e.target.value, 10))}
+              className="border border-gray-300 rounded p-2"
+            >
+              <option value={7}>7 Days</option>
+              <option value={15}>15 Days</option>
+              <option value={30}>30 Days</option>
+            </select>
+          </div>
+        </div>
         <table className="w-full text-left border-collapse">
           <thead className="text-gray-600 uppercase text-xs font-semibold border-b">
             <tr>
@@ -153,7 +204,11 @@ const InventoryTable = ({ items }) => {
               sortedData.map((product) => (
                 <tr
                   key={product.productId}
-                  className="border-b hover:bg-gray-50"
+                  className={`border-b hover:bg-gray-50 ${
+                    highlightedProductIds.includes(product.productId)
+                      ? "bg-yellow-200"
+                      : ""
+                  }`}
                 >
                   <td className="px-4 py-4">{product.productId}</td>
                   <td className="px-4 py-4">{product.productName}</td>

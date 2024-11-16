@@ -18,12 +18,6 @@ const RetailerInventory = () => {
   }, [getRetailerInventory, retailerEmail]);
   return (
     <div className="relative  w-full h-full">
-      <div className="flex mt-5 ml-5 mb-5  items-center gap-2">
-        <ArchiveIcon size={20} />
-        <h2 className="text-2xl font-bold text-gray-800  ">
-          Inventory Data
-        </h2>
-      </div>
       <InventoryTable items={inventoryData} />
     </div>
   );

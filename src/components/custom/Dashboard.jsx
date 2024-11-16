@@ -62,7 +62,7 @@ const Dashboard = () => {
     }
   }, [getExpiringProducts]);
 
-  console.log(expiringProducts);
+
 
   if (isLoading || !retaileSalesData) {
     return <Loader />;
