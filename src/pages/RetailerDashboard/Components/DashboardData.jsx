@@ -123,17 +123,17 @@ const DashboardOverviewCard = ({ data }) => {
                   className="flex justify-between text-sm text-gray-600 mb-1"
                 >
                   <span>{request.productName}</span>
-                  <span
-                    className={`font-medium ${
+                  <div
+                    className={`text-white text-xs font-bold mb-4 p-1 rounded-md ${
                       request.reqStatus === "pending"
-                        ? "text-yellow-500"
-                        : request.reqStatus === "approved"
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "bg-red-500"
+                        : request.reqStatus === "processing"
+                        ? "bg-orange-500"
+                        : "bg-green-500"
                     }`}
                   >
-                    {request.reqStatus}
-                  </span>
+                    {request.reqStatus.toUpperCase()}
+                  </div>
                 </li>
               ))}
             </ul>

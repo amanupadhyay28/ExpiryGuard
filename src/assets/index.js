@@ -8,7 +8,10 @@ import MonthlyRevenue from "./MonthyRevenue.png";
 import TotalRevenue from "./Revenue.png";
 import ProductSaved from "./ProductSaved.png";
 import TotalSales from "./TotalSales.png";
-import TotalRevenueHand from './TotalRevenueHand.png';
+import TotalRevenueHand from "./TotalRevenueHand.png";
+import Request from "./Request.png";
+import Driver from "./Driver.png";
+import Users from "./Users.png";
 export {
   InventoryTracking,
   InventoryTrackingTwo,
@@ -20,5 +23,8 @@ export {
   TotalRevenue,
   ProductSaved,
   TotalSales,
-  TotalRevenueHand 
+  TotalRevenueHand,
+  Request,
+  Driver,
+  Users,
 };

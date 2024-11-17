@@ -206,7 +206,7 @@ const InventoryTable = ({ items }) => {
                   key={product.productId}
                   className={`border-b hover:bg-gray-50 ${
                     highlightedProductIds.includes(product.productId)
-                      ? "bg-yellow-200"
+                      ? "bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3]"
                       : ""
                   }`}
                 >

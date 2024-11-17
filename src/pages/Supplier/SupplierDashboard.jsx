@@ -7,6 +7,13 @@ import { useGetRetailerForSupplierMutation } from "@/services/common";
 import { useGetDriverDetailsMutation } from "@/services/common";
 import { useGetTransferTaskDataMutation } from "@/services/common";
 import { useGetProductReqSupplierMutation } from "@/services/common";
+import {
+  TotalRevenue,
+  ProductSaved,
+  Request,
+  Driver,
+  Users,
+} from "../../assets/index";
 
 const SupplierDashboard = () => {
   const supplierEmail = localStorage.getItem("email");
@@ -133,42 +140,93 @@ const SupplierDashboard = () => {
     <div className="p-6 bg-white min-h-screen rounded-xl ">
       {/* cards Data  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4  ">
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3]">
+        <div
+          className="bg-white p-4 rounded-2xl shadow bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3] flex flex-col justify-between h-full
+
+"
+        >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium text-md">
-              Total Products Saved From expiring in Units
-            </h3>
+            <div className="flex flex-col gap-3 justify-center ">
+              <img
+                className="h-14 w-14"
+                src={ProductSaved}
+                alt="Product Saved Icon"
+              />
+              <h3 className="font-semibold text-md text-gray-600">
+                Total Products Saved From expiring in Units
+              </h3>
+            </div>
           </div>
-          <div className="text-2xl font-semibold">{productSaved}</div>
+          <div className="text-2xl font-semibold  text-gray-800 mt-auto">
+            {productSaved}
+          </div>
         </div>
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#fff4de] to-[#fef1c7]">
+        <div
+          className="bg-white p-4  rounded-2xl shadow bg-gradient-to-r from-[#fff4de] to-[#fef1c7]
+flex flex-col justify-between h-full
+"
+        >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Money Saved By Redistribution</h3>
+            <div className="flex flex-col gap-3 justify-center ">
+              <img className="h-12 w-12" src={TotalRevenue} />
+              <h3 className="font-semibold text-md text-gray-600">
+                Money Saved By Redistribution
+              </h3>
+            </div>
           </div>
-          <div className="text-2xl font-semibold"> ₹{moneySaved}</div>
+          <div className="text-2xl font-semibold  text-gray-800 mt-auto">
+            {" "}
+            ₹{moneySaved}
+          </div>
         </div>
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#dcfce7] to-[#f0fdf4]">
+        <div
+          className="bg-white p-4 rounded-2xl shadow bg-gradient-to-r from-[#dcfce7] to-[#f0fdf4]
+flex flex-col justify-between h-full
+"
+        >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Total Completed Request</h3>
+            <div className="flex flex-col gap-3 justify-center ">
+              <img className="h-20 w-20 mt-[-10px]" src={Request} />
+              <h3 className="font-semibold text-md">Total completed Request</h3>
+            </div>
           </div>
-          <div className="text-2xl font-semibold">
+          <div className="text-2xl font-semibold  text-gray-800 mt-auto">
             {getCompletedTransferTaskCountResponse}
           </div>
         </div>
         <div
-          className="bg-white p-4 rounded shadow bg-gradient-to-r from-purple-300 to-purple-100
+          className="bg-white p-4  rounded-2xl shadow bg-gradient-to-r from-[#b7e6fa] to-[#ffffff] flex flex-col justify-between h-full
+
+          "
+        >
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex flex-col gap-3 justify-center ">
+              <img className="h-12 w-20" src={Users} />
+              <h3 className="font-semibold text-md text-gray-600">
+                Total Connected Retailers
+              </h3>
+            </div>
+          </div>
+          <div className="text-2xl font-semibold   text-gray-800 mt-auto">
+            {retailerData}
+          </div>
+        </div>
+        <div
+          className="bg-white p-4 rounded-2xl shadow bg-gradient-to-r from-[#dcfce7] to-[#f0fdf4]
+flex flex-col justify-between h-full
 "
         >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Total Connected Retailers</h3>
+            <div className="flex flex-col gap-3 justify-center ">
+              <img className="h-20 w-20 mt-[-10px]" src={Driver} />
+              <h3 className="font-semibold text-md text-gray-600">
+                Total Connected Drivers
+              </h3>
+            </div>
           </div>
-          <div className="text-2xl font-semibold">{retailerData}</div>
-        </div>
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#b7e6fa] to-[#ffffff]">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Total Connected Drivers</h3>
+          <div className="text-2xl font-semibold  text-gray-800 mt-auto">
+            {totalDriver}
           </div>
-          <div className="text-2xl font-semibold">{totalDriver}</div>
         </div>
       </div>
 
