@@ -67,7 +67,7 @@ function Login() {
       {/* ToastContainer must be rendered in your component */}
       <div className="flex h-screen flex-col md:flex-row">
         {/* Left Side: Content */}
-        
+
         <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
           {/* <div className="max-w-md text-center">
             <h1 className="text-4xl font-bold mb-4">
@@ -84,15 +84,14 @@ function Login() {
               <p className="text-sm font-bold mt-2">- MR. Jain, CEO</p>
             </div>
           </div> */}
-           <OnboardingCarousel />
-         
+          <OnboardingCarousel />
         </div>
 
         {/* Right Side: Form */}
-        <div className="md:w-1/2 w-full flex justify-center items-center bg-white relative px-4 py-12 md:py-0">
+        <div className="md:w-1/2 w-full flex justify-center items-center bg-gradient-to-l from-[#b7e6fa] to-[#ffffff] relative px-4 py-12 md:py-0">
           <form
             onSubmit={handleLogin}
-            className="w-full max-w-lg p-8 shadow-lg rounded-lg z-10 bg-white"
+            className="w-full max-w-lg p-8 shadow-lg rounded-3xl z-10 bg-white"
           >
             <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>
             <Input
