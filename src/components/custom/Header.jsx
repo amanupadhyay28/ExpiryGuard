@@ -31,8 +31,8 @@ const Header = () => {
     <header className="bg-white shadow p-4 flex justify-between items-center">
       <h1 className="text-xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <span className="text-xl ">
-          Welcome, <span className="text-orange-500">{formattedUser}!</span>
+        <span className="text-xl font-semibold text-gray-500 ">
+          Welcome, <span className="text-xl font-extrabold text-orange-500">{formattedUser}!</span>
         </span>
        
         <Avatar>

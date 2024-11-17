@@ -67,7 +67,7 @@ const Sidebar = () => {
     : "";
   return (
     <div className="w-64 h-screen bg-primary text-white flex flex-col ">
-      <div className="text-2xl font-bold p-4">{formattedUser} Dashboard</div>
+      <div className="text-xl font-bold p-4">{formattedUser} Dashboard</div>
       <nav className="flex-1">
         {menuItems.map((item) =>
           item.name ? (
