@@ -170,8 +170,10 @@ const Orders = () => {
         </div>
 
         {/* Main table container */}
-        <div className="p-4">
-          <h2 className="text-lg font-bold mb-4">Transfer Task Details</h2>
+        <div className="p-4 bg-white rounded-lg">
+          <h2 className="text-lg text-gray-500 font-bold mb-4">
+            Transfer Task Details
+          </h2>
           <table className="table-auto w-full border-collapse shadow-lg">
             <thead>
               <tr className="bg-orange-500 text-white">
