@@ -12,21 +12,81 @@ import {
 import { useState, useEffect } from "react";
 
 import { useGetSavedProductsDataSupplierMutation } from "@/services/common";
+import { useGetCompletedTransferTaskCounMutation } from "@/services/common";
+import { useGetRetailerForSupplierMutation } from "@/services/common";
+import { useGetDriverDetailsMutation } from "@/services/common";
 const SupplierDashboard = () => {
   const supplierEmail = localStorage.getItem("email");
 
   const [getSavedProductsDataSupplier, { isLoading }] =
     useGetSavedProductsDataSupplierMutation();
+  const [getCompletedTransferTaskCount, { isCountLoading }] =
+    useGetCompletedTransferTaskCounMutation();
+  const [getRetailerForSupplierMutation, { isRetailerLoading }] =
+    useGetRetailerForSupplierMutation();
+
+  const [GetDriverDetailsCount, { isDriverLoading }] =
+    useGetDriverDetailsMutation();
+
   const [
     getSavedProductsDataSupplierResponse,
     setGetSavedProductsDataSupplierResponse,
   ] = useState([]);
+
+  const [
+    getCompletedTransferTaskCountResponse,
+    setgetCompletedTransferTaskCountResponse,
+  ] = useState([]);
+
+  const [retailerData, setRetailerData] = useState([]);
+
+  const [totalDriver, setTotalDriver] = useState([]);
 
   useEffect(() => {
     getSavedProductsDataSupplier({ supplierEmail }).then((response) => {
       setGetSavedProductsDataSupplierResponse(response.data);
     });
   }, [getSavedProductsDataSupplier]);
+
+  useEffect(() => {
+    getCompletedTransferTaskCount({ supplierEmail }).then((response) => {
+      setgetCompletedTransferTaskCountResponse(
+        response.data.completedTaskCount
+      );
+    });
+  }, [getCompletedTransferTaskCount]);
+
+  useEffect(() => {
+    if (supplierEmail) {
+      getRetailerForSupplierMutation({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setRetailerData(dataArray.length);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getRetailerForSupplierMutation]);
+
+  useEffect(() => {
+    if (supplierEmail) {
+      GetDriverDetailsCount({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setTotalDriver(dataArray.length);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [GetDriverDetailsCount]);
+
+  console.log("len driver is ", totalDriver);
 
   const productSaved =
     getSavedProductsDataSupplierResponse.totalProductsCountSaved;
@@ -66,7 +126,7 @@ const SupplierDashboard = () => {
   return (
     <div className="p-6 bg-white min-h-screen rounded-xl ">
       {/* cards Data  */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4  ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4  ">
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3]">
           <div className="flex justify-between items-center mb-2">
             <h3 className="font-medium text-md">
@@ -83,32 +143,26 @@ const SupplierDashboard = () => {
         </div>
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#dcfce7] to-[#f0fdf4]">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Total Sales in Units</h3>
+            <h3 className="font-medium">Total Completed Request</h3>
           </div>
-          <div className="text-2xl font-semibold">{cardData.totalSales}</div>
+          <div className="text-2xl font-semibold">
+            {getCompletedTransferTaskCountResponse}
+          </div>
         </div>
         <div
           className="bg-white p-4 rounded shadow bg-gradient-to-r from-purple-300 to-purple-100
 "
         >
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Total Revenue</h3>
+            <h3 className="font-medium">Total Connected Retailers</h3>
           </div>
-          <div className="text-2xl font-semibold">₹{cardData.totalRevenue}</div>
+          <div className="text-2xl font-semibold">{retailerData}</div>
         </div>
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#b7e6fa] to-[#ffffff]">
           <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Monthly Sales in Units</h3>
+            <h3 className="font-medium">Total Connected Drivers</h3>
           </div>
-          <div className="text-2xl font-semibold">{cardData.monthlySales}</div>
-        </div>
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#f4e8ff] to-[#ffffff]">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="font-medium">Monthly Revenue</h3>
-          </div>
-          <div className="text-2xl font-semibold">
-            ₹{cardData.monthlyRevenue}
-          </div>
+          <div className="text-2xl font-semibold">{totalDriver}</div>
         </div>
       </div>
 
