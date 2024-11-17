@@ -464,7 +464,7 @@ const api_SeeProductRequests = async (req, res) => {
 
     const productRequests = await ProductRequest.find({
       supplierEmail: supplierEmail,
-    });
+    }).sort({ createdAt: -1 });
     res.json(productRequests);
   } catch (error) {
     console.error("Error Fetching Product Request:", error);
