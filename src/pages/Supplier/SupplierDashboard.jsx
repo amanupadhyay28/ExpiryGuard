@@ -129,30 +129,8 @@ const SupplierDashboard = () => {
     getSavedProductsDataSupplierResponse.totalProductsCountSaved;
   const moneySaved = getSavedProductsDataSupplierResponse.totalRevenueGenerated;
 
-  // const data = [
-  //   {
-  //     name: "Page A",
-  //     Revenue: 4000,
-  //   },
-  //   {
-  //     name: "Page B",
-  //     Revenue: 3000,
-  //   },
-  //   {
-  //     name: "Page C",
-  //     Revenue: 2000,
-  //   },
-  //   {
-  //     name: "Page D",
-  //     Revenue: 2780,
-  //   },
-  //   {
-  //     name: "Page E",
-  //     Revenue: 1890,
-  //   },
-  // ];
   return (
-    <div className="p-6 bg-white max-h-96 rounded-xl ">
+    <div className="p-6 bg-white min-h-screen rounded-xl ">
       {/* cards Data  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4  ">
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3]">
@@ -295,41 +273,6 @@ const SupplierDashboard = () => {
           </div>
         </div>
       </div>
-
-      {/* Graph Data */}
-      {/* <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#f1f1f1] to-[#e4e4e4] mt-6">
-          <h2 className="text-xl font-semibold">Revenue Graph</h2>
-          <ResponsiveContainer width="100%" height={400}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" stroke="#5550bd" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="Revenue"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#f1f1f1] to-[#e4e4e4] mt-6">
-          <h2 className="text-xl font-semibold">Revenue Bar Graph</h2>
-
-          <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={data}>
-              <XAxis dataKey="name" stroke="#5550bd" />
-
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="Revenue" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div> */}
     </div>
   );
 };
