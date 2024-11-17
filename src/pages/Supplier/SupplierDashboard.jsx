@@ -172,13 +172,13 @@ const SupplierDashboard = () => {
         </div>
       </div>
 
-      <div className="my-10 max-w-full shadow-lg rounded-lg overflow-hidden bg-gradient-to-r from-[#5d60ef] to-[#a39af6]">
-        <div className="p-6">
+      <div className="my-10 max-w-full shadow-lg rounded-lg overflow-hidden bg-gradient-to-r from-[#5d60ef] to-[#a39af6] ">
+        <div className="p-6 ">
           <h2 className="text-2xl text-white font-bold mb-6">
             Dashboard Overview
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-50 p-6 rounded-3xl shadow-md">
               <div className="relative mb-4">
                 <h3 className="text-lg font-semibold text-blackmb-2 border-b-2 pb-2">
                   Latest Transfer Task Data
@@ -224,7 +224,7 @@ const SupplierDashboard = () => {
                 ))}
               </ul>
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+            <div className="bg-gray-50 p-6 rounded-3xl shadow-md">
               <div className="relative mb-4">
                 <h3 className="text-lg font-semibold text-black mb-2 border-b-2 pb-2">
                   Latest Product Request Data
