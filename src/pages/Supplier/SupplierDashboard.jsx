@@ -1,22 +1,16 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  Legend,
-} from "recharts";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useGetSavedProductsDataSupplierMutation } from "@/services/common";
 import { useGetCompletedTransferTaskCounMutation } from "@/services/common";
 import { useGetRetailerForSupplierMutation } from "@/services/common";
 import { useGetDriverDetailsMutation } from "@/services/common";
+import { useGetTransferTaskDataMutation } from "@/services/common";
+import { useGetProductReqSupplierMutation } from "@/services/common";
+
 const SupplierDashboard = () => {
   const supplierEmail = localStorage.getItem("email");
+  const Navigate = useNavigate();
 
   const [getSavedProductsDataSupplier, { isLoading }] =
     useGetSavedProductsDataSupplierMutation();
@@ -24,23 +18,25 @@ const SupplierDashboard = () => {
     useGetCompletedTransferTaskCounMutation();
   const [getRetailerForSupplierMutation, { isRetailerLoading }] =
     useGetRetailerForSupplierMutation();
-
   const [GetDriverDetailsCount, { isDriverLoading }] =
     useGetDriverDetailsMutation();
+  const [getTransferTaskData, { isTransferLoading }] =
+    useGetTransferTaskDataMutation();
+  const [getProductReqSupplierMutation, { isProductLoading }] =
+    useGetProductReqSupplierMutation();
 
   const [
     getSavedProductsDataSupplierResponse,
     setGetSavedProductsDataSupplierResponse,
   ] = useState([]);
-
   const [
     getCompletedTransferTaskCountResponse,
     setgetCompletedTransferTaskCountResponse,
   ] = useState([]);
-
   const [retailerData, setRetailerData] = useState([]);
-
   const [totalDriver, setTotalDriver] = useState([]);
+  const [transferTaskData, setTransferTaskData] = useState([]);
+  const [productReqSupplier, setProductReqSupplier] = useState([]);
 
   useEffect(() => {
     getSavedProductsDataSupplier({ supplierEmail }).then((response) => {
@@ -88,43 +84,75 @@ const SupplierDashboard = () => {
 
   console.log("len driver is ", totalDriver);
 
+  useEffect(() => {
+    if (supplierEmail) {
+      getTransferTaskData({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setTransferTaskData(dataArray);
+        })
+        .catch((error) =>
+          console.error("Error fetching transfer task data:", error)
+        );
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getTransferTaskData]);
+
+  console.log("transfer task data is ", transferTaskData);
+  const ModifiedtransferTaskData = transferTaskData.slice(0, 3);
+
+  useEffect(() => {
+    if (supplierEmail) {
+      getProductReqSupplierMutation({ supplierEmail })
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setProductReqSupplier(dataArray);
+        })
+        .catch((error) =>
+          console.error("Error fetching product request data:", error)
+        );
+    } else {
+      console.error("No supplier email found in localStorage.");
+    }
+  }, [getProductReqSupplierMutation]);
+
+  console.log("product req data is ", productReqSupplier);
+
+  const modifiedProductReqSupplier = productReqSupplier.slice(0, 3);
+
   const productSaved =
     getSavedProductsDataSupplierResponse.totalProductsCountSaved;
   const moneySaved = getSavedProductsDataSupplierResponse.totalRevenueGenerated;
 
-  const cardData = {
-    productsSavedFromExpiring: 0,
-    moneySavedByProducts: 0,
-    monthlyRevenue: 0,
-    monthlySales: 0,
-    totalRevenue: 0,
-    totalSales: 0,
-  };
-
-  const data = [
-    {
-      name: "Page A",
-      Revenue: 4000,
-    },
-    {
-      name: "Page B",
-      Revenue: 3000,
-    },
-    {
-      name: "Page C",
-      Revenue: 2000,
-    },
-    {
-      name: "Page D",
-      Revenue: 2780,
-    },
-    {
-      name: "Page E",
-      Revenue: 1890,
-    },
-  ];
+  // const data = [
+  //   {
+  //     name: "Page A",
+  //     Revenue: 4000,
+  //   },
+  //   {
+  //     name: "Page B",
+  //     Revenue: 3000,
+  //   },
+  //   {
+  //     name: "Page C",
+  //     Revenue: 2000,
+  //   },
+  //   {
+  //     name: "Page D",
+  //     Revenue: 2780,
+  //   },
+  //   {
+  //     name: "Page E",
+  //     Revenue: 1890,
+  //   },
+  // ];
   return (
-    <div className="p-6 bg-white min-h-screen rounded-xl ">
+    <div className="p-6 bg-white max-h-96 rounded-xl ">
       {/* cards Data  */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4  ">
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#ffe2e6] to-[#f7d7e3]">
@@ -166,43 +194,110 @@ const SupplierDashboard = () => {
         </div>
       </div>
 
-      {/* Table Data */}
-      <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#fff1f1] to-[#f7e4e4] mt-6">
-        <h2 className="text-xl font-semibold">Product Details</h2>
-        <table className="w-full mt-4">
-          <thead>
-            <tr>
-              <th className="text-left">Product Name</th>
-              <th className="text-left">Expiry Date</th>
-              <th className="text-left">Quantity</th>
-              <th className="text-left">Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Product 1</td>
-              <td>12/12/2021</td>
-              <td>20</td>
-              <td>₹200</td>
-            </tr>
-            <tr>
-              <td>Product 2</td>
-              <td>12/12/2021</td>
-              <td>20</td>
-              <td>₹200</td>
-            </tr>
-            <tr>
-              <td>Product 3</td>
-              <td>12/12/2021</td>
-              <td>20</td>
-              <td>₹200</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="my-10 max-w-full shadow-lg rounded-lg overflow-hidden bg-gradient-to-r from-[#5d60ef] to-[#a39af6]">
+        <div className="p-6">
+          <h2 className="text-2xl text-white font-bold mb-6">
+            Dashboard Overview
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <div className="relative mb-4">
+                <h3 className="text-lg font-semibold text-blackmb-2 border-b-2 pb-2">
+                  Latest Transfer Task Data
+                </h3>
+                <button
+                  className="absolute top-0 right-0 mt-2 text-sm text-blue-600 hover:underline"
+                  onClick={() => Navigate("/orders")}
+                >
+                  Show All
+                </button>
+              </div>
+              <ul>
+                {ModifiedtransferTaskData.map((task, index) => (
+                  <li
+                    key={index}
+                    className="mb-2 border-b-2 hover:bg-gradient-to-r from-purple-300 to-purple-100 p-2"
+                  >
+                    <h4 className="text-sm font-medium text-black mb-1">
+                      Task ID: {task.taskId}
+                    </h4>
+                    <div className="flex justify-between">
+                      <div className="text-sm text-gray-600">
+                        <p>
+                          <b>Source Retailer:</b> {task.sourceRetailerName}
+                        </p>
+                        <p>
+                          <b>Target Retailer:</b> {task.targetRetailerName}
+                        </p>
+                      </div>
+                      <div
+                        className={` text-white text-xs font-bold mb-4 p-1  rounded-md ${
+                          task.status === "assigned"
+                            ? "bg-orange-500"
+                            : task.status === "completed"
+                            ? "bg-green-500"
+                            : ""
+                        }`}
+                      >
+                        {task.status.toUpperCase()}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+              <div className="relative mb-4">
+                <h3 className="text-lg font-semibold text-black mb-2 border-b-2 pb-2">
+                  Latest Product Request Data
+                </h3>
+                <button
+                  className="absolute top-0 right-0 mt-2 text-sm text-blue-600 hover:underline"
+                  onClick={() => Navigate("/product_request")}
+                >
+                  Show All
+                </button>
+              </div>
+              <ul>
+                {modifiedProductReqSupplier.map((task, index) => (
+                  <li
+                    key={index}
+                    className="mb-2 border-b-2 hover:bg-gradient-to-r from-[#b7e6fa] to-[#ffffff] p-2"
+                  >
+                    <h4 className="text-sm font-semibold text-black mb-1">
+                      Request ID: {task.requestId}
+                    </h4>
+                    <div className="flex justify-between">
+                      <div className="text-sm text-gray-600">
+                        <p>
+                          <b>Product Name:</b> {task.productName}
+                        </p>
+                        <p>
+                          <b>Price:</b> {task.price}
+                        </p>
+                      </div>
+                      <div
+                        className={`text-white text-xs font-bold mb-4 p-1 rounded-md ${
+                          task.reqStatus === "pending"
+                            ? "bg-red-500"
+                            : task.reqStatus === "processing"
+                            ? "bg-orange-500"
+                            : "bg-green-500"
+                        }`}
+                      >
+                        {task.reqStatus.toUpperCase()}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Graph Data */}
-      <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white p-4 rounded shadow bg-gradient-to-r from-[#f1f1f1] to-[#e4e4e4] mt-6">
           <h2 className="text-xl font-semibold">Revenue Graph</h2>
           <ResponsiveContainer width="100%" height={400}>
@@ -234,7 +329,7 @@ const SupplierDashboard = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
