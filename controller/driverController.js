@@ -144,7 +144,7 @@ const assign_transfer_task = async (req, res) => {
 const api_update_task_status = async (req, res) => {
   try {
     const { taskId } = req.params;
-    
+
     const task = await TransferTask.findOne({ taskId });
     if (!task) {
       return res.status(404).json({ msg: "Task not found" });
@@ -225,7 +225,7 @@ const api_get_tranferTask_data = async (req, res) => {
     }
     const tasks = await TransferTask.find({
       supplierEmail: supplierEmail,
-    }).sort({ date: -1 });
+    }).sort({ createdAt: -1 });
     res.json(tasks);
   } catch (err) {
     console.error(err.message);
