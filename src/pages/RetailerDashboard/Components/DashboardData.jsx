@@ -8,7 +8,7 @@ const DashboardOverviewCard = ({ data }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
 
   useEffect(() => {
-    // Trigger the highlight and shake animation when the component mounts
+    
     setIsHighlighted(true);
 
     // Remove the highlight after 3 seconds (adjust as needed)
@@ -26,7 +26,7 @@ const DashboardOverviewCard = ({ data }) => {
     >
       <div className="p-6 w-full">
         <h2 className="text-2xl  text-white font-bold  mb-4">
-          Dashboard Overview
+          Quick View Alerts
         </h2>
 
         <div className="flex flex-row gap-x-6">

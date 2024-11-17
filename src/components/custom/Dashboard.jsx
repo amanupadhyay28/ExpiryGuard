@@ -33,12 +33,18 @@ const Dashboard = () => {
   const retailerEmail = localStorage.getItem("email");
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const showDialog = localStorage.getItem("HideDialog");
+    if (!showDialog) {
+      setModalOpen(true);
+    }
+  }, []);
 
   const [modalOpen, setModalOpen] = useState(true);
   const [getExpiringProducts, { isLoading: isExpiringLoading }] =
     useGetExpiringProductsMutation();
   const [expiringProducts, setExpiringProducts] = useState(0);
-  const userType = useSelector((state) => state.auth.userType);
+  const userType = localStorage.getItem("userType");
 
   const [getproductsSavedDataRetailer, { isSavedProductsDataLoading }] =
     useGetSavedProductsDataRetailerMutation();
@@ -64,7 +70,6 @@ const Dashboard = () => {
   const productsSavedFromExpiring =
     savedproductsDataRetailer.totalProductsCountSaved;
   const moneySavedByProducts = savedproductsDataRetailer.totalRevenueGenerated;
-
 
   const [postMyRequest, { isLoadingPostMyRequest }] =
     usePostMyRequestMutation();
@@ -141,7 +146,6 @@ const Dashboard = () => {
     .filter((product) => parseDate(product.expiryDate) >= new Date())
     .sort((a, b) => parseDate(a.expiryDate) - parseDate(b.expiryDate))
     .slice(0, 5);
-  
 
   const { monthlySales, monthlyRevenue, topSellingProducts, salesByProduct } =
     retaileSalesData;
@@ -178,11 +182,21 @@ const Dashboard = () => {
   const monthlySalesValue = monthlySales[monthYearDate] || 0;
   const monthlyRevenueValue = monthlyRevenue[monthYearDate] || 0;
 
+  const handleNavigate = () => {
+  sessionStorage.setItem("HideDialog", "true");
+    navigate("/inventory");
+  };
+  const handleDialogClose = () => {
+    sessionStorage.setItem("HideDialog", "true");
+    setModalOpen(false);
+  };
+  const HideDialog = sessionStorage.getItem("HideDialog");
+
   return (
     <div className="p-6 bg-white min-h-screen rounded-xl ">
       {/* Dialog Modal */}
-      {userType === "retailer" && (
-        <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+      {userType === "retailer" && !HideDialog && (
+        <Dialog open={modalOpen} onOpenChange={handleDialogClose}>
           <DialogContent
             className="bg-primary w-[900px] h-[300px] rounded-md"
             description=""
@@ -202,7 +216,7 @@ const Dashboard = () => {
                   You have{" "}
                   <span
                     className="text-orange-400 font-semibold  hover:underline cursor-pointer "
-                    onClick={() => navigate("/inventory")}
+                    onClick={handleNavigate}
                   >
                     {expiringProducts === 1
                       ? `${expiringProducts} product `

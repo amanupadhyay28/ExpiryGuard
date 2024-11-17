@@ -25,6 +25,7 @@ const removeStoreData = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("phonenumber");
     localStorage.removeItem("userType");
+    sessionStorage.removeItem("HideDialog");
   } catch (e) {
     console.error(e);
   }

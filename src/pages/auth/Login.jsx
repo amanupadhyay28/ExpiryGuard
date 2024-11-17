@@ -34,7 +34,7 @@ function Login() {
       const response = await loginUser({ ...formData, userType }).unwrap();
 
       dispatch(setUser(response));
-      toast.success("Login successful!", {
+      toast.success("Logout successful!", {
         position: "top-right",
         autoClose: 1000,
       });
@@ -64,9 +64,9 @@ function Login() {
   return (
     <>
       <ToastContainer />{" "}
-      {/* ToastContainer must be rendered in your component */}
+    
       <div className="flex h-screen flex-col md:flex-row">
-        {/* Left Side: Content */}
+      
 
         <div className="md:w-1/2 w-full bg-gradient-to-r from-black via-gray-900 to-gray-800 text-white flex flex-col justify-center items-center p-6 md:p-0">
           {/* <div className="max-w-md text-center">

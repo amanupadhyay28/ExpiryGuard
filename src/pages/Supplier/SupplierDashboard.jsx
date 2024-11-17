@@ -186,7 +186,7 @@ flex flex-col justify-between h-full
         >
           <div className="flex justify-between items-center mb-2">
             <div className="flex flex-col gap-3 justify-center ">
-              <img className="h-20 w-20 mt-[-10px]" src={Request} />
+              <img className="h-14 w-20 mt-[-10px]" src={Request} />
               <h3 className="font-semibold text-md">Total completed Request</h3>
             </div>
           </div>
@@ -218,7 +218,7 @@ flex flex-col justify-between h-full
         >
           <div className="flex justify-between items-center mb-2">
             <div className="flex flex-col gap-3 justify-center ">
-              <img className="h-20 w-20 mt-[-10px]" src={Driver} />
+              <img className="h-14 w-20 mt-[-10px]" src={Driver} />
               <h3 className="font-semibold text-md text-gray-600">
                 Total Connected Drivers
               </h3>
