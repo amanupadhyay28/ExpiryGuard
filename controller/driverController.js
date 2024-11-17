@@ -144,7 +144,7 @@ const assign_transfer_task = async (req, res) => {
 const api_update_task_status = async (req, res) => {
   try {
     const { taskId } = req.params;
-    console.log(taskId);
+    
     const task = await TransferTask.findOne({ taskId });
     if (!task) {
       return res.status(404).json({ msg: "Task not found" });

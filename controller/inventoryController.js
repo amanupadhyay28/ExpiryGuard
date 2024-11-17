@@ -461,7 +461,7 @@ const api_productRequests = async (req, res) => {
 const api_SeeProductRequests = async (req, res) => {
   try {
     const { supplierEmail } = req.body;
-    console.log(supplierEmail);
+
     const productRequests = await ProductRequest.find({
       supplierEmail: supplierEmail,
     });
