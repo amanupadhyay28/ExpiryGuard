@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const DashboardOverviewCard = ({ data }) => {
   const { lowStockProducts, nearestExpiryProducts, latestProductRequests } = {
     ...data,
   };
+  const [isHighlighted, setIsHighlighted] = useState(false);
 
+  useEffect(() => {
+    // Trigger the highlight and shake animation when the component mounts
+    setIsHighlighted(true);
+
+    // Remove the highlight after 3 seconds (adjust as needed)
+    const timer = setTimeout(() => setIsHighlighted(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
   const navigate = useNavigate();
 
   return (
@@ -48,15 +57,35 @@ const DashboardOverviewCard = ({ data }) => {
               ))}
             </ul>
           </div>
-
-          {/* Near Expiry Products */}
-          <div className="flex-1 bg-gray-50 p-4 rounded-lg shadow-md">
-            <div className=" relative">
+          <motion.div
+            initial={{ scale: 1 }}
+            animate={
+              isHighlighted
+                ? {
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 2, -2, 0],
+                    boxShadow: [
+                      "0 0 10px rgba(255, 0, 0, 0.5)",
+                      "0 0 20px rgba(255, 0, 0, 1)",
+                      "0 0 10px rgba(255, 0, 0, 0.5)",
+                      "0 0 0 rgba(0, 0, 0, 0)",
+                    ],
+                  }
+                : { scale: 1, boxShadow: "0 0 0 rgba(0, 0, 0, 0)" }
+            }
+            transition={{
+              duration: 0.6,
+              repeat: isHighlighted ? Infinity : 0,
+              repeatType: "loop",
+            }}
+            className="flex-1 bg-gray-50 p-4 rounded-lg shadow-md"
+          >
+            <div className="relative">
               <h3 className="text-lg font-semibold text-gray-600 mb-2 border-b-2">
                 Near Expiry Products
               </h3>
               <button
-                className=" absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline"
+                className="absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline"
                 onClick={() => navigate("/inventory")}
               >
                 Show All
@@ -73,8 +102,7 @@ const DashboardOverviewCard = ({ data }) => {
                 </li>
               ))}
             </ul>
-          </div>
-
+          </motion.div>
           {/* Latest Product Requests */}
           <div className="flex-1 bg-gray-50 p-4 rounded-lg shadow-md">
             <div className=" relative">
