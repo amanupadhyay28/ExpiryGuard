@@ -32,7 +32,7 @@ function Register() {
     e.preventDefault();
     try {
       const response = await registerUser(formData).unwrap();
-      console.log("response is ", response);
+      
       navigate("/dashboard");
     } catch (error) {
       console.error("Registration error:", error);

@@ -11,7 +11,7 @@ const RetailerInventory = () => {
   useEffect(() => {
     const getInventory = async () => {
       const response = await getRetailerInventory({ retailerEmail }).unwrap();
-      console.log("response ", response.products);
+   
       setInventoryData(response.products);
     };
     getInventory();

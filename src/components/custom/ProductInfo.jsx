@@ -57,8 +57,7 @@ const ProductInfo = () => {
       getExpiringProducts({ retailerEmail, supplierEmail })
         .unwrap()
         .then((response) => {
-          console.log("response is ", response);
-
+         
           setExpiringProducts(response.expiringProductsCount);
         })
         .catch((error) =>

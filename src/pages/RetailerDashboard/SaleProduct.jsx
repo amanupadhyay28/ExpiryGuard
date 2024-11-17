@@ -26,7 +26,7 @@ const SaleProduct = () => {
   useEffect(() => {
     const getInventory = async () => {
       const response = await getRetailerInventory({ retailerEmail }).unwrap();
-      console.log("response ", response.products);
+   
       setInventoryData(response.products);
     };
     getInventory();
@@ -50,7 +50,7 @@ const SaleProduct = () => {
     e.preventDefault();
     try {
       const response = await postSaleProduct(formData).unwrap();
-      console.log("response ", response);
+   
 
       toast.success("Product Sale Done successfully!", {
         position: "top-right",

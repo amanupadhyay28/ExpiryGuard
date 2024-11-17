@@ -21,9 +21,9 @@ import SupplierDashboard from "./pages/Supplier/SupplierDashboard";
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const userType = localStorage.getItem("userType");
-  console.log("isLooged in", isLoggedIn);
 
-  console.log("userType", userType);
+
+  
   const ProtectedRouteLayout = ({ children }) => (
     <div className="flex  h-screen">
       <Sidebar />

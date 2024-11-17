@@ -65,8 +65,6 @@ const Dashboard = () => {
     savedproductsDataRetailer.totalProductsCountSaved;
   const moneySavedByProducts = savedproductsDataRetailer.totalRevenueGenerated;
 
-  console.log("products saved : ", productsSavedFromExpiring);
-  console.log("Money Saved", moneySavedByProducts);
 
   const [postMyRequest, { isLoadingPostMyRequest }] =
     usePostMyRequestMutation();
@@ -143,8 +141,7 @@ const Dashboard = () => {
     .filter((product) => parseDate(product.expiryDate) >= new Date())
     .sort((a, b) => parseDate(a.expiryDate) - parseDate(b.expiryDate))
     .slice(0, 5);
-  console.log("low stock products", lowStockProducts);
-  console.log("nereast expiry  products", nearestExpiryProducts);
+  
 
   const { monthlySales, monthlyRevenue, topSellingProducts, salesByProduct } =
     retaileSalesData;

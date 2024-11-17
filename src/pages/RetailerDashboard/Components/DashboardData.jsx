@@ -1,22 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const DashboardOverviewCard = ({ data }) => {
   const { lowStockProducts, nearestExpiryProducts, latestProductRequests } = {
     ...data,
   };
-  console.log("one ", lowStockProducts);
-  console.log("two", nearestExpiryProducts);
-  console.log("three ", latestProductRequests);
 
   const navigate = useNavigate();
 
   return (
     // <div className="p-4 bg-gray-100 ">
-    <div className="my-10 max-w-full shadow-lg rounded-lg overflow-hidden bg-gradient-to-r from-[#5d60ef] to-[#a39af6]
+    <div
+      className="my-10 max-w-full shadow-lg rounded-lg overflow-hidden bg-gradient-to-r from-[#5d60ef] to-[#a39af6]
 
-">
+"
+    >
       <div className="p-6 w-full">
         <h2 className="text-2xl  text-white font-bold  mb-4">
           Dashboard Overview
@@ -29,7 +27,10 @@ const DashboardOverviewCard = ({ data }) => {
               <h3 className="text-lg font-semibold text-gray-600 mb-2 border-b-2">
                 Low Stock Products
               </h3>
-              <button className="absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline" onClick={()=>navigate("/inventory")}>
+              <button
+                className="absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline"
+                onClick={() => navigate("/inventory")}
+              >
                 Show All
               </button>
             </div>
@@ -54,7 +55,10 @@ const DashboardOverviewCard = ({ data }) => {
               <h3 className="text-lg font-semibold text-gray-600 mb-2 border-b-2">
                 Near Expiry Products
               </h3>
-              <button className=" absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline" onClick={()=>navigate("/inventory")}>
+              <button
+                className=" absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline"
+                onClick={() => navigate("/inventory")}
+              >
                 Show All
               </button>
             </div>
@@ -77,7 +81,10 @@ const DashboardOverviewCard = ({ data }) => {
               <h3 className="text-lg font-semibold text-gray-600 mb-2 border-b-2">
                 Latest Product Requests
               </h3>
-              <button className=" absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline" onClick={()=>navigate("/my_request")}>
+              <button
+                className=" absolute top-[-10px] right-0 mt-2 text-sm text-blue-600 hover:underline"
+                onClick={() => navigate("/my_request")}
+              >
                 Show All
               </button>
             </div>

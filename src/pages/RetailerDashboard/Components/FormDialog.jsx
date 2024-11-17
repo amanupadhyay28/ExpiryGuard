@@ -10,7 +10,7 @@ import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 
 const retailerEmail = localStorage.getItem("email");
-console.log("retailerEmail ", retailerEmail);
+
 const FormDialog = ({ open, onClose, product, onSubmit, reqType }) => {
   const [formData, setFormData] = useState({
     productId: "",
