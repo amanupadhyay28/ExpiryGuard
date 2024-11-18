@@ -16,7 +16,7 @@ const Header = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = localStorage.getItem("name");
+  const user = localStorage.getItem("userType");
   const formattedUser = user
     ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
     : "";
@@ -34,19 +34,7 @@ const Header = () => {
         <img src={Logo} className="w-14 h-14" />
         <h1 className="text-3xl font-extrabold text-primary">Expiry Guard</h1>
       </div>
-      <div className="flex items-center space-x-4">
-        <span className="text-xl font-semibold text-gray-500 ">
-          Welcome,{" "}
-          <span className="text-xl font-extrabold text-orange-500">
-            {formattedUser}!
-          </span>
-        </span>
-
-        <Avatar className="h-12 w-12">
-          <AvatarImage  src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      </div>
+      <div className="text-md text-gray-600 font-bold p-4">{formattedUser} Dashboard</div>
     </header>
   );
 };

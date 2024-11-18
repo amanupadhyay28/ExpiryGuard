@@ -11,9 +11,18 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../../Redux/reducers/auth";
 import { TbLogout } from "react-icons/tb";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "../../components/ui/avatar";
 
 const Sidebar = () => {
+  const user = localStorage.getItem("name");
   const userType = localStorage.getItem("userType");
+  const formattedUser = user
+    ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
+    : "";
   const [isLoading, setIsLoading] = useState(false);
   const handleLogout = () => {
     setIsLoading(true);
@@ -39,7 +48,8 @@ const Sidebar = () => {
       icon: <ArchiveIcon className="h-6 w-6" />,
     },
     {
-      name: userType === "supplier" ? "Product Request" : "Inventory Management",
+      name:
+        userType === "supplier" ? "Product Request" : "Inventory Management",
       path: userType === "supplier" ? "/product_request" : "/add_inventory",
       icon: <ClipboardListIcon className="h-6 w-6" />,
     },
@@ -61,13 +71,23 @@ const Sidebar = () => {
         ) : null,
     },
   ];
-  const user = localStorage.getItem("userType")?.toUpperCase();
-  const formattedUser = user
-    ? user.charAt(0).toUpperCase() + user.slice(1).toLowerCase()
-    : "";
+
   return (
-    <div className="w-64 h-screen bg-primary text-white flex flex-col ">
-      <div className="text-xl font-bold p-4">{formattedUser} Dashboard</div>
+    <div className="w-[280px] h-screen bg-primary text-white flex flex-col ">
+      <div className="flex  flex-row items-start justify-center text-center mt-4 mb-10 ">
+        <Avatar className="h-12 w-12">
+          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+
+        <span className="text-3xl font-semibold text-white m">
+          Welcome,{" "}
+          <br></br>
+          <span className="text-2xl font-extrabold text-orange-500 mr-2">
+            {formattedUser}!
+          </span>
+        </span>
+      </div>
       <nav className="flex-1">
         {menuItems.map((item) =>
           item.name ? (
@@ -79,7 +99,7 @@ const Sidebar = () => {
               }`}
             >
               {item.icon}
-              <span className="ml-3">{item.name}</span>
+              <span className="ml-3 ">{item.name}</span>
             </Link>
           ) : null
         )}
