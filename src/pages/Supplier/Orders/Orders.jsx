@@ -145,6 +145,7 @@ const Orders = () => {
         position: "top-right",
         autoClose: 1000,
       });
+      setFormVisible(false);
     } catch (error) {
       toast.error(`Transfer Product Error! ${error.data.msg}`, {
         position: "top-right",
