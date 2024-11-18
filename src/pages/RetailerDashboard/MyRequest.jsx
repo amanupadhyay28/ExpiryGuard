@@ -174,7 +174,7 @@ const MyRequest = () => {
                           : "bg-green-500"
                       }`}
                     >
-                      {product.reqStatus}
+                      {product.reqStatus.toUpperCase()}
                     </Badge>
                   )}
 
@@ -254,7 +254,7 @@ const MyRequest = () => {
                           : "bg-green-500"
                       }`}
                     >
-                      {product.reqStatus}
+                      {product.reqStatus.toUpperCase()}
                     </Badge>
                   )}
 
