@@ -11,7 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { usePostProductReqRetailerMutation } from "../../../services/common/index";
 import { useGetExpiringProductsMutation } from "../../../services/common/index";
-import { ArchiveIcon } from "lucide-react";
+import { ArchiveIcon, Pointer } from "lucide-react";
 
 const InventoryTable = ({ items }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(null);
@@ -227,6 +227,7 @@ const InventoryTable = ({ items }) => {
                   </td>
                   <td className="px-4 py-4 flex items-center relative">
                     <LuMoreHorizontal
+                className="cursor-pointer"
                       onClick={() => toggleBreadcrumb(product.productId)}
                     />
                     {isBreadcrumbOpen === product.productId && (

@@ -53,7 +53,9 @@ const FormDialog = ({ open, onClose, product, onSubmit, reqType }) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-xl font-semibold mb-4">Send Product Data</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            {reqType === "send" ? "Send Product" : "Request Product"}
+          </h2>
           <div>
             <Label>Product ID</Label>
             <Input name="productId" value={formData.productId} disabled />
