@@ -1,5 +1,5 @@
 import React from "react";
-import { FeatureSectionone, TotalRevenue } from "@/assets";
+import { FeatureSectionone, TotalRevenue } from "../../assets/index";
 
 const Features = () => {
   const features = [

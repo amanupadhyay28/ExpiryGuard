@@ -12,8 +12,16 @@ import TotalRevenueHand from "./TotalRevenueHand.png";
 import Request from "./Request.png";
 import Driver from "./Driver.png";
 import Users from "./Users.png";
-import HeroImg from "./heroimg.png";
-import FeatureSectionone from "./featuresSection1.png";
+import Nestle from "./Nestle-Logo.jpg";
+import Parle from "./Parle_Products-Logo..png";
+import Britania from "./britannia@logotyp.us.png";
+import Haldiram from "./Haldiram_logo_PNG1.png";
+import Bikaji from "./id6bD7Og90_1732026042986.png";
+import Amul from "./original-amul-logo-image-1024x637.png";
+import MotherDairy from "./mother-dairy-logo-vector.svg";
+import HeroImg from './heroimg.png'
+import FeatureSectionone from './featuresSection1.png'
+
 export {
   InventoryTracking,
   InventoryTrackingTwo,
@@ -29,6 +37,13 @@ export {
   Request,
   Driver,
   Users,
+  Nestle,
+  Parle,
+  Britania,
+  Haldiram,
+  Bikaji,
+  Amul,
+  MotherDairy,
   HeroImg,
-  FeatureSectionone,
+  FeatureSectionone
 };
