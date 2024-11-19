@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Textarea } from "../../components/ui/Textarea";
+import { Textarea } from "../../components/ui/textarea";
 import { useGetSupplierForRetailerMutation } from "../../services/common/index.js";
 import SelectComponent from "./Components/SupplierSelect";
 import { usePostAddProductMutation } from "../../services/common/index.js";
