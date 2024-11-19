@@ -11,10 +11,10 @@ const LandingPage = () => {
     <div>
       <Header/>
       <HeroSection />
+      <MarqueeCarousel/>
       <Features />
       <HowItWorks />
       <Benefits />
-      <MarqueeCarousel/>
       <Testimonials />
       <Footer />
     </div>

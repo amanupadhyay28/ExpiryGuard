@@ -19,8 +19,12 @@ import Haldiram from "./Haldiram_logo_PNG1.png";
 import Bikaji from "./id6bD7Og90_1732026042986.png";
 import Amul from "./original-amul-logo-image-1024x637.png";
 import MotherDairy from "./mother-dairy-logo-vector.svg";
-import HeroImg from './heroimg.png'
-import FeatureSectionone from './featuresSection1.png'
+import HeroImg from "./heroimg.png";
+import FeatureSectionone from "./featuresSection1.png";
+import Notifications from "./rb_2147828640.png";
+import Reporting from "./rb_20545.png";
+import Expiry from "./WhatsApp Image 2024-11-19 at 22.23.52.jpeg";
+import Expiry2 from "./image.png";
 
 export {
   InventoryTracking,
@@ -45,5 +49,9 @@ export {
   Amul,
   MotherDairy,
   HeroImg,
-  FeatureSectionone
+  FeatureSectionone,
+  Notifications,
+  Reporting,
+  Expiry,
+  Expiry2,
 };
