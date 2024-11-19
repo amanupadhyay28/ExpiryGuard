@@ -67,7 +67,7 @@ const Benefits = () => {
   return (
     <section className="py-5 m-16 ">
       <div className="container mx-auto px-6  text-center">
-        <h2 className="text-4xl font-extrabold text-orange-600">Benefits</h2>
+        <h2 className="text-4xl font-extrabold text-orange-600">Features</h2>
         <p className="mt-2 text-gray-600 text-2xl font-semibold ">
           What's Expiry Guard Provides
         </p>

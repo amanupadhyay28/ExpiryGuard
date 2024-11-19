@@ -6,16 +6,18 @@ import Benefits from "./components/Benefits";
 import Testimonials from "./components/Testimonial";
 import MarqueeCarousel from "./components/Marque";
 import Header from "./components/Header";
+import Webstats from "./components/Webstats";
 const LandingPage = () => {
   return (
     <div>
       <Header/>
       <HeroSection />
       <MarqueeCarousel/>
-      <Features />
+      {/* <Features /> */}
       <HowItWorks />
       <Benefits />
-      <Testimonials />
+      {/* <Testimonials /> */}
+      <Webstats/>
       <Footer />
     </div>
   );

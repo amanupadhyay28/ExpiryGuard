@@ -17,16 +17,16 @@ const Header = () => {
 
           {/* Navigation - Hidden on Mobile */}
           <nav className="hidden md:flex space-x-8 text-lg">
-            <a href="#home" className="hover:text-orange-400">
+            <a href="/" className="hover:text-orange-400">
               Home
             </a>
-            <a href="#about" className="hover:text-orange-400">
+            <a href="/" className="hover:text-orange-400">
               About
             </a>
-            <a href="#services" className="hover:text-orange-400">
+            <a href="/" className="hover:text-orange-400">
               Services
             </a>
-            <a href="#contact" className="hover:text-orange-400">
+            <a href="/" className="hover:text-orange-400">
               Contact
             </a>
           </nav>
