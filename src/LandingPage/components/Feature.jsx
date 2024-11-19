@@ -1,42 +1,45 @@
 import React from "react";
+import { FeatureSectionone, TotalRevenue } from "@/assets";
 
 const Features = () => {
   const features = [
     {
       title: "Smart Inventory Tracking",
       description: "Track and manage near-expiry products in real-time.",
-      icon: "📊",
+      img: FeatureSectionone,
     },
     {
       title: "Seamless Redistribution",
       description:
         "Connect with suppliers or retailers for efficient redistribution.",
-      icon: "🔄",
+      img: TotalRevenue,
     },
     {
       title: "Cost Savings",
       description: "Reduce wastage and save costs on returns.",
-      icon: "💰",
+      img: TotalRevenue,
     },
   ];
 
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl font-bold text-center text-gray-800">
+        <h2 className="text-4xl font-bold text-center text-orange-600 ">
           Features
         </h2>
         <div className="mt-10 grid gap-8 md:grid-cols-3">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="p-6 bg-blue-50 rounded-lg shadow text-center"
+              className="p-6 bg-primary rounded-lg shadow text-center"
             >
-              <div className="text-4xl">{feature.icon}</div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-800">
+              <img src={feature.img} className="h-20 w-20 m-auto" />
+              <h3 className="mt-4 text-2xl font-bold text-orange-500">
                 {feature.title}
               </h3>
-              <p className="mt-2 text-gray-600">{feature.description}</p>
+              <p className="mt-2 text-white font-semibold text-md">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

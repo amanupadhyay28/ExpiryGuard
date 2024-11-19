@@ -1,4 +1,5 @@
 import { InventoryTracking } from "../assets/index";
+import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <header className="bg-gray-900 text-white shadow-md">
@@ -16,28 +17,28 @@ const Header = () => {
 
           {/* Navigation - Hidden on Mobile */}
           <nav className="hidden md:flex space-x-8 text-lg">
-            <a href="#home" className="hover:text-indigo-400">
+            <a href="#home" className="hover:text-orange-400">
               Home
             </a>
-            <a href="#about" className="hover:text-indigo-400">
+            <a href="#about" className="hover:text-orange-400">
               About
             </a>
-            <a href="#services" className="hover:text-indigo-400">
+            <a href="#services" className="hover:text-orange-400">
               Services
             </a>
-            <a href="#contact" className="hover:text-indigo-400">
+            <a href="#contact" className="hover:text-orange-400">
               Contact
             </a>
           </nav>
 
           {/* Login Button on the extreme right */}
           <div className="flex items-center">
-            <a
-              href="#login"
-              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-lg font-semibold"
+            <Link
+              to="/login"
+              className="px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md text-lg font-semibold"
             >
               Login
-            </a>
+            </Link>
           </div>
         </div>
 

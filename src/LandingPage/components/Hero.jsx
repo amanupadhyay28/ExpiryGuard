@@ -1,30 +1,34 @@
 import React from "react";
 import { InventoryTrackingTwo } from "../../assets/index";
+import { Link } from "react-router-dom";
+import { HeroImg } from "../../assets/index";
 
 const Hero = () => {
   return (
-    <section className="bg-blue-50 py-16">
+    <section className="bg-blue-50 py-16 px-20">
       <div className="container mx-auto px-6 flex flex-col md:flex-row items-center">
         {/* Text Section - Left side */}
         <div className="md:w-1/2 text-center md:text-left">
-          <h1 className="text-4xl font-bold text-blue-600">
+          <h1 className="text-5xl font-bold text-orange-600">
             Optimize Inventory, Maximize Profit
           </h1>
-          <p className="mt-4 text-lg text-gray-700">
+          <p className="mt-4 text-xl text-gray-800 font-medium">
             Connect retailers and suppliers to redistribute near-expiry products
             efficiently.
           </p>
-          <button className="mt-8 bg-blue-600 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-700">
-            Get Started for Free
-          </button>
+          <Link to="/register">
+            <button className="mt-8 bg-orange-600 text-white text-xl py-5 px-6 rounded-2xl shadow hover:bg-orange-700 font-bold">
+              Get Started for Free
+            </button>
+          </Link>
         </div>
 
         {/* Image Section - Right side */}
         <div className="mt-8 md:mt-0 md:w-1/2 flex justify-center">
           <img
-            src={InventoryTrackingTwo}
+            src={HeroImg}
             alt="Hero Image"
-            className="h-96 w-96 object-cover"
+            className="h-100 w-100 object-cover"
           />
         </div>
       </div>

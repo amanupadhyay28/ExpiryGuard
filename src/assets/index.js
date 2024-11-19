@@ -12,6 +12,8 @@ import TotalRevenueHand from "./TotalRevenueHand.png";
 import Request from "./Request.png";
 import Driver from "./Driver.png";
 import Users from "./Users.png";
+import HeroImg from "./heroimg.png";
+import FeatureSectionone from "./featuresSection1.png";
 export {
   InventoryTracking,
   InventoryTrackingTwo,
@@ -27,4 +29,6 @@ export {
   Request,
   Driver,
   Users,
+  HeroImg,
+  FeatureSectionone,
 };
