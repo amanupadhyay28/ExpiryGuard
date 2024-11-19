@@ -1,5 +1,11 @@
-import { InventoryTrackingTwo } from "../../assets/index";
-import { Users } from "../../assets/index";
+import {
+  InventoryTrackingTwo,
+  Users,
+  PartnerShip,
+  Parternship_two,
+  InventoryTrackingThree,
+} from "../../assets/index";
+
 import { TotalSales } from "../../assets/index";
 import { Notifications } from "../../assets/index";
 import { Reporting } from "../../assets/index";
@@ -12,7 +18,7 @@ const Benefits = () => {
       title: "Real-time Inventory Tracking",
       description:
         "Track inventory levels in real-time to prevent overstocking or stockouts.",
-      icon: InventoryTrackingTwo, 
+      icon: InventoryTrackingThree,
     },
     {
       title: "Automated Expiry Management",
@@ -32,18 +38,18 @@ const Benefits = () => {
         "Efficiently redistribute products nearing expiry to stores with higher demand.",
       icon: Driver,
     },
-    {
-      title: "Comprehensive Financial Reporting",
-      description:
-        "Generate detailed financial reports to analyze profit, loss, and overall performance.",
-      icon: Reporting,
-    },
-    {
-      title: "Timely Notifications",
-      description:
-        "Receive timely alerts and notifications to take action on near-expiry products.",
-      icon: Notifications,
-    },
+    // {
+    //   title: "Comprehensive Financial Reporting",
+    //   description:
+    //     "Generate detailed financial reports to analyze profit, loss, and overall performance.",
+    //   icon: Reporting,
+    // },
+    // {
+    //   title: "Timely Notifications",
+    //   description:
+    //     "Receive timely alerts and notifications to take action on near-expiry products.",
+    //   icon: Notifications,
+    // },
     {
       title: "Minimized Waste and Maximized Profitability",
       description:
@@ -54,18 +60,20 @@ const Benefits = () => {
       title: "Customer Satisfaction",
       description:
         "Ensure customer satisfaction by keeping fresh products in stock and delivering on time.",
-      icon: Expiry,
+      icon: Parternship_two,
     },
   ];
 
   return (
-    <section className="py-10 m-16 ">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold text-orange-600">BENEFITS</h2>
-        <p className="mt-4 text-gray-600 text-2xl ">What,s Expiry Guard Provides</p>
-        <div className="mt-10 grid  gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <section className="py-5 m-16 ">
+      <div className="container mx-auto px-6  text-center">
+        <h2 className="text-4xl font-extrabold text-orange-600">Benefits</h2>
+        <p className="mt-2 text-gray-600 text-2xl font-semibold ">
+          What's Expiry Guard Provides
+        </p>
+        <div className="mt-10 grid  gap-8 md:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, index) => (
-            <div key={index} className="p-6 shadow rounded-xl  hover:shadow-lg transition">
+            <div key={index} className="p-6 shadow rounded-3xl bg-gray-100">
               <div className="flex justify-center">
                 <img
                   src={benefit.icon}
@@ -73,16 +81,12 @@ const Benefits = () => {
                   className="w-26 h-20 mb-4"
                 />
               </div>
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className="text-2xl font-semibold text-gray-700">
                 {benefit.title}
               </h3>
-              <p className="mt-2 text-gray-600">{benefit.description}</p>
-              <a
-                href="#"
-                className="mt-4 inline-block text-blue-600 hover:underline"
-              >
-                Read More
-              </a>
+              <p className="mt-2 text-gray-500 font-medium text-md">
+                {benefit.description}
+              </p>
             </div>
           ))}
         </div>

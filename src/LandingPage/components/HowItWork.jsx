@@ -26,19 +26,19 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-20 px-10 bg-gray-50">
       <div className="container mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-orange-600">
+        <h2 className="text-4xl font-extrabold text-center text-orange-600">
           How It Works
         </h2>
         <div className="mt-10 grid gap-8 md:grid-cols-4">
           {steps.map((step, index) => (
             <div key={index} className="text-center">
               <div className="text-5xl">{step.icon}</div>
-              <h3 className="mt-4 text-lg font-semibold text-gray-800">
+              <h3 className="mt-5 text-xl font-bold text-gray-800">
                 {step.title}
               </h3>
-              <p className="mt-2 text-gray-600">{step.description}</p>
+              <p className="mt-4 text-gray-600 font-medium text-center">{step.description}</p>
             </div>
           ))}
         </div>

@@ -13,14 +13,14 @@ const MarqueeCarousel = () => {
     { logo: Bikaji },
     { logo: Haldiram },
     { logo: Nestle },
-    { logo: MotherDairy },
+
     { logo: Britania },
     { logo: Parle },
   ];
 
   return (
-    <section className="mb-10 mt-5">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">
+    <section className=" mt-5">
+      <h2 className="text-xl font-semibold mt-10 text-center text-gray-500 mb-8  ">
         Trusted by Industry Leaders
       </h2>
       <div className="marquee-container overflow-hidden relative">
@@ -28,7 +28,7 @@ const MarqueeCarousel = () => {
           {customers.map((customer, index) => (
             <div
               key={index}
-              className="flex flex-col items-center justify-center min-w-[150px] min-h-[120px]  shadow-md p-4 rounded-lg hover:scale-105 transition-transform"
+              className="flex flex-col items-center justify-center min-w-[150px] min-h-[120px]  "
             >
               <img src={customer.logo} className="w-20 h-auto" />
               <p className="mt-4 text-gray-600">{customer.name}</p>
@@ -38,7 +38,7 @@ const MarqueeCarousel = () => {
           {customers.map((customer, index) => (
             <div
               key={`copy-${index}`}
-              className="flex flex-col items-center justify-center min-w-[150px] min-h-[120px]   shadow-md p-4 rounded-lg hover:scale-105 transition-transform"
+              className="flex flex-col items-center justify-center min-w-[150px] min-h-[120px]    p-4 rounded-lg "
             >
               <img src={customer.logo} className="w-20 h-auto" />
               <p className="mt-4 text-gray-600">{customer.name}</p>
