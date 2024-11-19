@@ -14,7 +14,7 @@ const Footer = () => {
         <FaTwitter size={30} />
       </div>
       <p className="text-center text-white font-medium">
-        &copy; 2022 Company Ltd. All rights reservered.
+        &copy; 2024 Expiry Guard Ltd. All rights reservered.
       </p>
     </footer>
   );

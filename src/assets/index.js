@@ -1,7 +1,9 @@
 import InventoryTracking from "./cardboard.jpg";
 import InventoryTrackingTwo from "./cardboarInventory.jpg";
+import InventoryTrackingThree from "./cardboarInventory_three.png";
 import Environ from "./environment.jpg";
 import PartnerShip from "./partnership.jpg";
+import Parternship_two from "./partnershipPng.png";
 import Van from "./van.png";
 import MonthlySales from "./MonthlySales.png";
 import MonthlyRevenue from "./MonthyRevenue.png";
@@ -25,6 +27,13 @@ import Notifications from "./rb_2147828640.png";
 import Reporting from "./rb_20545.png";
 import Expiry from "./WhatsApp Image 2024-11-19 at 22.23.52.jpeg";
 import Expiry2 from "./image.png";
+
+import Avatar_1 from "./f0.jpg";
+import Avatar_2 from "./m1.jpg";
+import Avatar_3 from "./m3.jpg";
+import Avatar_4 from "./m4.jpg";
+import Avatar_5 from "./m7.jpg";
+import Avatar_6 from "./m8.jpg";
 
 export {
   InventoryTracking,
@@ -50,8 +59,16 @@ export {
   MotherDairy,
   HeroImg,
   FeatureSectionone,
+  Avatar_1,
+  Avatar_2,
+  Avatar_3,
+  Avatar_4,
+  Avatar_5,
+  Avatar_6,
   Notifications,
   Reporting,
   Expiry,
   Expiry2,
+  Parternship_two,
+  InventoryTrackingThree,
 };
