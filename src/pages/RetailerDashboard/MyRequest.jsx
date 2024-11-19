@@ -99,199 +99,200 @@ const MyRequest = () => {
 
   const sendRequests = sortedData.filter((item) => item.reqType === "send");
   const otherRequests = sortedData.filter((item) => item.reqType !== "send");
+  if (isLoadingPostMyRequest) {
+    return <Loader />;
+  }
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg">
-      <table className="w-full text-left border-collapse">
-        <thead className="flex-row">
-          <tr className="text-gray-600 uppercase text-xs font-semibold border-b flex-row justify-center space-x-6">
-            {[
-              "requestId",
-              "productName",
-              "price",
-              "quantity",
-              "supplierEmail",
-              // "retailerEmail",
-              "expiryDate",
-              "reqType",
-              "Request Date",
-              "Update Status",
-            ].map((column) => (
+    <>
+      <div className="p-4 bg-white shadow-md rounded-lg">
+        <table className="w-full text-left border-collapse">
+          <thead className="flex-row">
+            <tr className="text-gray-600 uppercase text-xs font-semibold border-b flex-row justify-center space-x-6">
+              {[
+                "requestId",
+                "productName",
+                "price",
+                "quantity",
+                "supplierEmail",
+                // "retailerEmail",
+                "expiryDate",
+                "reqType",
+                "Request Date",
+                "Update Status",
+              ].map((column) => (
+                <th
+                  key={column}
+                  className="flex-row justify-center space-x-10 cursor-pointer"
+                  onClick={() => toggleSort(column)}
+                >
+                  <span>{column.replace(/([A-Z])/g, " $1")}</span>
+                  <span>{getSortIcon(column)}</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <thead>
+            <tr className="text-gray-600 uppercase text-xs font-semibold border-b text-center ">
               <th
-                key={column}
-                className="flex-row justify-center space-x-10 cursor-pointer"
-                onClick={() => toggleSort(column)}
+                colSpan="9"
+                className="px-4 py-5 text-gray-800 uppercase text-md font-extrabold "
               >
-                <span>{column.replace(/([A-Z])/g, " $1")}</span>
-                <span>{getSortIcon(column)}</span>
+                Products Send
               </th>
-            ))}
-          </tr>
-        </thead>
-
-        <thead>
-          <tr className="text-gray-600 uppercase text-xs font-semibold border-b text-center ">
-            <th
-              colSpan="9"
-              className="px-4 py-5 text-gray-800 uppercase text-md font-extrabold "
-            >
-              Products Send
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-800 text-sm bg-slate-100">
-          {sendRequests.length > 0 ? (
-            sendRequests.map((product) => (
-              <tr key={product._id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-4">{product.requestId}</td>
-                <td className="px-4 py-4">{product.productName}</td>
-                <td className="px-4 py-4 text-gray-800 font-semibold flex items-center">
-                  <FaRupeeSign />
-                  {product.price}
-                </td>
-                <td className="px-4 py-4">{product.quantity}</td>
-                <td className="px-4 py-4">{product.supplierEmail}</td>
-                {/* <td className="px-4 py-4">{product.retailerEmail}</td> */}
-                <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-500 hover:bg-red-700">
-                  {product.expiryDate}
-                </td>
-                <td className="px-4 py-4 text-black font-semibold text-md">
-                  {product.reqType.toUpperCase()}
-                </td>
-                <td className="px-4 py-4 text-green-600 font-semibold">
-                  {formatDate(product.createdAt)}
-                </td>
-                <td className="px-4 py-4 font-semibold text-white relative">
-                  {isLoadingPostMyRequest ? (
-                    <Loader />
-                  ) : (
-                    <Badge
-                      className={`py-1 font-bold cursor-pointer ${
-                        product.reqStatus === "pending"
-                          ? "bg-red-500"
-                          : product.reqStatus === "processing"
-                          ? "bg-orange-500"
-                          : "bg-green-500"
-                      }`}
-                    >
-                      {product.reqStatus.toUpperCase()}
-                    </Badge>
-                  )}
-
-                  {statusDropdown === product._id && (
-                    <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
-                      {["pending", "processing", "processed"].map((status) => (
-                        <button
-                          key={status}
-                          onClick={() => {
-                            setStatusDropdown(null);
-                          }}
-                          className={`block w-full text-left px-2 py-1 font-semibold ${
-                            status === "pending"
-                              ? "text-red-500"
-                              : status === "processing"
-                              ? "text-orange-500"
-                              : "text-green-500"
-                          }`}
-                        >
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="9" className="px-4 py-4 text-center text-gray-500">
-                No data available
-              </td>
             </tr>
-          )}
-        </tbody>
+          </thead>
+          <tbody className="text-gray-800 text-sm bg-slate-100">
+            {sendRequests.length > 0 ? (
+              sendRequests.map((product) => (
+                <tr key={product._id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-4">{product.requestId}</td>
+                  <td className="px-4 py-4">{product.productName}</td>
+                  <td className="px-4 py-4 text-gray-800 font-semibold flex items-center">
+                    <FaRupeeSign />
+                    {product.price}
+                  </td>
+                  <td className="px-4 py-4">{product.quantity}</td>
+                  <td className="px-4 py-4">{product.supplierEmail}</td>
+                  {/* <td className="px-4 py-4">{product.retailerEmail}</td> */}
+                  <td className="px-4 py-4 text-white font-extrabold text-xs bg-red-500 hover:bg-red-700">
+                    {product.expiryDate}
+                  </td>
+                  <td className="px-4 py-4 text-black font-semibold text-md">
+                    {product.reqType.toUpperCase()}
+                  </td>
+                  <td className="px-4 py-4 text-green-600 font-semibold">
+                    {formatDate(product.createdAt)}
+                  </td>
+                  <td className="px-4 py-4 font-semibold text-white relative">
+                    {isLoadingPostMyRequest ? (
+                      <Loader />
+                    ) : (
+                      <Badge
+                        className={`py-1 font-bold cursor-pointer ${
+                          product.reqStatus === "pending"
+                            ? "bg-red-500"
+                            : product.reqStatus === "processing"
+                            ? "bg-orange-500"
+                            : "bg-green-500"
+                        }`}
+                      >
+                        {product.reqStatus.toUpperCase()}
+                      </Badge>
+                    )}
 
-        <thead>
-          <tr className="text-gray-800 uppercase text-xs font-semibold border-b text-center ">
-            <th colSpan="9" className="px-4 py-5 text-md font-extrabold ">
-              Products Requested
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-800 text-sm bg-violet-100">
-          {otherRequests.length > 0 ? (
-            otherRequests.map((product) => (
-              <tr key={product._id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-4">{product.requestId}</td>
-                <td className="px-4 py-4">{product.productName}</td>
-                <td className="px-4 py-4 text-gray-800 font-semibold flex items-center">
-                  <FaRupeeSign />
-                  {product.price}
-                </td>
-                <td className="px-4 py-4">{product.quantity}</td>
-                <td className="px-4 py-4">{product.supplierEmail}</td>
-                {/* <td className="px-4 py-4">{product.retailerEmail}</td> */}
-                <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-500 hover:bg-red-700">
-                  {product.expiryDate}
-                </td>
-                <td className="px-4 py-4 text-black font-semibold text-md mx-6">
-                  {product.reqType.toUpperCase()}
-                </td>
-                <td className="px-4 py-4 text-green-600 font-semibold">
-                  {formatDate(product.createdAt)}
-                </td>
-                <td className="px-4 py-4 font-semibold text-white relative">
-                  {isLoadingPostMyRequest ? (
-                    <Loader />
-                  ) : (
-                    <Badge
-                      variant="default"
-                      className={`py-1 font-bold cursor-pointer ${
-                        product.reqStatus === "pending"
-                          ? "bg-red-500"
-                          : product.reqStatus === "processing"
-                          ? "bg-orange-500"
-                          : "bg-green-500"
-                      }`}
-                    >
-                      {product.reqStatus.toUpperCase()}
-                    </Badge>
-                  )}
+                    {statusDropdown === product._id && (
+                      <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
+                        {["pending", "processing", "processed"].map(
+                          (status) => (
+                            <button
+                              key={status}
+                              onClick={() => {
+                                setStatusDropdown(null);
+                              }}
+                              className={`block w-full text-left px-2 py-1 font-semibold ${
+                                status === "pending"
+                                  ? "text-red-500"
+                                  : status === "processing"
+                                  ? "text-orange-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <Loader />
+            )}
+          </tbody>
 
-                  {statusDropdown === product._id && (
-                    <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
-                      {["pending", "processing", "processed"].map((status) => (
-                        <button
-                          key={status}
-                          onClick={() => {
-                            setStatusDropdown(null);
-                          }}
-                          className={`block w-full text-left px-2 py-1 font-semibold ${
-                            status === "pending"
-                              ? "text-red-500"
-                              : status === "processing"
-                              ? "text-orange-500"
-                              : "text-green-500"
-                          }`}
-                        >
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="9" className="px-4 py-4 text-center text-gray-500">
-                No data available
-              </td>
+          <thead>
+            <tr className="text-gray-800 uppercase text-xs font-semibold border-b text-center ">
+              <th colSpan="9" className="px-4 py-5 text-md font-extrabold ">
+                Products Requested
+              </th>
             </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody className="text-gray-800 text-sm bg-violet-100">
+            {otherRequests.length > 0 ? (
+              otherRequests.map((product) => (
+                <tr key={product._id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-4">{product.requestId}</td>
+                  <td className="px-4 py-4">{product.productName}</td>
+                  <td className="px-4 py-4 text-gray-800 font-semibold flex items-center">
+                    <FaRupeeSign />
+                    {product.price}
+                  </td>
+                  <td className="px-4 py-4">{product.quantity}</td>
+                  <td className="px-4 py-4">{product.supplierEmail}</td>
+                  {/* <td className="px-4 py-4">{product.retailerEmail}</td> */}
+                  <td className="px-4 py-4 text-white  text-xs    font-extrabold bg-red-500 hover:bg-red-700">
+                    {product.expiryDate}
+                  </td>
+                  <td className="px-4 py-4 text-black font-semibold text-md mx-6">
+                    {product.reqType.toUpperCase()}
+                  </td>
+                  <td className="px-4 py-4 text-green-600 font-semibold">
+                    {formatDate(product.createdAt)}
+                  </td>
+                  <td className="px-4 py-4 font-semibold text-white relative">
+                    {isLoadingPostMyRequest ? (
+                      <Loader />
+                    ) : (
+                      <Badge
+                        variant="default"
+                        className={`py-1 font-bold cursor-pointer ${
+                          product.reqStatus === "pending"
+                            ? "bg-red-500"
+                            : product.reqStatus === "processing"
+                            ? "bg-orange-500"
+                            : "bg-green-500"
+                        }`}
+                      >
+                        {product.reqStatus.toUpperCase()}
+                      </Badge>
+                    )}
+
+                    {statusDropdown === product._id && (
+                      <div className="absolute top-full mt-1 left-0 w-32 bg-white shadow-lg rounded-lg p-2 z-10">
+                        {["pending", "processing", "processed"].map(
+                          (status) => (
+                            <button
+                              key={status}
+                              onClick={() => {
+                                setStatusDropdown(null);
+                              }}
+                              className={`block w-full text-left px-2 py-1 font-semibold ${
+                                status === "pending"
+                                  ? "text-red-500"
+                                  : status === "processing"
+                                  ? "text-orange-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </button>
+                          )
+                        )}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <Loader />
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 };
 

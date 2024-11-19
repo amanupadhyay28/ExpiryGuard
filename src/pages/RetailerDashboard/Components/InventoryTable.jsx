@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePostProductReqRetailerMutation } from "../../../services/common/index";
 import { useGetExpiringProductsMutation } from "../../../services/common/index";
 import { ArchiveIcon, Pointer } from "lucide-react";
+import Loader from "@/components/custom/Loader";
 
 const InventoryTable = ({ items }) => {
   const [isBreadcrumbOpen, setIsBreadcrumbOpen] = useState(null);
@@ -21,7 +22,8 @@ const InventoryTable = ({ items }) => {
   const [highlightedProductIds, setHighlightedProductIds] = useState([]);
   const [selectedDays, setSelectedDays] = useState(7);
   const breadcrumbRef = useRef(null);
-  const [postProductReq] = usePostProductReqRetailerMutation();
+  const [postProductReq, { isproductLoading }] =
+    usePostProductReqRetailerMutation();
   const [getExpiringProducts, { isLoading: isExpiringLoading }] =
     useGetExpiringProductsMutation();
   const [expiringProducts, setExpiringProducts] = useState(null);
@@ -145,6 +147,9 @@ const InventoryTable = ({ items }) => {
       console.error("Error submitting form:", error);
     }
   };
+  if (isproductLoading || isExpiringLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -227,7 +232,7 @@ const InventoryTable = ({ items }) => {
                   </td>
                   <td className="px-4 py-4 flex items-center relative">
                     <LuMoreHorizontal
-                className="cursor-pointer"
+                      className="cursor-pointer"
                       onClick={() => toggleBreadcrumb(product.productId)}
                     />
                     {isBreadcrumbOpen === product.productId && (
