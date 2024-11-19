@@ -1,4 +1,4 @@
-import { InventoryTracking } from "../assets/index";
+import { InventoryTracking } from "../../assets/index";
 import { Link } from "react-router-dom";
 const Header = () => {
   return (

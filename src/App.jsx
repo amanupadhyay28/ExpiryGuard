@@ -36,7 +36,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/" element={<LandingPage />} /> */}
+        <Route
+          path="/"
+          element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LandingPage />}
+        />
         <Route
           path="/login"
           element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />}
@@ -129,8 +133,5 @@ function App() {
     </Router>
   );
 }
-// function App() {
-//   return <LandingPage />;
-// }
 
 export default App;
