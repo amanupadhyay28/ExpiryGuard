@@ -21,6 +21,12 @@ import Amul from "./original-amul-logo-image-1024x637.png";
 import MotherDairy from "./mother-dairy-logo-vector.svg";
 import HeroImg from "./heroimg.png";
 import FeatureSectionone from "./featuresSection1.png";
+import Notifications from "./rb_2147828640.png";
+import Reporting from "./rb_20545.png";
+import Expiry from "./WhatsApp Image 2024-11-19 at 22.23.52.jpeg";
+import Expiry2 from "./image.png";
+import HeroImg from "./heroimg.png";
+import FeatureSectionone from "./featuresSection1.png";
 import Avatar_1 from "./f0.jpg";
 import Avatar_2 from "./m1.jpg";
 import Avatar_3 from "./m3.jpg";
@@ -58,4 +64,9 @@ export {
   Avatar_4,
   Avatar_5 ,
   Avatar_6,
+  FeatureSectionone,
+  Notifications,
+  Reporting,
+  Expiry,
+  Expiry2,
 };
