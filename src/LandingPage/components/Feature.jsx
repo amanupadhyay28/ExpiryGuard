@@ -33,8 +33,8 @@ const Features = () => {
               key={index}
               className="p-6 bg-primary rounded-lg shadow text-center"
             >
-              <img src={feature.img} className="h-20 w-20 m-auto" />
-              <h3 className="mt-4 text-2xl font-bold text-orange-500">
+              <img src={feature.img} className="h-40 w-40 m-auto" />
+              <h3 className="mt-4 text-2xl font-bold text-white">
                 {feature.title}
               </h3>
               <p className="mt-2 text-white font-semibold text-md">
