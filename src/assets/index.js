@@ -19,8 +19,14 @@ import Haldiram from "./Haldiram_logo_PNG1.png";
 import Bikaji from "./id6bD7Og90_1732026042986.png";
 import Amul from "./original-amul-logo-image-1024x637.png";
 import MotherDairy from "./mother-dairy-logo-vector.svg";
-import HeroImg from './heroimg.png'
-import FeatureSectionone from './featuresSection1.png'
+import HeroImg from "./heroimg.png";
+import FeatureSectionone from "./featuresSection1.png";
+import Avatar_1 from "./f0.jpg";
+import Avatar_2 from "./m1.jpg";
+import Avatar_3 from "./m3.jpg";
+import Avatar_4 from "./m4.jpg";
+import Avatar_5 from "./m7.jpg";
+import Avatar_6 from "./m8.jpg";
 
 export {
   InventoryTracking,
@@ -45,5 +51,11 @@ export {
   Amul,
   MotherDairy,
   HeroImg,
-  FeatureSectionone
+  FeatureSectionone,
+  Avatar_1,
+  Avatar_2 ,
+  Avatar_3,
+  Avatar_4,
+  Avatar_5 ,
+  Avatar_6,
 };
