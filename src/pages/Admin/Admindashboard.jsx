@@ -1,119 +1,147 @@
 import { useGetAdminDataMutation } from "../../services/common/index";
 import { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
+import { FaTrash } from "react-icons/fa";
 
-const Admindashboard = () => {
+const AdminDashboard = () => {
   const [getAdmindata] = useGetAdminDataMutation();
-  const [adminData, setAdminData] = useState([]);
+  const [suppliersData, setSuppliersData] = useState([]);
+  const [retailersData, setRetailersData] = useState([]);
 
   useEffect(() => {
     getAdmindata({})
       .unwrap()
       .then((response) => {
-        const dataArray = Array.isArray(response) ? response : [response];
-        setAdminData(dataArray);
+        if (response) {
+          const dataArray = Array.isArray(response) ? response : [response];
+          setSuppliersData(dataArray.flatMap((item) => item.suppliers || []));
+          setRetailersData(dataArray.flatMap((item) => item.retailers || []));
+        }
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, [getAdmindata]);
 
+  const handleDelete = (type, id) => {
+    console.log(`Delete ${type} with ID: ${id}`);
+    // Implement delete logic here
+  };
+
+  const suppliersColumns = [
+    { name: "Supplier ID", selector: (row) => row.supplierId, sortable: true },
+    { name: "Name", selector: (row) => row.name, sortable: true },
+    { name: "Email", selector: (row) => row.email, sortable: true },
+    { name: "Phone", selector: (row) => row.phoneNumber, sortable: true },
+    {
+      name: "Company",
+      selector: (row) => row.companyName || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Commodity",
+      selector: (row) => row.commoditySold || "N/A",
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <button
+          onClick={() => handleDelete("supplier", row._id)}
+          className="text-red-500 hover:text-red-700 transition duration-200 ease-in-out"
+        >
+          <FaTrash className="text-lg" />
+        </button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
+  const retailersColumns = [
+    { name: "Retailer ID", selector: (row) => row.retailerId, sortable: true },
+    { name: "Name", selector: (row) => row.name, sortable: true },
+    { name: "Email", selector: (row) => row.email, sortable: true },
+    { name: "Phone", selector: (row) => row.phoneNumber, sortable: true },
+    { name: "Address", selector: (row) => row.address, sortable: true },
+    {
+      name: "Action",
+      cell: (row) => (
+        <button
+          onClick={() => handleDelete("retailer", row._id)}
+          className="text-red-500 hover:text-red-700 transition duration-200 ease-in-out"
+        >
+          <FaTrash className="text-lg" />
+        </button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
+  const customStyles = {
+    header: {
+      style: {
+        fontSize: "16px",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+        color: "#1F2937",
+      },
+    },
+    rows: {
+      style: {
+        "&:hover": {
+          backgroundColor: "#F3F4F6",
+        },
+      },
+    },
+    pagination: {
+      style: {
+        backgroundColor: "#F9FAFB",
+        borderTop: "1px solid #E5E7EB",
+      },
+    },
+  };
+
   return (
-    <div className="p-4 bg-gray-50">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-        Admin Dashboard
-      </h1>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 md:px-20">
+      <div className="max-w-8xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <h1 className="text-4xl font-extrabold text-orange-600 text-center mb-6 pb-3 border-b-2">
+          Admin Dashboard
+        </h1>
 
-      {/* Suppliers Section */}
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Suppliers</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg">
-          <thead>
-            <tr className="bg-blue-600 text-white text-left">
-              <th className="px-4 py-3">Supplier ID</th>
-              <th className="px-4 py-3">Supplier Name</th>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Phone Number</th>
-              <th className="px-4 py-3">Company Name</th>
-              <th className="px-4 py-3">Commodity Sold</th>
-              <th className="px-4 py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {adminData.map((item) =>
-              item.suppliers.map((supplier, index) => (
-                <tr
-                  key={index}
-                  className="border-b hover:bg-gray-100 transition-colors"
-                >
-                  <td className="px-4 py-3">{supplier.supplierId}</td>
-                  <td className="px-4 py-3">{supplier.name}</td>
-                  <td className="px-4 py-3">{supplier.email}</td>
-                  <td className="px-4 py-3">{supplier.phoneNumber}</td>
-                  <td className="px-4 py-3">{supplier.companyName || "N/A"}</td>
-                  <td className="px-4 py-3">
-                    {supplier.commoditySold || "N/A"}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <button
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() =>
-                        console.log("Delete supplier with ID:", supplier._id)
-                      }
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+        {/* Suppliers Section */}
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold text-gray-400 mb-4">Suppliers</h2>
+          <DataTable
+            columns={suppliersColumns}
+            data={suppliersData}
+            pagination
+            highlightOnHover
+            responsive
+            striped
+            customStyles={customStyles}
+          />
+        </div>
 
-      {/* Retailers Section */}
-      <h2 className="text-2xl font-semibold text-gray-700 mt-8 mb-4">
-        Retailers
-      </h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg">
-          <thead>
-            <tr className="bg-green-600 text-white text-left">
-              <th className="px-4 py-3">Retailer ID</th>
-              <th className="px-4 py-3">Retailer Name</th>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Phone Number</th>
-              <th className="px-4 py-3">Address</th>
-              <th className="px-4 py-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {adminData.map((item) =>
-              item.retailers.map((retailer, index) => (
-                <tr
-                  key={index}
-                  className="border-b hover:bg-gray-100 transition-colors"
-                >
-                  <td className="px-4 py-3">{retailer.retailerId}</td>
-                  <td className="px-4 py-3">{retailer.name}</td>
-                  <td className="px-4 py-3">{retailer.email}</td>
-                  <td className="px-4 py-3">{retailer.phoneNumber}</td>
-                  <td className="px-4 py-3">{retailer.address}</td>
-                  <td className="px-4 py-3 text-center">
-                    <button
-                      className="text-red-500 hover:text-red-700"
-                      onClick={() =>
-                        console.log("Delete retailer with ID:", retailer._id)
-                      }
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        {/* Retailers Section */}
+        <div>
+          <h2 className="text-3xl font-semibold text-gray-400 mb-4">
+            Retailers
+          </h2>
+          <DataTable
+            columns={retailersColumns}
+            data={retailersData}
+            pagination
+            highlightOnHover
+            responsive
+            striped
+            customStyles={customStyles}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default Admindashboard;
+export default AdminDashboard;
