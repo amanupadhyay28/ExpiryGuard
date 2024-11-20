@@ -19,6 +19,7 @@ import ProductForm from "./pages/RetailerDashboard/AddInventory";
 import MyRequest from "./pages/RetailerDashboard/MyRequest";
 import SupplierDashboard from "./pages/Supplier/SupplierDashboard";
 import LandingPage from "./LandingPage/LandingPage";
+import Admindashboard from "./pages/Admin/Admindashboard";
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const userType = localStorage.getItem("userType");
@@ -39,7 +40,9 @@ function App() {
         {/* <Route path="/" element={<LandingPage />} /> */}
         <Route
           path="/"
-          element={isLoggedIn ? <Navigate to="/dashboard" replace /> : <LandingPage />}
+          element={
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <LandingPage />
+          }
         />
         <Route
           path="/login"
@@ -51,6 +54,8 @@ function App() {
             isLoggedIn ? <Navigate to="/dashboard" replace /> : <Register />
           }
         />
+
+        <Route path="/admindashboard" element={<Admindashboard />} />
 
         {/* Protected Routes */}
         <Route

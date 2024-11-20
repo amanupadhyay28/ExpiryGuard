@@ -20,14 +20,14 @@ const Header = () => {
             <a href="/" className="hover:text-orange-400">
               Home
             </a>
-            <a href="/" className="hover:text-orange-400">
-              About
+            <a href="#about" className="hover:text-orange-400">
+              How We works
             </a>
-            <a href="/" className="hover:text-orange-400">
-              Services
+            <a href="#features" className="hover:text-orange-400">
+            Features
             </a>
-            <a href="/" className="hover:text-orange-400">
-              Contact
+            <a href="#statistics" className="hover:text-orange-400">
+              Our Statistics
             </a>
           </nav>
 

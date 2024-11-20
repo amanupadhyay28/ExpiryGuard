@@ -214,6 +214,14 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getAdminData: builder.mutation({
+      query: () => {
+        return {
+          url: "/api_getSuppliersAndRetailers",
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
@@ -240,5 +248,6 @@ export const {
   useGetSavedProductsDataSupplierMutation,
   useGetCompletedTransferTaskCounMutation,
   useGetWebStatsMutation,
+  useGetAdminDataMutation,
 } = apiSlice;
 export default apiSlice;

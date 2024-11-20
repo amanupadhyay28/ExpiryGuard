@@ -22,7 +22,7 @@ const Features = () => {
   ];
 
   return (
-    <section className="mt-10 mb-10 bg-white">
+    <section className="mt-10 mb-10 bg-white" >
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-extrabold  text-center text-orange-600 ">
           Features

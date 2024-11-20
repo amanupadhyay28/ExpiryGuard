@@ -23,7 +23,7 @@ const Webstats = () => {
   console.log(webstatsData);
 
   return (
-    <section className="text-gray-600 body-font mx-20 mt-28">
+    <section className="text-gray-600 body-font mx-20 mt-28" id="statistics">
       <div className="container px-5 pb-6  mx-auto ">
         <div className="flex flex-col text-center w-full mb-8">
           <h1 className="sm:text-3xl text-2xl font-extrabold title-font text-orange-600">
@@ -54,7 +54,7 @@ const Webstats = () => {
           </div>
           <div className="p-4 md:w-1/3 sm:w-1/2 w-full">
             <div className="px-4 py-6 rounded-lg">
-            <MdOutlineAddShoppingCart className="text-indigo-500 w-12 h-12 mb-3 inline-block" />
+              <MdOutlineAddShoppingCart className="text-indigo-500 w-12 h-12 mb-3 inline-block" />
               <h2 className="title-font font-medium text-3xl text-gray-900">
                 {webstatsData.totalProductsCountSaved}
               </h2>
@@ -66,7 +66,7 @@ const Webstats = () => {
             <div className=" px-4 py-6 rounded-lg">
               <RiMoneyRupeeCircleLine className="text-indigo-500 w-12 h-12 mb-3 inline-block" />
               <h2 className="title-font font-medium text-3xl text-gray-900">
-                {webstatsData.totalRevenueGenerated}
+                ₹{webstatsData.totalRevenueGenerated}
               </h2>
               <p className="leading-relaxed">Money Saved</p>
             </div>
