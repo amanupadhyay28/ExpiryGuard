@@ -503,6 +503,17 @@ const api_updateProductRequestStatus = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const api_getSuppliersAndRetailers = async (req, res) => {
+  try {
+    const suppliers = await Supplier.find();
+    const retailers = await Retailer.find();
+    res.json({ suppliers, retailers });
+  } catch (error) {
+    console.error("Error fetching suppliers and retailers:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   api_add_product,
   api_update_quantity,
@@ -517,4 +528,5 @@ module.exports = {
   api_updateProductRequestStatus,
   api_getRetailerProductRequests,
   api_getExpiringProductsForSupplier,
+  api_getSuppliersAndRetailers,
 };

@@ -56,4 +56,5 @@ router.post(
   "/api_getExpiringProductsForSupplier",
   inventoryController.api_getExpiringProductsForSupplier
 );
+router.get("/api_getSuppliersAndRetailers",inventoryController.api_getSuppliersAndRetailers)
 module.exports = router;
