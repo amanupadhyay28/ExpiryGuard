@@ -320,8 +320,7 @@ const api_getwebStats = async (req, res) => {
     return res.status(200).json({
       totalProductsCountSaved: totalProductsCountSaved,
       totalRevenueGenerated: totalRevenueGenerated,
-      totalRetailercount: totalRetailercount,
-      totalsuppliercount: totalsuppliercount,
+      totalUsercount: totalRetailercount + totalsuppliercount,
     });
   } catch (err) {
     console.error(err.message);
