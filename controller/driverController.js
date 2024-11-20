@@ -1,5 +1,6 @@
 const TransferTask = require("../models/tranferTask");
 const Supplier = require("../models/supplier");
+const Retailer = require("../models/retailer");
 
 const api_add_driver = async (req, res) => {
   try {
@@ -293,6 +294,41 @@ const api_get_savedProductsDataRetailer = async (req, res) => {
   }
 };
 
+const api_getwebStats = async (req, res) => {
+  try {
+    const completedTransferTasks = await TransferTask.find({
+      status: "completed",
+    });
+    const totalSupplier = await Supplier.find();
+    const totalRetailer = await Retailer.find();
+
+    const totalsuppliercount = totalSupplier.length;
+    const totalRetailercount = totalRetailer.length;
+
+    let totalProductsCountSaved = 0;
+    let totalRevenueGenerated = 0;
+
+    completedTransferTasks.forEach((task) => {
+      task.products.forEach((product) => {
+        const quantity = parseInt(product.quantity, 10);
+        const price = parseFloat(product.price);
+
+        totalProductsCountSaved += quantity;
+        totalRevenueGenerated += quantity * price;
+      });
+    });
+    return res.status(200).json({
+      totalProductsCountSaved: totalProductsCountSaved,
+      totalRevenueGenerated: totalRevenueGenerated,
+      totalRetailercount: totalRetailercount,
+      totalsuppliercount: totalsuppliercount,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 const api_get_savedProductsDataSupplier = async (req, res) => {
   try {
     const { supplierEmail } = req.body;
@@ -342,4 +378,5 @@ module.exports = {
   api_get_savedProductsDataRetailer,
   api_get_savedProductsDataSupplier,
   api_get_completed_TransferTask_count,
+  api_getwebStats,
 };

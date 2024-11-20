@@ -28,5 +28,6 @@ router.post(
   "/api_get_completed_TransferTask_count",
   driverController.api_get_completed_TransferTask_count
 );
+router.get("/api_getwebStats", driverController.api_getwebStats);
 
 module.exports = router;
