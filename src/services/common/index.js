@@ -197,7 +197,7 @@ export const apiSlice = createApi({
         };
       },
     }),
-   getCompletedTransferTaskCoun: builder.mutation({
+    getCompletedTransferTaskCoun: builder.mutation({
       query: (task) => {
         return {
           url: "/api_get_completed_TransferTask_count",
@@ -206,9 +206,16 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getWebStats: builder.mutation({
+      query: () => {
+        return {
+          url: "/api_getwebStats",
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
-
 
 export const {
   useLoginUserMutation,
@@ -232,5 +239,6 @@ export const {
   useGetSavedProductsDataRetailerMutation,
   useGetSavedProductsDataSupplierMutation,
   useGetCompletedTransferTaskCounMutation,
+  useGetWebStatsMutation,
 } = apiSlice;
 export default apiSlice;

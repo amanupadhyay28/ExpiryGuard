@@ -1,4 +1,25 @@
+import { useGetWebStatsMutation } from "../../services/common/index";
+import { useState, useEffect } from "react";
 const Webstats = () => {
+  const [webstats] = useGetWebStatsMutation();
+  const [webstatsData, setwebstatsData] = useState([]);
+
+  useEffect(() => {
+    try {
+      webstats({})
+        .unwrap()
+        .then((response) => {
+          const dataArray = Array.isArray(response) ? response : [response];
+
+          setwebstatsData(dataArray[0]);
+        })
+        .catch((error) => console.error("Error fetching retailers:", error));
+    } catch (error) {
+      console.error(`No supplier data found ${error}`);
+    }
+  }, [webstats]);
+  console.log(webstatsData);
+
   return (
     <section className="text-gray-600 body-font mx-20 mt-28">
       <div className="container px-5 pb-6  mx-auto ">
@@ -24,7 +45,7 @@ const Webstats = () => {
                 <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
               </svg>
               <h2 className="title-font font-medium text-3xl text-gray-900">
-                1.3K
+                {webstatsData.totalUsercount}
               </h2>
               <p className="leading-relaxed">Total Suppliers And Retailers</p>
             </div>
@@ -44,7 +65,7 @@ const Webstats = () => {
                 <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path>
               </svg>
               <h2 className="title-font font-medium text-3xl text-gray-900">
-                2.7K
+                {webstatsData.totalProductsCountSaved}
               </h2>
               <p className="leading-relaxed">Products Saved From Expiring</p>
             </div>
@@ -65,7 +86,7 @@ const Webstats = () => {
                 <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
               </svg>
               <h2 className="title-font font-medium text-3xl text-gray-900">
-                74
+                {webstatsData.totalRevenueGenerated}
               </h2>
               <p className="leading-relaxed">Money Saved</p>
             </div>
