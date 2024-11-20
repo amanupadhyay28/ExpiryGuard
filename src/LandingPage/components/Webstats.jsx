@@ -1,5 +1,7 @@
 import { useGetWebStatsMutation } from "../../services/common/index";
 import { useState, useEffect } from "react";
+import { RiMoneyRupeeCircleLine } from "react-icons/ri";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
 const Webstats = () => {
   const [webstats] = useGetWebStatsMutation();
   const [webstatsData, setwebstatsData] = useState([]);
@@ -52,18 +54,7 @@ const Webstats = () => {
           </div>
           <div className="p-4 md:w-1/3 sm:w-1/2 w-full">
             <div className="px-4 py-6 rounded-lg">
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="text-indigo-500 w-12 h-12 mb-3 inline-block"
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 17l4 4 4-4m-4-5v9"></path>
-                <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path>
-              </svg>
+            <MdOutlineAddShoppingCart className="text-indigo-500 w-12 h-12 mb-3 inline-block" />
               <h2 className="title-font font-medium text-3xl text-gray-900">
                 {webstatsData.totalProductsCountSaved}
               </h2>
@@ -73,18 +64,7 @@ const Webstats = () => {
 
           <div className="p-4 md:w-1/3 sm:w-1/2 w-full">
             <div className=" px-4 py-6 rounded-lg">
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                className="text-indigo-500 w-12 h-12 mb-3 inline-block"
-                viewBox="0 0 24 24"
-              >
-                <path d="M3 18v-6a9 9 0 0118 0v6"></path>
-                <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
-              </svg>
+              <RiMoneyRupeeCircleLine className="text-indigo-500 w-12 h-12 mb-3 inline-block" />
               <h2 className="title-font font-medium text-3xl text-gray-900">
                 {webstatsData.totalRevenueGenerated}
               </h2>
