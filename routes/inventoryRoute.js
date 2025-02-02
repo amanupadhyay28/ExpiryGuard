@@ -10,6 +10,11 @@ router.post(
   inventoryController.api_add_product
 );
 router.post(
+  "/api_import_products",
+  inventoryController.upload.single("file"),
+  inventoryController.api_import_products
+);
+router.post(
   "/api_update_quantity",
   authRetailer,
   inventoryController.api_update_quantity
@@ -56,5 +61,8 @@ router.post(
   "/api_getExpiringProductsForSupplier",
   inventoryController.api_getExpiringProductsForSupplier
 );
-router.get("/api_getSuppliersAndRetailers",inventoryController.api_getSuppliersAndRetailers)
+router.get(
+  "/api_getSuppliersAndRetailers",
+  inventoryController.api_getSuppliersAndRetailers
+);
 module.exports = router;

@@ -3,6 +3,11 @@ const Inventory = require("../models/inventory");
 const Retailer = require("../models/retailer");
 const ProductRequest = require("../models/productRequest");
 const Sale = require("../models/sale");
+const multer = require("multer");
+const xlsx = require("xlsx");
+const path = require("path");
+const fs = require("fs");
+
 
 // Helper function to format a date to 'YYYY-MM-DD'
 const formatDateToYYYYMMDD = (date) => {
@@ -12,6 +17,93 @@ const formatDateToYYYYMMDD = (date) => {
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save uploaded files to "uploads" directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+const api_import_products = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ msg: "No file uploaded" });
+    }
+
+    const workbook = xlsx.readFile(req.file.path);
+    const sheetName = workbook.SheetNames[0];
+    const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    const { retailerEmail } = req.body;
+
+    if (!retailerEmail) {
+      return res.status(400).json({ msg: "Retailer email is required" });
+    }
+
+    let inventory = await Inventory.findOne({ retailerEmail });
+
+    if (!inventory) {
+      inventory = new Inventory({ retailerEmail, products: [] });
+    }
+
+    data.forEach((row) => {
+      const {
+        productName,
+        description,
+        quantity,
+        price,
+        batchNumber,
+        manufactureDate,
+        expiryDate,
+        supplierEmail,
+        supplierName,
+      } = row;
+
+      const formattedManufactureDate = formatDateToYYYYMMDD(manufactureDate);
+      const formattedExpiryDate = formatDateToYYYYMMDD(expiryDate);
+
+      const existingProduct = inventory.products.find(
+        (product) =>
+          product.productName === productName &&
+          product.manufactureDate === formattedManufactureDate &&
+          product.expiryDate === formattedExpiryDate &&
+          product.price === price
+      );
+
+      if (existingProduct) {
+        existingProduct.quantity += parseInt(quantity);
+      } else {
+        const productId = `PROD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        inventory.products.push({
+          productId,
+          productName,
+          description,
+          quantity: parseInt(quantity),
+          price: parseFloat(price),
+          batchNumber,
+          manufactureDate: formattedManufactureDate,
+          expiryDate: formattedExpiryDate,
+          supplierEmail,
+          supplierName,
+        });
+      }
+    });
+
+    await inventory.save();
+    fs.unlinkSync(req.file.path); 
+
+    res.json({ msg: "Products imported successfully" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ msg: "Server Error" });
+  }
+};
+
+
 
 const api_add_product = async (req, res) => {
   try {
@@ -393,6 +485,7 @@ const api_getExpiringProductsForSupplier = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 const api_getInventory = async (req, res) => {
   try {
     const { retailerEmail } = req.body;
@@ -514,6 +607,9 @@ const api_getSuppliersAndRetailers = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
 module.exports = {
   api_add_product,
   api_update_quantity,
@@ -529,4 +625,7 @@ module.exports = {
   api_getRetailerProductRequests,
   api_getExpiringProductsForSupplier,
   api_getSuppliersAndRetailers,
+  api_import_products,
+  upload,
+
 };
